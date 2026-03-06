@@ -1,0 +1,448 @@
+/* ===================================================
+   CRAFTLAB CONFIGURATOR — Tesla-style layout
+   =================================================== */
+
+/* ---- ROOT CONTAINER -------------------------------- */
+.cl-config-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--color-white);
+    position: relative;
+}
+
+/* ---- HEADER ---------------------------------------- */
+.cl-config-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    background: var(--color-white);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+    z-index: 20;
+    flex-shrink: 0;
+}
+
+.cl-config-brand {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-navy);
+    letter-spacing: -0.01em;
+}
+
+.cl-config-subtitle {
+    font-size: 0.75rem;
+    color: var(--color-gray-medium);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.cl-close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-dark-text);
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.cl-close-btn:hover {
+    opacity: 1;
+}
+
+/* ---- BODY (image + controls split) ----------------- */
+.cl-body {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* ---- MOBILE: image stacked at top (35vh) ----------- */
+.cl-visual-panel {
+    flex-shrink: 0;
+    position: relative;
+    background: #f0f0f0;
+    overflow: hidden;
+
+    /* Mobile: horizontal strip */
+    width: 100%;
+    height: 38vh;
+}
+
+.cl-visual-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    animation: imgFade 0.4s ease-out;
+}
+
+@keyframes imgFade {
+    from {
+        opacity: 0;
+        transform: scale(1.03);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.cl-visual-gradient {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60%;
+    background: linear-gradient(to top, rgba(255, 255, 255, 0.85), transparent);
+    pointer-events: none;
+}
+
+.cl-visual-tag {
+    position: absolute;
+    bottom: 1rem;
+    left: 1.25rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-navy);
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(8px);
+    border-radius: 99px;
+    padding: 4px 12px;
+}
+
+/* ---- CONTROLS PANEL -------------------------------- */
+.cl-controls-panel {
+    flex: 1;
+    overflow-y: auto;
+    /* Mobile: scrolls below image via cl-body flex-col */
+}
+
+/* Mobile: stack vertically */
+@media (max-width: 899px) {
+    .cl-body {
+        flex-direction: column;
+    }
+
+    .cl-visual-panel {
+        height: 38vh;
+        width: 100%;
+    }
+
+    .cl-controls-panel {
+        padding-bottom: 120px;
+        /* room for summary bar */
+    }
+}
+
+/* Desktop: side-by-side */
+@media (min-width: 900px) {
+    .cl-body {
+        flex-direction: row;
+    }
+
+    .cl-visual-panel {
+        width: 58%;
+        height: 100%;
+        position: sticky;
+        top: 0;
+    }
+
+    .cl-controls-panel {
+        width: 42%;
+        padding-bottom: 80px;
+    }
+
+    .cl-config-header {
+        padding: 1.1rem 3rem;
+    }
+}
+
+/* ---- CONFIG SECTIONS ------------------------------- */
+.config-section {
+    padding: 2rem 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+@media (min-width: 900px) {
+    .config-section {
+        padding: 2.5rem 3rem;
+    }
+}
+
+.section-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--color-gray-medium);
+    margin-bottom: 0.4rem;
+}
+
+.section-title {
+    font-family: var(--font-serif);
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--color-navy);
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.01em;
+}
+
+.section-desc {
+    font-size: 0.875rem;
+    color: var(--color-gray-medium);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+/* fade-in when section appears */
+.fade-in {
+    animation: sectionFade 0.35s ease-out;
+}
+
+@keyframes sectionFade {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ---- TESLA-STYLE OPTION LIST ----------------------- */
+.tesla-options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.tesla-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border: 1.5px solid rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    background: var(--color-white);
+    transition: border-color 0.18s, background 0.18s;
+    gap: 1rem;
+}
+
+.tesla-option:hover {
+    border-color: rgba(0, 0, 0, 0.25);
+}
+
+.tesla-option.selected {
+    background: rgba(14, 30, 54, 0.03);
+    border-color: var(--color-navy);
+    /* default; overridden per macro color */
+}
+
+.topt-name {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-navy);
+}
+
+.topt-desc {
+    font-size: 0.8rem;
+    color: var(--color-gray-medium);
+    margin-top: 2px;
+}
+
+/* color dot for flavor options */
+.flavor-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* ---- QUANTITY CHIPS -------------------------------- */
+.quantity-chips {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.qty-chip {
+    text-align: left;
+    padding: 1rem 1.25rem;
+    border: 1.5px solid rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius-md);
+    background: var(--color-white);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-navy);
+    cursor: pointer;
+    transition: border-color 0.18s, background 0.18s;
+}
+
+.qty-chip:hover {
+    border-color: rgba(0, 0, 0, 0.25);
+}
+
+.qty-chip.selected {
+    border-color: var(--color-navy);
+    background: rgba(14, 30, 54, 0.04);
+}
+
+/* ---- PARAMS SECTION -------------------------------- */
+.params-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.params-cta {
+    margin-top: 2.5rem;
+}
+
+/* ---- SUMMARY BAR (mobile fixed bottom) ------------- */
+.cl-summary-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--color-white);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    z-index: 30;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.06);
+}
+
+@media (min-width: 900px) {
+    .cl-summary-bar {
+        display: none;
+    }
+}
+
+.summary-bar-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.summary-bar-left span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-navy);
+}
+
+.summary-bar-sub {
+    font-size: 0.75rem !important;
+    font-weight: 400 !important;
+    color: var(--color-gray-medium) !important;
+}
+
+.rotate-180 {
+    transform: rotate(180deg);
+    transition: transform 0.2s;
+}
+
+/* ---- SUMMARY DRAWER -------------------------------- */
+.cl-summary-drawer {
+    position: fixed;
+    bottom: 64px;
+    left: 0;
+    right: 0;
+    background: var(--color-white);
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    z-index: 29;
+    padding: 0.5rem 0;
+    animation: slideUp 0.25s ease-out;
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.08);
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+.summary-drawer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.summary-drawer-key {
+    font-size: 0.8rem;
+    color: var(--color-gray-medium);
+    font-weight: 500;
+}
+
+.summary-drawer-val {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-navy);
+}
+
+.summary-drawer-val.empty {
+    color: var(--color-gray-medium);
+    font-weight: 400;
+}
+
+/* ---- EXIT MODAL ------------------------------------ */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 1.5rem;
+}
+
+.modal-content {
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem 2rem;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.modal-content h2 {
+    font-family: var(--font-serif);
+    color: var(--color-navy);
+    margin-bottom: 0.75rem;
+    font-size: 1.5rem;
+}
+
+.modal-content p {
+    color: var(--color-dark-text);
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    opacity: 0.75;
+}
+
+.modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}

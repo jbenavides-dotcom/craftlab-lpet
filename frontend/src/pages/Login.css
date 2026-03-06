@@ -1,0 +1,106 @@
+.login-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: var(--spacing-xxl) var(--spacing-xl) var(--spacing-xl);
+    justify-content: space-between;
+    background-color: var(--color-gray-light);
+}
+
+.login-header {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+}
+
+.login-logo {
+    max-width: 180px;
+    height: auto;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+}
+
+.login-error {
+    color: #ef4444;
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+.login-footer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    gap: var(--spacing-xl);
+    padding-top: var(--spacing-xxl);
+}
+
+.login-contact-link {
+    color: var(--color-dark-text);
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: opacity 0.2s;
+    text-align: center;
+}
+
+.login-contact-link:hover {
+    opacity: 0.7;
+}
+
+.login-copyright {
+    font-size: 0.75rem;
+    color: var(--color-dark-text);
+    opacity: 0.7;
+}
+
+.mt-md {
+    margin-top: var(--spacing-md);
+}
+
+/* Welcome Modal Specifics */
+.welcome-modal {
+    text-align: left;
+}
+
+.welcome-title {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    color: var(--color-navy);
+    margin-bottom: var(--spacing-xs);
+    line-height: 1.1;
+}
+
+.welcome-highlight {
+    color: var(--color-pink-bg);
+    font-style: italic;
+    filter: brightness(0.7) contrast(1.5);
+    /* Make it pop more on light gray */
+}
+
+.welcome-subtitle {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-pink-bg);
+    filter: brightness(0.7) contrast(1.5);
+    margin-bottom: var(--spacing-lg);
+}
+
+.welcome-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    color: var(--color-dark-text);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+}

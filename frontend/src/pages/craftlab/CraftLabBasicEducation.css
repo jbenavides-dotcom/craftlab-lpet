@@ -1,0 +1,138 @@
+.education-stories-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100vw;
+    background-color: var(--color-gray-light);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Progress Bar Container */
+.stories-progress-container {
+    display: flex;
+    gap: 4px;
+    padding: var(--spacing-md) var(--spacing-sm);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), transparent);
+}
+
+.story-progress-segment {
+    flex: 1;
+    height: 3px;
+    background-color: rgba(255, 255, 255, 0.4);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.story-progress-fill {
+    height: 100%;
+    background-color: var(--color-white);
+    width: 0%;
+    transition: width 0.1s linear;
+}
+
+.story-progress-fill.completed {
+    width: 100%;
+}
+
+/* Story Content Area */
+.story-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xl);
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+/* Tapping Overlay Zones */
+.story-tap-zones {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    z-index: 5;
+}
+
+.tap-zone-left {
+    flex: 1;
+    cursor: pointer;
+}
+
+.tap-zone-right {
+    flex: 2;
+    /* Larger area for advancing */
+    cursor: pointer;
+}
+
+/* Visual Elements */
+.story-visual {
+    width: 200px;
+    height: 200px;
+    margin-bottom: var(--spacing-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: var(--color-white);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.story-visual svg {
+    color: var(--color-navy);
+}
+
+.story-title {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    color: var(--color-navy);
+    margin-bottom: var(--spacing-md);
+}
+
+.story-text {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--color-gray-dark);
+    max-width: 400px;
+}
+
+/* Close button */
+.story-close {
+    position: absolute;
+    top: calc(var(--spacing-md) + 10px);
+    right: var(--spacing-md);
+    z-index: 20;
+    color: var(--color-white);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+}
+
+/* Removed desktop layout constraint so it acts as full screen slider */

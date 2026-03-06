@@ -1,0 +1,1185 @@
+Descripción general del proyecto:
+La app de La Palma & El Tucán integra dos programas principales: CraftLab y Forward Booking. En CraftLab, los usuarios se convierten en creadores al controlar cada paso de la producción, desde la selección de variedades hasta el ajuste fino de los tiempos de fermentación y secado para diseñar perfiles únicos. Este proceso es guiado por un módulo educativo obligatorio que enseña la ciencia detrás de los procesos químicos del café. Por su parte, Forward Booking permite la reserva anticipada de café del programa Neighbors & Crops antes de su cosecha, asegurando un suministro constante y de alta calidad en una producción anual limitada a solo 500 sacos. Ambas plataformas fusionan tecnología y tradición para ofrecer una experiencia sensorial totalmente personalizada
+
+Título de la interfaz: 1. Pantalla de Inicio de Sesión (Login Exclusivo)
+
+Función general: Autenticar a los usuarios preseleccionados para acceder a los programas CraftLab y Forward Booking. Al ser una app cerrada, actúa como un filtro de seguridad y, al mismo tiempo, como un punto de contacto para posibles nuevos participantes.
+
+Estructura visual: Diseño centrado, minimalista y limpio. Usa abundante espacio negativo para darle protagonismo al logo en la parte superior. En el centro se ubican los controles interactivos (campos de texto y botón), dejando la zona inferior para los textos informativos, legales y el nuevo enlace de contacto.
+
+Colores y estética: * Fondo: Rosa pastel cálido, que transmite sofisticación y se alinea con una estética "boutique".
+
+Logo: Trazos finos en negro con el detalle de la pluma en blanco, reforzando la idea de artesanía y tradición.
+
+Campos de entrada: Gris muy claro con bordes redondeados, ofreciendo un diseño moderno y amigable.
+
+Botón principal: Negro sólido con texto en blanco, creando el mayor contraste visual en la pantalla para guiar la acción principal.
+
+Listado y función de cada elemento:
+
+Logo "La Palma & El Tucán": Elemento puramente visual que refuerza la identidad de la marca.
+
+Input "Email": Campo de texto para que el usuario ingrese el correo vinculado a su cuenta.
+
+Input "Password": Campo de texto oculto para la contraseña. Incluye un icono de "ojo tachado" que permite al usuario revelar/ocultar los caracteres escritos.
+
+Botón "Sign In": Botón de acción principal que envía las credenciales para iniciar la sesión.
+
+Enlace de contacto (Sugerencia para reemplazar "Texto de Equation"): Un texto interactivo que diga "Want to participate in CraftLab? Contact us". Servirá para que los no usuarios pidan acceso.
+
+Texto "Copyright 2025": Etiqueta de texto estático en el pie de página con información de derechos de autor.
+
+Navegación y flujos:
+
+Botón "Sign In": Al hacer clic, si las credenciales son correctas, redirige al usuario al "Dashboard" o "Home" de la app. Si son incorrectas, debe mostrar una alerta o texto de error (ej. "Correo o contraseña incorrectos").
+
+Icono de ojo: Alterna la visibilidad del campo "Password" sin cambiar de pantalla.
+
+Enlace "Contact us": Al tocarlo, abrirá la aplicación de correo predeterminada del teléfono del usuario (mediante un enlace mailto:), idealmente con el correo de destino y el asunto ya rellenados (ej. Asunto: "Application for CraftLab").
+
+Datos y lógica:
+
+Autenticación: Requiere conexión a la base de datos de usuarios (ej. Firebase, Supabase) para validar que el Email y el Password coincidan.
+
+Restricción de registro: Al ser una app cerrada, la base de datos o el backend deben tener la lógica de que las cuentas solo las crea un administrador. No hay flujo de "Crear cuenta" o "Sign up" en la app.
+
+Título de la interfaz: 1.1 Pop-up de Bienvenida a CraftLab
+
+Función general: Dar la bienvenida al usuario al entorno de CraftLab e introducir la filosofía del programa ("Your Coffee Playground"). Actúa como un onboarding inicial para inspirar, dar contexto sobre la experimentación con el café y conectar emocionalmente con el usuario antes de que interactúe con las herramientas.
+
+Estructura visual: Es una ventana modal tipo tarjeta con bordes redondeados superpuesta sobre la pantalla principal. Utiliza una jerarquía tipográfica muy marcada: un título grande y llamativo, un subtítulo en color de contraste, un encabezado secundario y, finalmente, el texto de cuerpo. Todo el texto está alineado a la izquierda, dándole un aspecto de invitación o manifiesto.
+
+Colores y estética:
+
+Fondo del modal: Gris muy claro, que genera contraste para que sea legible sin perder la armonía con el fondo rosa de la app.
+
+Tipografía de títulos ("Welcome Craft", "Where Coffee..."): Azul muy oscuro/negro, transmitiendo seriedad y elegancia.
+
+Acentos de color: La palabra "Lab" en cursiva y el subtítulo "Your Coffee Playground" usan un tono rosa vibrante, dándole un toque creativo y enlazando con la paleta de la marca.
+
+Texto de cuerpo: Gris oscuro para facilitar la lectura.
+
+Listado y función de cada elemento:
+
+Icono "X" (esquina superior derecha): Botón para cerrar o descartar la ventana flotante.
+
+Título principal ("Welcome CraftLab"): Elemento visual y de texto que nombra el programa. Combina fuentes para destacar la identidad visual.
+
+Subtítulo ("Your Coffee Playground"): Eslogan que resume la propuesta de valor del programa.
+
+Cuerpo de texto ("Where Coffee Dreams..."): Dos párrafos estáticos que explican en qué consiste el programa (experimentación, fermentación y creación de perfiles).
+
+Navegación y flujos:
+
+Icono "X": Al hacer clic, el pop-up se cierra con una animación de salida y el usuario regresa a la pantalla que estaba de fondo (la pantalla 1 de Login).
+
+Datos y lógica:
+
+Visibilidad (Lógica de aparición): En Antigravity deberás configurar un disparador (trigger) para este pop-up. Si aparece en el login, la lógica debe determinar si se muestra automáticamente al abrir la app o si el usuario hace clic en algún botón de "Info".
+
+Condicional de estado: Se recomienda añadir una variable local en el dispositivo del usuario (ej. ha_visto_bienvenida = true) para que este pop-up solo aparezca la primera vez que se abre la aplicación y no sea molesto en el futuro.
+
+Título de la interfaz: 2. Home - Selección de Programa
+
+Función general: Servir como centro de mando y toma de decisiones. Permite al usuario elegir entre las dos unidades de negocio principales: Forward Booking (reserva anticipada) y CraftLab (creación personalizada), además de ofrecer acceso a la gestión de cuenta y pedidos realizados.
+
+Estructura visual: Organización vertical clara. Posee un encabezado fijo (Header), una sección de bienvenida personalizada, un cuerpo central con dos tarjetas de selección de gran tamaño y un menú de navegación inferior (Bottom Nav) para acceso rápido a secciones globales.
+
+Colores y estética: * Fondo principal: Gris claro neutro que hace resaltar los elementos interactivos.
+
+Marco exterior: Rosa vibrante, manteniendo la identidad visual de la marca vista en el login.
+
+Tipografía: Combinación de fuentes Serif para títulos y logotipos (tradición/lujo) y Sans Serif para descripciones (modernidad/lectura clara). El color rosa se usa estratégicamente en el llamado a la acción principal ("Start your coffee journey").
+
+Listado y función de cada elemento:
+
+Icono Menú (Hamburguesa): Abre un menú lateral para ajustes adicionales o información legal.
+
+Logotipo Central: Refuerzo de marca en el header.
+
+Icono de Perfil: Acceso a los datos del usuario y cierre de sesión.
+
+Texto de Bienvenida ("Hi, [$.name]"): Variable dinámica que muestra el nombre del usuario para una experiencia personalizada.
+
+Tarjetas de Programa (FB y CL): Botones contenedores con iconos distintivos. FB para Forward Booking y CL para CraftLab.
+
+Textos Descriptivos: Frases cortas debajo de cada tarjeta que aclaran el beneficio de cada opción (Simplify selection vs Create custom profile).
+
+Barra de Navegación Inferior: Tres iconos (Home, Orders, Us) para moverse entre el inicio, el historial de pedidos y la sección "Sobre nosotros".
+
+Navegación y flujos:
+
+Clic en FB (Forward Booking): Redirige a la interfaz de reserva de lotes de Neighbors & Crops.
+
+Clic en CL (CraftLab): Redirige al módulo educativo inicial o al configurador de perfiles de café.
+
+Icono Orders: Lleva a la lista de compras y estados de pedido.
+
+Icono Us: Navega hacia contenido institucional o de contacto.
+
+Datos y lógica:
+
+Variable $.name: Requiere el llamado del nombre del usuario desde la base de datos tras el login exitoso.
+
+Estado de Selección: La interfaz debe "escuchar" qué programa se selecciona para cargar los activos correspondientes en la siguiente pantalla.
+
+Indicador de pestaña activa: El icono de "Home" en la barra inferior aparece resaltado (en negro) para indicar la ubicación actual del usuario.
+
+Título de la interfaz: 2.1 Pop-up de Bienvenida a Forward Booking
+
+Función general: Actúa como una pantalla de confirmación y contexto educativo. Su objetivo es validar que el usuario desea ingresar al programa de reserva anticipada y explicar la propuesta de valor exclusiva de Neighbors & Crops (calidad garantizada, apoyo a caficultores y producción limitada).
+
+Estructura visual: Modal centrado con bordes muy redondeados que destaca sobre el fondo de la aplicación. Mantiene una jerarquía vertical: cierre en la parte superior, título de gran formato, cuerpo de texto informativo y un botón de acción prominente en la base.
+
+Colores y estética:
+
+Fondo del modal: Gris neutro muy claro (off-white).
+
+Tipografía del título: Combina el negro para "Welcome to" y "Forward" con un rosa elegante para "Booking", manteniendo la coherencia de marca.
+
+Botón de acción: Color ocre/dorado tierra, que evoca el color del grano de café procesado o la tierra, diferenciando visualmente este flujo del de CraftLab.
+
+Texto del botón: Blanco en negrita para máxima legibilidad.
+
+Listado y Función de cada elemento:
+
+Icono "X" (Cerrar): Ubicado en la esquina superior derecha; permite al usuario desistir de la acción y volver a la Home.
+
+Título ("Welcome to Forward Booking"): Identifica claramente el servicio seleccionado.
+
+Cuerpo de texto: Explica el impacto social (apoyo a pequeños agricultores) y la escasez del producto (límite de 500 sacos de 35 kg).
+
+Botón "Customize your order": El Call to Action (CTA) principal que confirma la entrada al flujo de reserva.
+
+Navegación y flujos:
+
+Icono "X": Cierra el pop-up y mantiene al usuario en la Interfaz 2 (Home).
+
+Botón "Customize your order": Dirige al usuario a la Interfaz 3, que sería el catálogo o selector de lotes de Forward Booking.
+
+Datos y lógica:
+
+Trigger (Disparador): Este modal solo debe activarse al hacer clic en la tarjeta "FB" de la Home.
+
+Información estática: El contenido del texto (los 500 sacos) es informativo, pero en el futuro podría conectarse a un contador de inventario real para mostrar cuántos sacos quedan disponibles.
+
+Título de la interfaz: 2.2 Splash Screen / Pantalla de Carga (Forward Booking)
+
+Función general: Gestionar la espera del usuario mientras la aplicación carga los datos específicos del programa Forward Booking (inventario, lotes disponibles, etc.). Su objetivo es reducir la percepción de espera y reforzar la identidad visual del servicio seleccionado.
+
+Estructura visual: Composición minimalista con enfoque central. Los logotipos están alineados en el eje vertical medio para captar toda la atención. Como bien mencionas, el espacio inferior o central debe reservarse para el elemento dinámico de carga.
+
+Colores y estética: * Fondo: Color ocre/café tierra sólido, que diferencia esta sección del rosa general de la app, sumergiendo al usuario en la atmósfera de "Forward Booking".
+
+Logotipo "La Palma & El Tucán": En color negro, manteniendo la elegancia.
+
+Logotipo "Forward Booking": Tipografía Serif de gran tamaño en azul oscuro y blanco, ocupando el ancho visual central.
+
+Listado y Función de cada elemento: * Logotipo Institucional: Identifica la marca madre.
+
+Logotipo del Programa: Identifica el módulo específico que se está cargando.
+
+Icono de carga (Spinner): (Elemento a añadir en desarrollo) Un elemento animado (como un grano de café girando o una línea minimalista) que indica actividad del sistema.
+
+Navegación y flujos: * Automática: El usuario no interactúa con esta pantalla. Una vez que los datos están listos, la pantalla desaparece automáticamente (transición de salida) para revelar la Interfaz 3.
+
+Datos y lógica: * Trigger de salida: La pantalla debe cerrarse solo cuando la respuesta del servidor (API de lotes de café) sea exitosa (Status 200).
+
+Manejo de errores: Si la carga falla tras X segundos, la lógica debería permitir mostrar un mensaje de error o un botón de "Reintentar".
+
+Sugerencia para Antigravity: Podrías usar un Lottie (archivo de animación ligero) para el icono de carga que mencionas, para que se vea fluido y profesional.
+
+Título de la interfaz: 3. Selector de Inicio de Ruta - Forward BookingFunción general: Permitir al usuario elegir el punto de entrada para su reserva de café. Aunque el sistema obligará a completar los 4 criterios (Fecha, Variedad, Perfil de Sabor y Proceso), esta pantalla otorga una sensación de control y personalización desde el primer momento.Estructura visual: Mantiene el encabezado con el logotipo del programa y un botón de retroceso. El cuerpo central presenta una cuadrícula simétrica de $2 \times 2$ con tarjetas interactivas. Finaliza con un botón de acción principal en la parte inferior.Colores y estética: * Fondo: Gris neutro claro, permitiendo que el marco rosa de la app siga presente.Tarjetas: Gris medio con iconos lineales en negro, lo que les da un aspecto limpio y técnico.Botón "Start": Color ocre/café tierra, manteniendo la consistencia cromática del programa Forward Booking.Tipografía: El título "¿Where do you want to start?" resalta en rosa para llamar la atención del usuario.Listado y función de cada elemento:Botón "<" (Atrás): Permite regresar a la Home (Interfaz 2).Logotipo "Forward Booking": Confirmación visual del módulo activo.Tarjeta "Date": Icono de calendario; inicia el flujo por fechas de cosecha o disponibilidad.Tarjeta "Variety": Icono de rama de cafeto; inicia el flujo por tipo de grano (Geisha, Java, etc.).Tarjeta "Flavor Profile": Icono de taza humeante; inicia por notas de cata (frutales, achocolatados, etc.).Tarjeta "Process": Icono de granos de café; inicia por el método de beneficio (Lavado, Natural, Honey, etc.).Botón "Start": Valida la selección de la tarjeta y lanza la secuencia de configuración.Navegación y flujos:Selección de tarjeta: Al tocar una tarjeta, esta debe mostrar un estado visual de "seleccionada" (ej. un borde más oscuro o cambio de color).Botón Start: Dirige a la pantalla correspondiente al icono seleccionado (3.1, 3.2, etc.). Una vez completado ese paso, la app debe redirigir automáticamente al siguiente paso no completado hasta llenar los cuatro.Datos y lógica:Lógica de Secuencia Dinámica: En Antigravity, deberás configurar una variable de "Pila de Pasos". Si el usuario elige "Variety", el orden de navegación se ajusta para que ese sea el primero, pero los otros tres queden en cola.Base de Datos (Operarios): Esta pantalla requiere que la base de datos esté poblada con los lotes actuales. La lógica debe filtrar los lotes que cumplan con los criterios que el usuario va seleccionando en tiempo real (si elijo "Variedad: Geisha", en el siguiente paso de "Sabor" solo deben aparecer perfiles asociados a esa variedad).
+
+Título de la interfaz: 3.1 Selector de Fecha - Forward Booking
+
+Función general: Permitir al usuario filtrar la oferta de café disponible según trimestres específicos del año o por la disponibilidad más inmediata. Es el primer nivel de segmentación del inventario basado en la estacionalidad de la cosecha.
+
+Estructura visual: Presenta un encabezado con una barra de progreso visual (iconos de los 4 pasos). El cuerpo central muestra 4 botones rectangulares pequeños para los trimestres y un botón de ancho completo para la disponibilidad inmediata. Finaliza con un botón de acción condicional.
+
+Colores y estética:
+
+Barra de estado: Los iconos de los pasos no completados aparecen en líneas finas; el paso actual ("Date") debe resaltar (ej. con la línea inferior negra).
+
+Botones de selección: Gris suave con texto en negro, que cambian de estado (highlight) al ser seleccionados.
+
+Botón condicional: Color ocre/café tierra, indicando que es el motor de avance del flujo.
+
+Listado y función de cada elemento:
+
+Icono "X" (Cerrar): Permite abortar el proceso de personalización y volver al selector de inicio (Interfaz 3).
+
+Barra de Pasos (Stepper): Muestra visualmente el progreso (Process, Date, Variety, Flavor). Ayuda al usuario a entender que faltan 3 pasos más.
+
+Botones de Trimestre (Jan-Mar, etc.): Filtros temporales fijos que corresponden a los ciclos de cosecha de Neighbors & Crops.
+
+Botón "Earliest Availability": Opción "comodín" que selecciona automáticamente el lote disponible más cercano en el tiempo.
+
+Botón Condicional [If/Then/Else]: Este botón cambia su texto y función según el estado: "Next" (si faltan pasos) o "Review Order" (si es el último paso completado).
+
+Navegación y flujos:
+
+Selección de opción: Al elegir un trimestre, se activa el botón inferior.
+
+Botón inferior: Conduce al siguiente paso de la cola (por ejemplo, "Variety"). Si el usuario ya completó los otros 3 pasos previamente, este botón lo llevará directamente al resumen final.
+
+Datos y lógica:
+
+Filtrado Cruzado (Interdependencia): Esta es la lógica central que mencionas. La base de datos debe ser relacional.
+
+Escenario A: Si el usuario elige "Jan-Mar", la siguiente pantalla (Variety) solo debe consultar y mostrar registros cuyo campo harvest_season incluya ese rango.
+
+Escenario B: Si el usuario viene de elegir "Variety: Geisha", esta pantalla de fechas solo debe tener habilitados (clicleables) los trimestres donde hay producción de Geisha. Los trimestres sin stock deben aparecer en un estado grisado (disabled).
+
+Carga para operarios: Para que esto sea fácil de usar, el operario solo debe marcar en el panel administrativo qué meses y qué variedades tiene cada lote; la app se encarga de cruzar esa información automáticamente para el usuario final.
+
+Nota para la construcción en Antigravity
+Para lograr este filtrado dinámico, deberás usar filtros de consulta (Query Filters) que dependan de variables globales. Por ejemplo:
+Select Variety WHERE season == selected_date AND flavor == selected_flavor.
+
+Título de la interfaz: 3.2 Selector de Perfil de Sabor (Flavor Profile)Función general: Permitir al usuario elegir la experiencia sensorial de su café. La interfaz utiliza un sistema de categorías (Bright, Balanced, Fermented) que, al ser seleccionadas, despliegan notas de cata específicas y actualizan una imagen ambiental que representa dicho perfil.Estructura visual: * Header: Incluye el stepper (barra de progreso) y el botón de cierre "X".Zona Hero: Una imagen dinámica que cambia según la selección (ej. frutas tropicales, especias, chocolate).Cuerpo: Selector de categorías mediante botones ovalados y un área de grid ($2 \times 2$) para los ítems específicos ([variableprofile item]).Footer: Botón de acción condicional y, como nueva adición, el icono de ayuda/video.Colores y estética: * Imagen Hero: Fotografía de alta calidad con colores vibrantes y orgánicos sobre fondo blanco, elevando la percepción de "producto premium".Botones de Categoría: Color ocre/café tierra. El botón seleccionado debe tener un estado activo (ej. sombra o borde más oscuro).Etiquetas de Perfil: Tonos tierra claros y oscuros para diferenciar los descriptores de sabor.Listado y función de cada elemento:Stepper: Indica que el usuario está en el paso de "Taza/Sabor".Imagen Dinámica: Cambia en tiempo real según el perfil elegido para generar una conexión visual con el sabor.Botones de Categoría: * Bright: Filtra para mostrar "Citrus - Spicy - Sweet", etc.Balanced: Filtra para mostrar "Aromatic - Fruity", etc.Fermented: Filtra para mostrar "Fruity - Cocoa", etc.[variableprofile item]: Botones dinámicos que muestran los descriptores finales (ej. "Tropical Fruits").Icono de Video/Ayuda (Nuevo): Un icono flotante o integrado (ej. un pequeño círculo con un símbolo de "Play" o "?") que abre un modal con la explicación del proceso.Navegación y flujos:Selección de Perfil: Al tocar una nota de cata (ej. "Tropical - Spicy - Cacao"), se marca como seleccionada y se habilita el botón inferior.Botón [If/Then/Else]: Lleva al siguiente paso de la cola (Variety o Process) o al resumen final si es el cuarto paso.Icono de Video: Abre una interfaz superpuesta (Pop-up 3.2.1) con el video educativo.Datos y lógica:Lógica de Imagen: En Antigravity, debes asociar una variable de imagen a cada categoría. If category == 'Fermented' THEN show image_tropical_mix.Mapeo de Sabores: La base de datos debe estructurarse así:Categoría: Fermented -> Items: Fruity - Cocoa, Tropical Fruits, etc.Filtrado: Si el usuario ya eligió una fecha donde solo hay cafés "Balanced", los botones de "Bright" y "Fermented" deberían aparecer desactivados.Facilidad para operarios: El operario en su panel solo debe subir la foto y marcar a qué categoría pertenece el lote; la app hace el resto.
+
+Título de la interfaz: 3.3 Selector de Proceso de Fermentación (Fermentation Process)
+
+Función general: Permitir al usuario elegir el método de beneficio y fermentación de su café. Al igual que en los pasos anteriores, las opciones mostradas están filtradas en tiempo real según las selecciones previas de Fecha, Variedad o Perfil de Sabor.
+
+Estructura visual: * Header: Stepper de 4 iconos con el paso "Grano/Proceso" resaltado. Botón "X" para salir.
+
+Zona Hero Dinámica: Imagen que muestra camas de secado o cerezas de café en proceso. Esta imagen cambia según el método seleccionado (ej: muestra café al sol para "Natural" o tanques para "Washed").
+
+Cuerpo: Grid de botones grises con los nombres de los procesos (Natural, Washed, Honey, Bio-Innovation).
+
+Footer: Botón "Continue" de color ocre y el nuevo Icono de Ayuda Global.
+
+Colores y estética: * Imagen Hero: Fotografía con tonos tierra y orgánicos que refuerza el concepto de "tradición y proceso".
+
+Contraste: Los botones de proceso cambian de gris claro a ocre cuando son seleccionados, alineándose con el botón de acción inferior.
+
+Listado y función de cada elemento:
+
+Stepper: Ubica al usuario en el flujo (Icono de granos de café).
+
+Imagen Hero Interactiva: Al hacer clic en la imagen, se despliega el Pop-up 3.3.1 con una explicación técnica/visual del proceso seleccionado.
+
+Indicador de Interacción (Sugerencia): Añadir una pequeña etiqueta o icono de "lupa/info" sobre la esquina de la imagen que diga "Tap to learn about this process", para que el usuario sepa que es clicleable.
+
+Botones de Proceso (Natural, Honey, etc.): Activan el filtro del inventario.
+
+Botón "Continue": Valida la selección y avanza al siguiente paso pendiente.
+
+Icono de Ayuda Global ("?"): Ubicado en una esquina del footer; al pulsarlo, despliega un video o guía general de cómo funciona todo el servicio de Forward Booking.
+
+Navegación y flujos:
+
+Clic en Imagen: Abre el modal educativo específico del proceso.
+
+Clic en proceso: Actualiza la imagen superior y las variables de filtrado.
+
+Botón Continue: Si es el último de los 4 pasos, redirige al Resumen de Pedido.
+
+Datos y lógica:
+
+Filtrado Bidireccional: Si el usuario eligió un perfil de sabor "Fermented", esta pantalla solo habilitará "Bio-Innovation" o "Natural", bloqueando "Washed" si no existen lotes que cumplan ambas condiciones.
+
+Mapeo Educativo: Cada proceso debe tener vinculado en la base de datos un texto_explicativo y una url_imagen para que el pop-up se llene dinámicamente.
+
+Título: 3.3.1 Modal Informativo de Elemento
+
+Función: Explicar la ciencia y el resultado sensorial del ítem seleccionado (ya sea un sabor o un proceso).
+
+Estructura: Ventana pequeña superpuesta con título, descripción breve y quizás un icono representativo.
+
+Lógica: Se activa por el "clic" en la imagen hero o en el icono de información. Es el lugar donde el usuario aprende mientras diseña.
+
+Título de la interfaz: 3.4 Selector de Variedad (Variety)
+
+Función general: Permitir al usuario seleccionar la genética específica del café (ej. Geisha, Java, Sidra, Caturra). Es el paso donde se define el "cuerpo y alma" botánica del lote.
+
+Estructura visual:
+
+Header: Stepper con los 4 iconos. El icono de la rama de cafeto aparece resaltado con una línea inferior negra. Botón de cierre "X".
+
+Zona Hero Dinámica: Imagen de alta resolución de hojas o cerezas de café. Al igual que en "Flavor" y "Process", esta imagen es interactiva.
+
+Cuerpo: Un grid de botones con los nombres de las variedades disponibles.
+
+Footer: Botón de acción condicional y el icono de ayuda global.
+
+Colores y estética:
+
+Imagen Hero: Tonos verdes profundos y naturales que contrastan con el rosa de la interfaz.
+
+Botones: Los botones de variedad ("Sin nombre" en el diseño, que se llenarán dinámicamente) usan el tono ocre/café tierra cuando están seleccionados, manteniendo la unidad visual del programa Forward Booking.
+
+Listado y Función de cada elemento:
+
+Stepper: Control visual del progreso en los 4 pasos obligatorios.
+
+Imagen Hero Interactiva: Al ser presionada, despliega el Pop-up 3.4.1 con la historia, origen y notas típicas de la variedad seleccionada.
+
+Botones de Variedad: Elementos dinámicos que muestran el nombre de la variedad (ej. "Geisha").
+
+Botón [If/Then/Else]: Motor de navegación que detecta si este es el último paso para enviar al usuario al resumen final.
+
+Navegación y flujos:
+
+Clic en Imagen: Abre el modal informativo de la variedad.
+
+Clic en Variedad: Marca la opción y habilita el avance. Si se cambia la variedad, el sistema debe re-validar que los pasos ya elegidos (Sabor o Fecha) sigan siendo compatibles.
+
+Datos y lógica:
+
+Filtrado en Cascada: Esta pantalla consume los datos de la base de datos filtrados por las selecciones de las interfaces 3.1, 3.2 y 3.3.
+
+Lógica de "Sin nombre": En Antigravity, estos botones deben estar vinculados a una List View o Grid View que traiga los nombres de la tabla Varieties donde stock > 0.
+
+Pop-up Educativo (3.4.1): Similar al de sabores, debe cargar la descripción técnica de la genética para que el usuario entienda por qué esa variedad es especial.
+
+Análisis del Sistema de Ayuda y Pop-ups (Global para 3.1 a 3.4)
+Pop-up de Imagen (3.x.1): Como bien mencionaste, este aparece en todos los pasos que tienen imagen hero. Su función es educación específica.
+
+Icono de Ayuda Global ("?"): Debe estar presente en el footer. Su función es educación del servicio. Al pulsarlo, el usuario puede ver un video sobre cómo Forward Booking apoya a los caficultores de Neighbors & Crops.
+
+¡Excelente observación! Ese detalle de la barra dinámica es vital para la usabilidad, ya que funciona como una "migaja de pan" (breadcrumb) que le recuerda al usuario qué ha elegido hasta el momento sin tener que retroceder.
+
+Aquí tienes la estructura actualizada para la Interfaz 3.4 y el detalle del comportamiento de esa barra superior:
+
+Título de la interfaz: 3.4 Selector de Variedad (Variety)
+
+Función general: Paso final (o intermedio, según el orden) para definir la genética del café. Permite al usuario elegir entre las variedades disponibles que han sobrevivido a los filtros previos de Fecha, Sabor y Proceso.
+
+Estructura visual: * Header Dinámico: Barra de 4 iconos con etiquetas de texto que se actualizan en tiempo real.
+
+Zona Hero: Imagen de alta calidad de la variedad (clicleable para info).
+
+Cuerpo: Grid de selección de variedades.
+
+Footer: Botón de acción "[If/Then/Else]" y acceso a ayuda global.
+
+Colores y estética: * Barra superior: Iconos en negro sobre fondo blanco; el paso activo tiene una línea de énfasis inferior.
+
+Estado de selección: Los botones de "Sin nombre" (que serán Caturra, Geisha, etc.) cambian a ocre/café al ser seleccionados.
+
+Listado y Función de cada elemento:
+
+Barra de Progreso Dinámica: Muestra los 4 pilares (Process, Date, Variety, Flavor). Si un paso ya fue seleccionado, el texto genérico cambia por la elección del usuario (ej: de "Process" a "Natural").
+
+Imagen de Variedad: Visual que cambia según la opción tocada. Funciona como botón para abrir el Pop-up educativo 3.4.1.
+
+Botones de Variedad: Cargan dinámicamente los nombres desde la base de datos de operarios.
+
+Botón de Acción: Valida si el flujo de los 4 pasos está completo.
+
+Navegación y flujos:
+
+Al completar los 4 pasos: El botón inferior cambiará automáticamente a "Review Summary" o "Confirm Reservation".
+
+Clic en icono de la barra superior: Permite al usuario saltar rápidamente a un paso ya completado para editar su elección.
+
+Datos y lógica:
+
+Lógica de la Barra Dinámica: En Antigravity, cada etiqueta de la barra debe ser una variable tipo String.
+
+Default: "Process".
+
+On Select: Si SelectedProcess != null, mostrar SelectedProcess.Name.
+
+Filtrado Final: Esta pantalla debe realizar la consulta final: Mostrar Variedades DONDE (Disponible en Fecha X) Y (Compatible con Sabor Y) Y (Procesable con Método Z).
+
+Análisis del Pop-up Educativo (Global para imágenes)
+Título: 3.x.1 Modal de Detalle Técnico
+
+Función: Al tocar la imagen hero en cualquier paso (Variety, Flavor, Process), se despliega este modal.
+
+Contenido: * Título: Nombre del elemento (ej. "Geisha" o "Honey Process").
+
+Video/Imagen: Un recurso visual que apoye la explicación.
+
+Descripción: Texto que detalla por qué esa elección afecta el perfil final de la taza.
+
+Lógica para Antigravity: El contenido del pop-up debe ser dinámico. No crees un pop-up por cada sabor; crea un solo modal que rellene sus campos de texto e imagen basándose en el "Elemento Seleccionado" actual.
+
+Título de la interfaz: 3.5 Pop-up de Confirmación de Salida (Exit Confirmation)Función general: Actuar como una barrera de seguridad para prevenir que el usuario pierda su progreso. Al ser un proceso de 4 pasos con filtrado dinámico, salir por error obligaría al usuario a reiniciar toda la lógica de selección, por lo que este modal valida la intención real de abandono.Estructura visual: Modal pequeño y centrado con bordes redondeados. Presenta el logotipo del programa en la parte superior, un icono de cierre secundario, un mensaje de advertencia claro en el cuerpo y un botón de acción prominente en la base.Colores y estética:Fondo del modal: Gris neutro claro (off-white) para mantener la limpieza visual.Tipografía: El texto de advertencia usa un gris oscuro para no ser agresivo pero sí legible.Botón "Yes, Leave": Color ocre/café tierra con texto en blanco, manteniendo la paleta de Forward Booking.Listado y función de cada elemento:Logotipo "Forward Booking": Mantiene el contexto de en qué sección se encuentra el usuario.Icono "X" (Esquina superior derecha): Funciona como un "Cancelar". Al oprimirlo, el usuario cierra el pop-up y vuelve exactamente donde estaba en su proceso de selección.Texto de advertencia: "If you leave now, all your selections will be lost. Are you sure you want to exit?". Informa explícitamente sobre la consecuencia de la acción (pérdida de datos).Botón "Yes, Leave": Confirma la salida del flujo.Navegación y flujos:Disparador (Trigger): Se activa al presionar la "X" en cualquiera de las interfaces de selección (3.1 a 3.4) o el botón de retroceso del sistema.Acción "X" del modal: Cierra el pop-up y mantiene la sesión actual de selección.Acción "Yes, Leave": Borra las variables temporales de la sesión (Fecha, Variedad, etc.) y redirige al usuario a la Interfaz 2 (Home).Datos y lógica:Gestión de Estado: En Antigravity, el botón "Yes, Leave" debe ejecutar un comando de Clear State o Reset Variables para que, si el usuario vuelve a entrar después, los filtros estén limpios y no herede selecciones previas por error.Persistencia: Si decides que la app sea más avanzada, podrías cambiar la lógica a "Guardar borrador", pero según este diseño, la instrucción es borrar el progreso para mantener la exclusividad de los lotes en tiempo real.Resumen del Sistema de Navegación ActualizadoCon este elemento, hemos cerrado el ciclo de seguridad del servicio. El flujo ahora es:Home (Interfaz 2) $\rightarrow$ Splash (2.2) $\rightarrow$ Selector Inicio (3).Cualquier Paso (3.1 a 3.4) $\rightarrow$ Clic en X $\rightarrow$ Aparece 3.5.
+
+Título de la interfaz: 4. Configuración de Cantidad y EmpaqueFunción general: Permitir al usuario definir la logística de su pedido. En esta pantalla se selecciona el peso por saco y la cantidad total de café reservado, basándose en las especificaciones de producción limitada mencionadas al inicio.Estructura visual: Modal de cierre con encabezado informativo. Presenta una barra de resumen superior, dos botones de opción para el tamaño del saco y un control de cantidad numérico en la parte inferior. Finaliza con el botón de acción principal.Colores y estética:Barra de Resumen Superior: Fondo blanco con iconos negros, manteniendo la visibilidad de las elecciones previas.Botones de Peso (35kg / 70kg): Gris suave que cambia a ocre/café al ser seleccionado para indicar el estado activo.Contador de Cantidad: Diseño limpio en blanco con símbolos "+" y "-" para una interacción táctil fácil.Botón "Continue": Color ocre, consistente con el flujo de Forward Booking.Listado y función de cada elemento:Barra Dinámica de Elecciones: Muestra los iconos de los 4 pasos completados. Incluye etiquetas técnicas de variables (ej. [DateFbSelect]) que se reemplazan por los datos reales elegidos.Selector de Tamaño de Saco: Dos botones para elegir entre 35 kg o 70 kg. Esto define la unidad de medida del pedido.Contador de Sacos (Stepper): Permite aumentar o disminuir el número de unidades.Indicador de Peso Total ("0 Kg"): Texto dinámico que multiplica el número de sacos por el tamaño seleccionado (ej. 2 sacos $\times$ 70 kg = 140 kg).Botón "Continue": Valida que la cantidad sea mayor a 0 y avanza al resumen final de facturación/confirmación.Navegación y flujos:Clic en "X": Dispara el pop-up de confirmación de salida (3.5) ya que el proceso está casi terminado.Botón "Continue": Dirige a la pantalla de Resumen Final de Pedido (Interfaz 5) donde se muestra el precio estimado y detalles de envío.Datos y lógica:Cálculo en Tiempo Real: En Antigravity, el texto de "Kg" debe ser una fórmula: Total_Kg = (Selected_Bag_Size * Quantity).Lógica de Límite: El sistema debe validar que la suma total no exceda el límite de 1400 kg (según el texto descriptivo) y que haya stock disponible en el lote seleccionado para cubrir esa cantidad.Variables de Resumen: Los nombres técnicos arriba ([selectedVariety], etc.) deben mapearse correctamente a las variables de estado de la sesión para mostrar al usuario exactamente qué está comprando en bolsas.
+
+¡Excelente cierre para el flujo de Forward Booking! Con esto completamos el ciclo desde el interés inicial hasta la persistencia de datos en el backend (Airtable/Base de Datos).
+
+Aquí tienes la estructuración de las interfaces finales y la lógica de la base de datos para los operarios:
+
+Título de la interfaz: 5. Revisión de Términos y Confirmación Final
+
+Función general: Actuar como el paso de validación legal y contractual antes de formalizar la reserva. Asegura que el usuario entienda la exclusividad de los 500 sacos anuales y acepte los términos de envío y procesamiento.
+
+Estructura visual: Modal limpio con un encabezado de programa, una sección de texto legal con scroll, un selector de "Check agreement" y el botón de acción final.
+
+Colores y estética: Mantiene el gris neutro de fondo y el ocre/café en el botón principal para dar coherencia al servicio de Forward Booking.
+
+Listado y función de cada elemento:
+
+Check agreement: Un checkbox obligatorio que el usuario debe marcar para habilitar la compra.
+
+Texto descriptivo: Reitera la exclusividad de Neighbors & Crops y la producción limitada.
+
+Botón "Confirm and Place Order": Es el disparador (trigger) que ejecuta el envío de toda la información a la base de datos.
+
+Navegación y flujos: Una vez pulsado el botón, redirige a la Interfaz 6 (Éxito).
+
+Datos y lógica: Este botón realiza un POST a la base de datos enviando las variables acumuladas: [DateFbSelect], [selectedVariety], [FlavorFbSelect], [ProcessFbSelect], [BagSize] y [Quantity].
+
+Título de la interfaz: 6. Pantalla de Éxito (Success Screen)
+
+Función general: Confirmar visualmente al usuario que su pedido ha sido procesado correctamente y proporcionarle una vía para hacer seguimiento.
+
+Estructura visual: Minimalista. Texto central de gran tamaño ("¡You've completed your order!") y un botón de navegación simple en la parte inferior.
+
+Navegación y flujos: El botón "Go Orders" redirige al usuario a la pestaña de "Pedidos" en el menú inferior de la Home.
+
+Título de la interfaz: 7. Historial de Pedidos (Orders Overview)
+
+Función general: Listar de forma resumida todos los pedidos asociados al usuario para que pueda ver el estatus global de sus inversiones en café.
+
+Estructura visual: Lista de tarjetas con sombras suaves (cards) que contienen iconos lineales de los 4 pilares, la fecha de creación y el peso total. Al final de cada tarjeta, una barra de progreso visual indica la etapa actual.
+
+Colores y estética: Fondo gris claro con tarjetas blancas de bordes redondeados. Los iconos mantienen el negro sólido para legibilidad y el color ocre para los estados activos.
+
+Listado y Función de cada elemento:
+
+Etiqueta "Created: Fecha": Muestra el momento exacto de la reserva.
+
+Iconos de los 4 pilares: Recordatorio visual de la Variedad, Sabor, Proceso y Fecha elegidos.
+
+Size: 000 Kg: Cantidad total reservada en el flujo anterior.
+
+Barra de Seguimiento: Representación gráfica de los estados (Order, Fermentation, Drying, Ready).
+
+Botón/Card completa: Al hacer clic, abre el detalle profundo del pedido.
+
+Navegación y flujos: Dirige a la Interfaz 7.1.
+
+Datos y lógica: Realiza una consulta SELECT * FROM pedidos WHERE user_id == actual. Si es de Forward Booking, los campos técnicos de química vendrán como null.
+
+Título de la interfaz: 7.1 Seguimiento Detallado (Order Tracking)
+
+Función general: Ventana de comunicación directa y visual entre la finca y el cliente. Muestra el avance real del lote mediante multimedia y mensajes del operario.
+
+Estructura visual: Bloque superior con imagen/video "Hero", banda central de estado en rosa y sección inferior de texto descriptivo con iconos de referencia.
+
+Colores y estética: El encabezado usa un verde oscuro orgánico que contrasta con el rosa vibrante de la barra de "Estado Pedido".
+
+Listado y Función de cada elemento:
+
+Header Multimedia: Renderiza la imagen o video subido por el operario para ese lote específico.
+
+Label "Servicio": Indica si es Forward Booking o CraftLab.
+
+Barra "Estado Pedido": Texto dinámico del estatus actual.
+
+Sección "Mensaje": Espacio para las actualizaciones personalizadas que escribe el equipo de producción.
+
+Navegación y flujos: Botón de retroceso para volver al historial global.
+
+Datos y lógica: Los campos URL (imagen), Status (estado) y Message (texto) se actualizan en tiempo real desde el panel administrativo de la empresa.
+
+Estrategia de Plataforma Centralizada (Supabase)
+Para facilitar la operación de la empresa sin depender de múltiples herramientas:
+
+Tablas Relacionales: En lugar de celdas aisladas, usas relaciones. Por ejemplo, una tabla de Lotes conectada a una de Pedidos, lo que evita errores de inventario.
+
+Storage: Las fotos y videos de seguimiento se suben directamente al Bucket de Supabase, generando la URL que la app consume automáticamente.
+
+Panel de Operarios: Puedes crear una vista web sencilla para que los operarios solo vean los campos que necesitan editar (Mensaje y Foto de seguimiento) sin ver toda la base de datos técnica.
+
+8. Pantalla de Bienvenida y Diagnóstico CraftLab
+Título de la interfaz: 8. CraftLab Onboarding & Diagnóstico
+
+Función general: Introducir los 3 pilares de innovación de La Palma & El Tucán (Rutas Metabólicas, Microorganismos, Acidificación) y evaluar el conocimiento del usuario para asignarle la ruta educativa adecuada.
+
+Estructura visual:
+
+Header: Video de fondo en bucle (B-roll de la finca, recolección de cerezas, tanques de fermentación). Texto superpuesto con la introducción.
+
+Cuerpo Central: Los 3 pilares presentados con iconos minimalistas.
+
+Footer (Diagnóstico): Pregunta central ("¿Cuánto sabes sobre fermentación?") con dos botones grandes de selección.
+
+Colores y estética: Estética inmersiva. El video de fondo oscuro permite que el texto en blanco y detalles en rosa resalten. Transmite un ambiente de "laboratorio moderno en medio de la naturaleza".
+
+Listado y Función de cada elemento:
+
+Video Hero:  Atrapa visualmente al usuario.
+
+Texto Intro: Breve resumen de la innovación y los 3 pilares.
+
+Botón "No sé nada": Activa la Ruta Educativa Básica (8.1).
+
+Botón "Sé lo básico": Activa la Ruta Educativa Técnica (8.2).
+
+Navegación y flujos: Al tocar cualquiera de los botones, se lanza el módulo educativo correspondiente con una transición suave (fade-in).
+
+Datos y lógica: Guarda temporalmente la elección del usuario (Nivel: Básico o Avanzado) para futuras interacciones en la app.
+
+8.1 Módulo Educativo: Ruta Básica (Formato "Historias")
+Para el usuario que "no sabe nada", leer párrafos largos puede ser abrumador. Convertiremos tu texto en un formato de "Historias" (pantallas que avanzan con toques) apoyadas en animaciones.
+
+Título de la interfaz: 8.1 Lecciones Interactivas (Ruta Básica)
+
+Función general: Educar al usuario sobre la magia de la fermentación de forma visual, digerible y entretenida, preparándolo para crear su primer perfil.
+
+Estructura visual: Ocupa toda la pantalla. Barra de progreso en la parte superior (dividida en 5 segmentos). En el centro, una animación o video corto seguido de un párrafo breve (máximo 3-4 líneas extraídas de tu texto).
+
+Colores y estética: Fondos en tonos grises muy claros y ocre, con animaciones coloridas para explicar conceptos químicos de forma amigable (ej. bacterias de caricatura amistosa).
+
+Listado y Función de cada elemento:
+
+Barra de Progreso (Top): Muestra en qué paso del tutorial está el usuario (Intro, Importancia, Rutas, Oxígeno, Acidificación).
+
+Pantalla 1 (Intro & Importancia): Texto de bienvenida.
+
+Pantalla 2 (Rutas Metabólicas): Animación de un termómetro y un medidor de azúcar. Explica cómo la temperatura y el Brix cambian el sabor.
+
+Pantalla 3 (Oxígeno): Un gráfico interactivo simple donde se muestra un tanque cerrado (notas frutales) vs. un tanque abierto (notas suaves).
+
+Pantalla 4 (Video de Proceso): Aquí insertamos el video que sugeriste. Un clip de 15 segundos mostrando el proceso real en la finca (flote, horas en cereza).
+
+Navegación y flujos: El usuario toca el lado derecho de la pantalla para avanzar y el izquierdo para retroceder, idéntico a las redes sociales.
+
+Datos y lógica: Al completar el último segmento, se dispara automáticamente la interfaz de validación (8.3).
+
+8.2 Módulo Educativo: Ruta Técnica (Formato "Laboratorio")
+Para el usuario que "sabe lo básico", el formato de historias puede parecer muy simple. Le daremos una interfaz tipo Dashboard donde explore la ciencia a su ritmo.
+
+Título de la interfaz: 8.2 Explorador Técnico de Fermentación
+
+Función general: Profundizar en términos técnicos (Lactobacillus spp., Saccharomyces cerevisiae, respiración anaeróbica) utilizando gráficos y esquemas detallados.
+
+Estructura visual: Un esquema central de un "Tanque de Fermentación Bio-Innovation". Alrededor del tanque hay 3 "puntos interactivos" (hotspots) parpadeantes. Debajo, un panel de lectura que se actualiza al tocar los puntos.
+
+Colores y estética: Estética científica y pulcra. Azul oscuro, gris técnico y acentos de color rosa para datos numéricos.
+
+Listado y Función de cada elemento:
+
+Esquema Central:
+
+Hotspot 1 (Microorganismos): Al tocar, el panel inferior muestra tu texto sobre cepas autóctonas y Lactobacillus plantarum.
+
+Hotspot 2 (Rutas Metabólicas): Al tocar, muestra la explicación sobre catabolismo, oxígeno y síntesis de ácidos.
+
+Hotspot 3 (Acidificación y pH): Al tocar, despliega un gráfico de cómo cae el pH durante 110 horas y el texto correspondiente.
+
+Botón "Unlock CraftLab": Permanece inactivo (gris) hasta que el usuario haya tocado y leído los 3 hotspots.
+
+Navegación y flujos: Exploración libre. Una vez vistos los 3 temas, el botón inferior se enciende en ocre para avanzar al reto final.
+
+Datos y lógica: Un sistema de flags (banderas booleanas) en Antigravity: has_read_microbes = true, etc. Cuando las tres son true, se activa el botón.
+
+8.3 El Reto: Desbloqueando CraftLab
+Para asegurar que la información fue asimilada y hacer la transición hacia la herramienta de creación.
+
+Título de la interfaz: 8.3 Mini-Quiz (Unlock)
+
+Función general: Validar pedagógicamente el aprendizaje con una interacción rápida, transformando al usuario de estudiante a "creador".
+
+Estructura visual: Modal de celebración. Texto amigable y un elemento de "arrastrar y soltar" (drag and drop) o un deslizador (slider).
+
+Colores y estética: Rosa vibrante y blanco. Muy positivo y recompensante.
+
+Listado y Función de cada elemento:
+
+Pregunta de validación interactiva: Por ejemplo, "Si quieres resaltar notas de frutas tropicales intensas, ¿qué ambiente necesitas?".
+
+Opciones visuales: Dos iconos arrastrables: Un tanque tapado (Anaeróbico) y un tanque destapado (Aeróbico). El usuario debe arrastrar el correcto hacia una taza de café.
+
+Animación de Éxito: Al acertar, confeti minimalista y un mensaje "¡Felicidades, eres un creador! Bienvenido a CraftLab".
+
+Navegación y flujos: Al superar el reto, el sistema navega directamente a la Interfaz 9 (El tablero principal de configuración de CraftLab).
+
+Datos y lógica: Actualiza en la base de datos el perfil del usuario: craftlab_unlocked = true. Así, la próxima vez que entre a la app, no tendrá que volver a pasar por este módulo educativo y entrará directo al laboratorio.
+
+Título de la interfaz: 9. Pop-up de Acceso a CraftLab (Confirmación)
+
+Función general: Dar la bienvenida oficial al usuario al entorno de creación tras haber superado el módulo educativo. Funciona como una confirmación de entrada desde la Home, invitándolo a sumergirse en la personalización.
+
+Estructura visual: Es una ventana modal centrada, de bordes redondeados. Presenta los logotipos en la parte superior, seguidos del título "CraftLab" con jerarquía tipográfica. Un bloque de texto persuasivo en el centro y un botón de acción oscuro y prominente en la base.
+
+Colores y estética: * Fondo: Gris muy claro, limpio y minimalista.
+
+Tipografía y Botón: Azul marino oscuro (Navy), estableciendo el color principal de la experiencia CraftLab.
+
+Acentos: El término "Lab" mantiene el característico color rosa vibrante de la marca.
+
+Listado y función de cada elemento:
+
+Icono "X" (Esquina superior derecha): Cierra el pop-up y devuelve al usuario a la Home.
+
+Logotipo "La Palma & El Tucán": Refuerzo institucional.
+
+Título "CraftLab": Identificador visual del servicio.
+
+Texto de bienvenida: Mensaje inspiracional ("Welcome to CraftLab—your coffee creation playground!...").
+
+Botón "Access CraftLab": El llamado a la acción (CTA) que avanza al inicio del proceso.
+
+Navegación y flujos:
+
+Clic en "Access CraftLab": Redirige a la Interfaz 9.1 (Hoja de ruta).
+
+Datos y lógica:
+
+Condición de Aparición: Este pop-up solo debe abrirse si el usuario hace clic en la tarjeta de "CraftLab" en la Home Y la variable craftlab_unlocked (del módulo educativo previo) es igual a true. Si es false, debería llevarlo primero al módulo educativo (Interfaz 8).
+
+Análisis de la Interfaz de Hoja de Ruta
+Título de la interfaz: 9.1 Introducción y Hoja de Ruta de CraftLab
+
+Función general: Establecer las expectativas del usuario antes de comenzar a configurar. Al ser un proceso mucho más largo y técnico que el de Forward Booking (8 pasos frente a 4), esta pantalla actúa como un índice para que el usuario sepa exactamente qué decisiones va a tomar.
+
+Estructura visual: Pantalla completa (o modal que ocupa el 90% del alto). Cuenta con un Header oscuro fijo en la parte superior. El cuerpo contiene un saludo, dos párrafos introductorios y una lista numerada del 1 al 8 (con sub-niveles en el paso 7). Finaliza con un botón de acción en la parte inferior.
+
+Colores y estética:
+
+Header: Azul marino oscuro, destacando el logotipo minimalista "CL" en blanco y rosa.
+
+Fondo del cuerpo: Gris neutro claro para facilitar la lectura de la lista.
+
+Botón "Next": Azul marino oscuro, manteniendo la consistencia de la línea gráfica de CraftLab.
+
+Listado y función de cada elemento:
+
+Header oscuro: Contiene el acrónimo "CL", el logotipo completo de la marca y el botón de cierre "X".
+
+Saludo ("Hello!") y Texto Intro: Párrafos que preparan al usuario para afinar los elementos de su visión cafetera.
+
+Lista Numerada (1 al 8): Texto estático que resume las etapas:
+
+Macroprofile
+
+Flavor Profile
+
+Coffee Variety
+
+Quantity
+
+Processing Category
+
+Processing Method
+
+Processing Parameters (a. Stabilization, b. Cherry Ferm., c. Mucilage Ferm., d. Solar Dry, e. Mechanical Dry)
+
+Shipment Time frame
+
+Botón "Next": Arranca formalmente el paso 1.
+
+Navegación y flujos:
+
+Icono "X": Como en flujos anteriores, debería activar el pop-up de "Confirmación de Salida" para evitar que el usuario cierre por error.
+
+Botón "Next": Redirige a la pantalla del primer paso ("1. Select Your Macroprofile").
+
+Datos y lógica:
+
+Inicialización de Sesión: Al hacer clic en "Next", el sistema en Antigravity debe inicializar un nuevo registro (o variables locales vacías) para todos los campos técnicos (macroprofile, flavor, cherry_fermentation_hours, etc.) que se irán llenando en las siguientes pantallas.
+
+Título de la interfaz: 10. Configurador PWA CraftLab (Sección 1: Macroprofile)
+
+Función general: Iniciar el proceso de diseño del café en una experiencia fluida de un solo desplazamiento (scroll). Esta sección específica permite al usuario definir la identidad sensorial principal de su lote (Fermented, Bright o Classic).
+
+Estructura visual (Responsive):
+
+En PC (Estilo Porsche): Pantalla dividida. El 60% izquierdo de la pantalla es un área fija (sticky) que muestra la imagen dinámica del café. El 40% derecho es un panel con scroll vertical donde están todas las opciones de selección.
+
+En Celular (Estilo Tesla): La imagen dinámica se ancla en la parte superior (ocupando el 30-40% de la pantalla) y se queda fija o se encoge ligeramente mientras el usuario hace scroll hacia abajo para ver las opciones. En la parte inferior, hay una barra flotante fija con el resumen y el botón de avanzar.
+
+Colores y estética: * Fondo del panel de opciones: Blanco o gris muy claro para máxima legibilidad.
+
+Tipografía y Botones activos: Azul marino oscuro (Navy) característico de CraftLab.
+
+Iconos y detalles: Trazos finos y elegantes, manteniendo el borde rojo/rosa al seleccionar un macroperfil para resaltarlo (como se ve en tu diseño actual).
+
+Listado y función de cada elemento:
+
+Contenedor Visual (Sticky Image): Un área grande que muestra la taza de café. Cambia de textura, color o elementos a su alrededor según lo que el usuario seleccione en el panel.
+
+Título de Sección ("Select your macro profile"): Encabezado claro que separa esta sección de la siguiente.
+
+Icono de Ayuda ("?"): Un botón clicable al lado del título. Al pulsarlo, abre un modal/pop-up flotante (sin salir del configurador) con un video o texto que explica qué es un "Macroprofile".
+
+Tarjetas de Selección (Cup Profile): Botones grandes y clickeables con los iconos de Fermented, Bright y Classic.
+
+Barra Inferior Flotante (Sticky Footer): Exclusiva de la versión móvil. Muestra un mini-resumen (ej. "Macro: Fermented") y el botón azul oscuro para ir a la siguiente sección.
+
+Navegación y flujos:
+
+No hay cambios de página. Al hacer clic en una tarjeta (ej. "Fermented"), esta se marca visualmente (borde de color) y la imagen fija se actualiza con una transición suave (fade).
+
+Hacer scroll hacia abajo revela el paso 2 (Flavor Profile), manteniendo la imagen fija arriba (en móvil) o a un lado (en PC).
+
+El icono "?" abre un Pop-up por encima de la vista actual; al cerrarlo, el usuario sigue exactamente donde estaba.
+
+Datos y lógica (React/PWA):
+
+State Management: React guarda la variable selectedMacroprofile. En el instante en que esta variable cambia, la UI renderiza la imagen correspondiente asociada a ese estado.
+
+Lazy Loading: Para que la app sea rápida, las imágenes de los siguientes pasos solo se cargan a medida que el usuario hace scroll hacia abajo.
+
+Título de la interfaz: 11. Configurador PWA CraftLab (Sección 2: Flavor Profile)
+
+Función general: Permitir al usuario elegir las notas de cata específicas para su café. El listado de sabores mostrados dependerá directamente del Macroprofile seleccionado en la sección justo arriba, ofreciendo una experiencia altamente personalizada.
+
+Estructura visual (Responsive):
+
+Integración PWA: Esta sección aparece inmediatamente debajo del panel de Macroprofile al hacer scroll.
+
+Panel de Opciones: Las opciones de sabor (que en el diseño antiguo estaban en un carrusel horizontal pequeño) se transforman en una cuadrícula (Grid) de botones grandes y limpios, o en una lista vertical, para facilitar el toque (Tap) en dispositivos móviles sin tener que hacer scroll lateral.
+
+Imagen Dinámica (Sticky): El área de la imagen principal reacciona a la selección de esta sección.
+
+Colores y estética:
+
+Mantiene el fondo limpio y la tipografía en azul marino oscuro (Navy).
+
+Acentos de color: Se rescatan los códigos de color del diseño original (Naranja para Tropical/Spicy, Amarillo para Tropical Fruits, Morado para Fruity/Cocoa, etc.). Estos colores pueden usarse como un sutil borde en las tarjetas de selección para darle vida a la interfaz.
+
+Listado y Función de cada elemento:
+
+Título de Sección ("Choose your flavor profile"): Texto descriptivo que separa visualmente este bloque del anterior.
+
+Icono de Ayuda ("?"): (Añadido al igual que en la sección anterior). Abre un pop-up superpuesto explicando cómo el proceso químico logra esas notas de sabor específicas.
+
+Tarjetas de Sabores (Flavor Cards): Botones con el icono de la taza, la franja de color y el texto descriptivo ("Tropical / Spicy / Cacao", "Red Fruits / Sweet", etc.).
+
+Imagen Dinámica Actualizable: Al tocar un sabor, la imagen fija del configurador cambia. Por ejemplo, si elige "Tropical Fruits", la imagen de la taza de café se rodea mágicamente de papayas y guayabas (como la excelente imagen de referencia image_067c5d.jpg que me mostraste antes para Forward Booking).
+
+Navegación y flujos:
+
+Interacción sin saltos: Al tocar una tarjeta de sabor, esta se resalta. No hay botón de "Next Step"; el usuario simplemente sigue bajando (scroll down) hacia la sección 3 (Variety).
+
+Barra Flotante (Móvil): La barra en la parte inferior de la pantalla se actualiza en tiempo real. Ahora diría algo como: Macro: Fermented | Flavor: Tropical Fruits.
+
+Datos y lógica (React/PWA):
+
+Filtrado Reactivo (Lógica Condicional): Esta es la parte técnica más importante. El componente de React debe evaluar la variable selectedMacroprofile.
+
+Si el usuario seleccionó "Fermented" arriba, esta sección solo renderiza las tarjetas de "Fruity / Cocoa", "Tropical Fruits", etc.
+
+Si el usuario cambia de opinión y hace scroll hacia arriba para cambiar su Macro a "Bright", las tarjetas de esta sección se borran y se reemplazan instantáneamente por los sabores cítricos/florales, sin recargar la página.
+
+State Management: Guarda la elección en la variable selectedFlavor.
+
+Título de la interfaz: 12. Configurador PWA CraftLab (Sección 3: Coffee Variety)
+
+Función general: Permitir al usuario seleccionar la genética del café (Geisha, Sidra, Java, etc.). Es un paso botánico fundamental donde la variedad elegida debe ser congruente con el sabor y perfil seleccionados en los pasos anteriores.
+
+Estructura visual (Responsive):
+
+Integración PWA: Aparece al hacer scroll debajo de la sección "Flavor Profile".
+
+Panel de Opciones: Las opciones botánicas se presentan en una cuadrícula o fila de botones circulares/tarjetas.
+
+Imagen Dinámica (Sticky): El área visual principal se actualiza. Ahora mostrará la planta, las hojas o las cerezas específicas de la variedad elegida.
+
+Colores y estética:
+
+Mantiene el fondo limpio.
+
+Los iconos de las variedades usan una paleta de rojos, granates y rosas (representando la maduración de la cereza del café), lo cual añade un toque orgánico y elegante al azul marino corporativo.
+
+Listado y Función de cada elemento:
+
+Título de Sección ("Select your coffee variety"): Texto descriptivo que introduce la sección.
+
+Texto Educativo: Un párrafo breve ("These coffee varieties are crafted to match...") que da valor a los años de experiencia de la finca.
+
+Imagen Dinámica Actualizable: Cambia en tiempo real. (Nota: La ilustración animada con la roca que se ve en tu imagen es simpática, pero si vamos por un estilo Porsche/Premium, te sugiero usar fotografías de alta resolución de las hojas/cerezas reales, o renders 3D elegantes).
+
+Tarjetas de Variedad: Botones para Geisha, Sidra, Java, Castillo, Pink Bourbon.
+
+Navegación y flujos:
+
+Al tocar una variedad, el borde se resalta y la imagen anclada cambia.
+
+El usuario simplemente continúa haciendo scroll hacia abajo para el siguiente paso (Quantity).
+
+Datos y lógica (React/PWA):
+
+Filtrado cruzado: Tal como dice tu texto en la imagen ("crafted to match your selected flavor"), React debe habilitar solo las variedades que puedan lograr el perfil de sabor elegido en la Sección 2.
+
+Guarda la variable selectedVariety.
+
+Análisis del Panel de Resumen (Bottom Sheet)
+Título de la interfaz: 12.1 Panel Desplegable de Resumen (Your Selections at a Glance)
+
+Función general: Actuar como el "carrito de compras" o "hoja de especificaciones" del configurador. Le permite al usuario ver exactamente qué ha construido hasta el momento, qué le falta por decidir, y le da tranquilidad sobre el proceso.
+
+Estructura visual: Es un Bottom Sheet Modal (una hoja que se desliza desde abajo hacia arriba, cubriendo el 80-90% de la pantalla). Tiene un diseño de lista estructurada de pares "Clave: Valor".
+
+Colores y estética:
+
+Cambio drástico (Acertado): Usa un fondo azul marino casi negro para generar un contraste total con el configurador que está detrás. Esto indica que es una vista de "sistema" o "revisión".
+
+Textos de alerta: Los valores faltantes ("No selected") usan el color rosa vibrante de la marca, para llamar la atención del usuario sobre lo que aún debe configurar. Los textos confirmados van en blanco.
+
+Listado y Función de cada elemento:
+
+Icono "X" y Flecha abajo: Para cerrar el panel y volver al configurador.
+
+Logotipos Institucionales (Header): Para mantener la identidad de marca en este espacio cerrado.
+
+Texto "Your Selections at a Glance": Título claro de la sección.
+
+Párrafo de Confianza: "Here's an overview... Trust in our expertise..." Un toque emocional muy valioso en UX para justificar el precio y la espera.
+
+Lista de Variables (Key-Value): Muestra el estado en tiempo real de: Macro Profile, Flavor, Variety, Size, Process, UpperProcess, parámetros de tiempo, y Date.
+
+Navegación y flujos:
+
+Disparador (Trigger): Se abre al tocar la barra/botón flotante en la parte inferior de la pantalla del configurador PWA.
+
+Cierre: Se desliza hacia abajo al tocar la "X" o al hacer el gesto de deslizar hacia abajo en la pantalla (muy natural en móviles).
+
+Datos y lógica (React/PWA):
+
+Lectura de Estado (State Read-only): Esta pantalla no modifica datos, solo los lee. En React, simplemente inyecta las variables actuales (ej. {macroProfile || 'No selected'}).
+
+Si la variable es nula, aplica la clase CSS de color rosa; si tiene datos, aplica la clase blanca.
+
+¡Sigamos construyendo esta experiencia PWA de lujo! El panel de resumen que revisamos antes (image_ccd101.png) encajará perfecto como un menú deslizable desde la parte inferior, dándole al usuario control total sin sacarlo de su flujo.
+
+Ahora, integrando tu diseño de la pantalla de cantidad, aquí tienes el análisis de las siguientes dos secciones, adaptadas a nuestro nuevo formato de scroll vertical (estilo Tesla/Porsche):
+
+Análisis de la Sección 4: Cantidad (Quantity)
+Título de la interfaz: 13. Configurador PWA CraftLab (Sección 4: Determine your quantity)
+
+Función general: Definir el volumen exacto de café verde que el usuario desea producir. Esta sección brilla porque no solo pide un número, sino que educa al usuario sobre el rendimiento del café (el esfuerzo detrás de cada kilo).
+
+Estructura visual (Responsive):
+
+Integración PWA: Aparece justo debajo de "Variety" al hacer scroll.
+
+Panel de Opciones: Un bloque de texto educativo seguido de botones tipo pastilla (pill buttons) para seleccionar el peso.
+
+Imagen Dinámica (Sticky): La imagen anclada ahora mostrará la caja o sacos de envío.
+
+Colores y estética:
+
+Imagen (Caja): La ilustración usa bloques sólidos en azul marino oscuro, rosa y blanco, integrando perfectamente el branding. (Para un estilo más premium, en la PWA podríamos hacer que esta caja sea un render 3D que se actualice visualmente).
+
+Botones de Peso: Blancos con texto oscuro, que se rellenarían de azul marino o rosa al ser seleccionados.
+
+Listado y Función de cada elemento:
+
+Título de Sección ("Determine your quantity"): Separa visualmente este paso del anterior.
+
+Texto Educativo: Explica la regla de oro: se necesitan aproximadamente 7.3 kg de cerezas para producir 1 kg de café verde. ¡Este es un detalle genial para justificar el valor del producto!
+
+Imagen Dinámica (Caja de CraftLab): Representación visual del empaque. En React, esta imagen podría cambiar (ej. mostrar 2 cajas si elige 25 kg, 4 cajas si elige 50 kg).
+
+Botones de Selección: Opciones fijas de "12,5 Kg", "25 Kg", "37,5 Kg" y "50 Kg".
+
+Navegación y flujos:
+
+Al tocar un peso, el usuario sigue bajando (scroll) hacia la sección de procesos.
+
+El "Sticky Footer" (la barra flotante inferior) actualiza su resumen: ... | Variety: Geisha | Size: 25 Kg.
+
+Datos y lógica (React/PWA):
+
+Observación de UX / Lógica: Hay una pequeña contradicción en el texto de tu diseño. El texto dice "with a minimum of 25 kg" (con un mínimo de 25 kg), pero el primer botón disponible es de 12,5 Kg. En Antigravity/React, deberás decidir cuál es la regla real. Si el mínimo es 25 kg, el botón de 12,5 kg debería eliminarse o estar desactivado.
+
+Guarda la variable selectedQuantity.
+
+Análisis de la Sección 5: Categoría de Proceso (Processing Category)
+(Basado en el índice de la hoja de ruta que analizamos antes y adaptado al estilo PWA)
+
+Título de la interfaz: 14. Configurador PWA CraftLab (Sección 5: Choose Your Processing Category)
+
+Función general: El inicio de la verdadera "química" de CraftLab. Aquí el usuario elige el método de beneficio base (Natural, Washed, Honey, Bio-Innovation) sobre el cual luego ajustará los parámetros exactos.
+
+Estructura visual (Responsive):
+
+Integración PWA: Siguiente bloque al hacer scroll vertical.
+
+Panel de Opciones: Cuadrícula de tarjetas grandes (Grid) con los nombres de los procesos.
+
+Imagen Dinámica (Sticky): La zona visual se transforma completamente. Pasa de mostrar una caja de envío a mostrar el entorno de la finca (ej. camas africanas de secado al sol, tanques de fermentación o cerezas despulpadas).
+
+Colores y estética:
+
+El diseño se mantiene limpio, utilizando el azul marino para los botones activos. Las imágenes ancladas aquí deberían tener tonos tierra, rojos (cerezas) y verdes (finca) para contrastar con la interfaz blanca/gris.
+
+Listado y Función de cada elemento:
+
+Título de Sección ("Choose Your Processing Category"): Encabezado claro.
+
+Icono de Ayuda ("?"): Al pulsarlo, lanza un modal flotante con un video corto explicando visualmente la diferencia entre un proceso Natural y un Lavado.
+
+Tarjetas de Categoría: Botones clicables (Natural, Washed, Honey, Bio-Innovation, etc.).
+
+Imagen Anclada: Fotografía premium que reacciona al toque. (Si toca "Natural", muestra cerezas secándose enteras; si toca "Washed", muestra el grano pergamino limpio).
+
+Navegación y flujos:
+
+Selección con un toque y scroll hacia abajo para entrar al "paso de los expertos": afinar los parámetros del proceso.
+
+Datos y lógica (React/PWA):
+
+Filtrado de Opciones: Al igual que en Forward Booking, esta sección debe evaluar las elecciones previas. Si el usuario eligió un sabor "Fermented" en el paso 2 y variedad "Geisha" en el paso 3, este paso 5 solo debe mostrar las categorías de proceso que logran ese resultado en esa variedad.
+
+Guarda la variable selectedCategory.
+
+Título de la interfaz: 14. Configurador PWA CraftLab (Sección 5: Processing Type)
+
+Función general: Definir la dirección del beneficio del café. Permite al usuario elegir la "familia" del proceso (Washed, Honey, Natural), cada una con un impacto dramático en la taza final.
+
+Estructura visual (Responsive):
+
+Integración PWA: Nuevo bloque al hacer scroll debajo de "Cantidad".
+
+Panel de Opciones: Tarjetas verticales o horizontales que contienen el título y la descripción detallada que me proporcionaste.
+
+Imagen Dinámica (Sticky): La imagen principal se actualiza. Muestra una macrofotografía del grano en su estado correspondiente (ej. pergamino limpio para Washed, cereza entera arrugada para Natural).
+
+Colores y estética:
+
+Fondo blanco/gris claro. Las tarjetas seleccionadas se delinean en azul marino.
+
+Listado y Función de cada elemento:
+
+Título ("Personaliza el proceso de fermentación"): Título principal de la sección.
+
+Texto Educativo: "Cada tipo de procesamiento impacta de manera única en los aromas..."
+
+Tarjeta "Washed Type": Limpieza y brillo.
+
+Tarjeta "Honey Type": Dulzura y suavidad.
+
+Tarjeta "Natural Type": Intensidad y complejidad.
+
+Icono de Educación / Pop-up: Botón interactivo ("Learn more") que abre la explicación técnica de por qué un proceso Natural es más intenso que un Lavado.
+
+Datos y lógica (React/PWA):
+
+Filtrado Activo: La PWA filtra la columna UpperProcess. Si la fila de la variedad Geisha seleccionada anteriormente solo tiene lotes "Natural Process Type" y "Honey Process Type" para el sabor deseado, la tarjeta de "Washed" aparecerá deshabilitada o directamente no se renderizará.
+
+Análisis de la Sección 6: Método de Proceso (Sub-Procesos / Process)
+Aquí es donde el usuario siente que realmente está en un "Lab", tomando decisiones químicas precisas. Corresponde a la interfaz de tu diseño (image_ccc863.png) y a la columna Process de la base de datos.
+
+Título de la interfaz: 15. Configurador PWA CraftLab (Sección 6: Customize Your Processing Method)
+
+Función general: Seleccionar la subcategoría química exacta que definirá la fermentación. Refina la elección anterior para controlar las bacterias y el nivel de acidez.
+
+Estructura visual (Responsive):
+
+Integración PWA: Aparece inmediatamente debajo del "Processing Type".
+
+Panel de Opciones: Un selector de iconos circulares con ilustraciones científicas/químicas (como se ve en image_ccc863.png con la molécula láctica o la cereza con colores).
+
+Imagen Dinámica (Sticky): Cambia a los tanques de fermentación azules característicos del laboratorio de la finca, como se muestra en tu diseño.
+
+Colores y estética:
+
+Los iconos tienen toques de rojo, azul (moléculas) y amarillo, dando un aspecto de panel de control científico.
+
+Listado y Función de cada elemento:
+
+Título ("Customize your processing method"): Texto de introducción.
+
+Iconos de Método: Botones circulares para Natural, Bio-Washed, Bio-Natural, Lactic, pH Clarity, etc..
+
+Pop-up Educativo (Módulo de educación): Al tocar cualquiera de estos métodos (o un icono de información adjunto), se debe desplegar el modal que explica cómo este subproceso interactúa con el grano.
+
+Navegación y flujos:
+
+El usuario selecciona un método (ej. Lactic) y la PWA habilita el scroll hacia la sección final (los parámetros de horas y estabilización).
+
+Datos y lógica (React/PWA):
+
+Lógica Relacional Fuerte: Este paso es el filtro final de la tabla. El componente React lee la columna Process.
+
+Ejemplo de código mental: Si UpperProcess == 'Honey', mostrar opciones (Lactic, Bio-Washed) SI y SOLO SI existen en la DB para la variedad actual.
+
+Título de la interfaz: 16. Configurador PWA CraftLab (Sección 7a: Cherry Stabilization)
+
+Función general: Permitir al usuario definir el tiempo exacto (en horas) que la cereza de café reposará antes de ser procesada. La interfaz actúa como un "simulador", educando al usuario sobre las probabilidades de sabor que obtendrá al mover el indicador numérico.
+
+Estructura visual (Responsive):
+
+Integración PWA: Aparece al hacer scroll debajo de la selección de "Processing Method".
+
+Panel de Opciones: Un título, texto educativo, y un control deslizante (Slider) horizontal o vertical que va desde el valor mínimo hasta el máximo permitido para ese lote.
+
+Imagen Dinámica (Sticky): El área visual (que en PC está a la izquierda y en móvil arriba) se convierte en un medidor dinámico. Usará la excelente idea de tu diseño: una balanza visual entre "Fruity Brightness" y "Cocoa hints".
+
+Colores y estética:
+
+El control deslizante (Slider) usa un riel gris claro, y la barra de progreso se llena en el color azul marino o rosa característico a medida que se aumentan las horas.
+
+Los iconos de la imagen dinámica (Fruity vs Cocoa) cambian de opacidad. Si el usuario selecciona "0 hr", el icono de Fruity Brightness brilla. Si sube a "48 hr", se ilumina el de Cocoa hints.
+
+Listado y Función de cada elemento:
+
+Título ("Cherry Stabilization"): Identifica la variable química que se está alterando.
+
+Icono "?" (Ayuda): Modal con un video técnico sobre qué le pasa a la cereza estructuralmente al dejarla reposar.
+
+Texto Educativo: "Stabilization allows the coffee to rest after processing...".
+
+Slider Numérico (Selector de Horas): El usuario arrastra un punto para seleccionar "0 hrs", "12 hrs", "24 hrs", etc.
+
+Feedback Textual Predictivo (Dinámico): Justo debajo del slider, un texto cambia en tiempo real. Ej: Si hrs < 12: "Probabilidad de taza brillante y frutal". Si hrs > 24: "Desarrollando dulzor profundo y notas a cacao".
+
+Navegación y flujos:
+
+Al mover el slider y soltarlo, el sistema registra el dato y el usuario simplemente hace scroll hacia abajo para el siguiente parámetro.
+
+Datos y lógica (React/PWA):
+
+Limites Dinámicos (Min/Max): ¡Aquí tu base de datos brilla de nuevo! El componente React busca las filas que sobrevivieron a los filtros anteriores (Ej. Geisha + Lactic). Lee la columna Stabilizatio[n] y establece que el slider solo puede moverse entre el número menor (ej. 0) y el mayor (ej. 28.7) disponible.
+
+State Management: Guarda la variable numérica selectedStabilization.
+
+Extrapolación a los demás parámetros (7b, 7c, 7d, 7e)
+Dado que me mencionas que el usuario seguirá seleccionando rangos numéricos, el formato PWA es ideal porque apilaremos estos "Sliders" uno debajo del otro de manera muy elegante. El usuario hará scroll e irá ajustando:
+
+Cherry Fermentation (7b): Slider para horas. La imagen sticky cambia para mostrar cerezas en tanques. (Lee la columna Cherry Ferment[ation] de la DB).
+
+Mucilage Fermentation (7c): Slider para horas. La imagen muestra el mucílago expuesto. (Lee la columna Mucilage Fermentation).
+
+Solar Dry (7d): Slider para horas de secado al sol. La imagen muestra camas africanas. (Lee la columna Solar Dry Hours).
+
+Mechanical Dry (7e): Slider para secado mecánico. (Lee la columna Mechanical).
+
+Nota de UX: En cada uno de estos pasos, si en la base de datos el valor es siempre 0.00 para la combinación elegida por el usuario, la PWA debería ocultar ese slider automáticamente o mostrarlo bloqueado con un mensaje: "No requerido para este perfil", simplificando el proceso.
+
+Título de la interfaz: 16.1 Pop-up de Confirmación de Salida (CraftLab Exit)
+
+Función general: Actuar como un seguro contra accidentes. Como la configuración de CraftLab es larga y técnica, cerrar la PWA por error sería frustrante. Este modal valida si el abandono es intencional.
+
+Estructura visual: Modal emergente muy limpio y centrado. Encabezado con el logotipo de CraftLab, texto de advertencia en el medio y un botón de acción oscuro ocupando casi todo el ancho inferior.
+
+Colores y estética:
+
+Fondo: Gris muy claro para dar lectura cómoda.
+
+Botón principal ("Yes, leave without saving"): Azul marino profundo (Navy). El uso de este color oscuro le da "peso" visual a la decisión de borrar todo.
+
+Listado y función de cada elemento:
+
+Icono "X" (Esquina superior derecha): Permite al usuario arrepentirse, cerrando el modal y dejándolo exactamente en la sección de la PWA donde estaba.
+
+Logotipo "CraftLab": Refuerza en qué entorno se encuentra.
+
+Texto de Advertencia: "You have not completed your order yet..." Informa claramente la consecuencia de la acción.
+
+Botón "Yes, leave without saving": Ejecuta el abandono del flujo.
+
+Navegación y flujos:
+
+Disparador (Trigger): Se activa al presionar la "X" de la barra superior del configurador principal o si el usuario presiona el botón "Atrás" de su navegador/celular.
+
+Acción de salida: Redirige a la Home principal de la app.
+
+Datos y lógica (React/PWA):
+
+Limpieza de Estado (Clear State): Si el usuario hace clic en salir, React debe vaciar absolutamente todas las variables temporales (selectedMacro, selectedVariety, selectedCherryHours, etc.) para que la próxima vez que entre, encuentre el laboratorio en blanco.
+
+Análisis de la Sección 7b: Fermentación en Cereza
+Título de la interfaz: 17. Configurador PWA CraftLab (Sección 7b: Cherry Fermentation)
+
+Función general: Definir el nivel de fermentación anaeróbica/aeróbica mientras el grano aún está dentro de su cereza. Enseña al usuario cómo el tiempo extendido aumenta la complejidad y la acidez vibrante.
+
+Estructura visual (Responsive):
+
+Integración PWA: Este bloque aparece suavemente al hacer scroll justo debajo del paso de "Stabilization".
+
+Panel de Opciones: A diferencia del slider de estabilización, aquí tenemos una fila horizontal de Tarjetas de Selección con iconos moleculares y rangos numéricos.
+
+Imagen Dinámica (Sticky): El medidor visual con los gráficos de "Fruity Brightness" y "Cocoa hints", el cual mantendremos fijo a la izquierda (PC) o arriba (Móvil).
+
+Colores y estética:
+
+Las tarjetas de opciones tienen un diseño de "panel de control" con iconos de bacterias/moléculas en rojo, verde y amarillo, dándole un verdadero aspecto de laboratorio.
+
+Listado y Función de cada elemento:
+
+Título ("Cherry Fermentation") & Icono "?": Identifica el paso y permite abrir el video educativo.
+
+Texto Educativo: Explica el impacto de fermentar el café aún envuelto en su cereza.
+
+Tarjetas de Rangos de Horas: Botones interactivos que agrupan los tiempos. Ej. "64 - 90 hr (Short)", "111 - 134 hr (Med)", "160 - 180 hr (Extended)".
+
+Navegación y flujos:
+
+Al tocar una tarjeta, esta se resalta en azul marino y la imagen sticky reacciona (ej. si elige Extended Fermentation, la balanza visual se inclina hacia los tonos frutales intensos o de cacao).
+
+El usuario simplemente continúa su scroll hacia abajo.
+
+Datos y lógica (React/PWA):
+
+Renderizado Condicional desde BD: El componente de React leerá la columna Cherry Ferment[ation] de tu base de datos Airtable/Supabase. Si la combinación previa del usuario (Ej. Geisha + Lactic) solo tiene valores de 64 y 70 horas en la tabla, la PWA solo renderizará la tarjeta de "64 - 90 hr" y ocultará las demás. ¡Esto evita que el usuario diseñe un café imposible de producir!
+
+Análisis de la Sección 7c: Fermentación de Mucílago
+Título de la interfaz: 18. Configurador PWA CraftLab (Sección 7c: Mucilage Fermentation)
+
+Función general: Permitir al usuario controlar el tiempo que el grano fermenta con su capa de mucílago intacta. Esta decisión química es clave para potenciar el dulzor, la textura sedosa (cuerpo) y el balance de la taza final.
+
+Estructura visual (Responsive):
+
+Integración PWA: Aparece al hacer scroll debajo de "Cherry Fermentation".
+
+Panel de Opciones: Título, descripción técnica y una fila horizontal con las tarjetas de selección de rango de horas.
+
+Imagen Dinámica (Sticky): El área visual se actualiza con la fotografía macro del mucílago y el nuevo "Espectro de Sabor" elegante que sugerimos arriba.
+
+Colores y estética:
+
+Interfaz limpia con botones que se iluminan o rellenan de azul marino profundo al ser seleccionados.
+
+Listado y Función de cada elemento:
+
+Título ("Mucilage Fermentation") & Icono "?": Para identificar la variable y abrir el modal educativo del proceso.
+
+Texto Educativo: "Targeting the sticky mucilage layer promotes enhanced sweetness, a silky texture...". Un copy excelente que justifica la acción.
+
+Tarjetas de Selección: Muestran los valores disponibles. Según tu diseño, podrían ser "0 hr (Short)" o "24 hr (Extended)".
+
+Navegación y flujos:
+
+Un toque selecciona la opción, actualiza el indicador del Espectro de Sabor en la imagen anclada, y el usuario simplemente sigue su scroll hacia el secado.
+
+Datos y lógica (React/PWA):
+
+Filtrado Dinámico: El sistema lee la columna Mucilage Fermentation de la base de datos para la combinación elegida por el usuario. Si la base de datos dice 0.00 para ese lote específico, el sistema puede auto-seleccionar "0 hr" y bloquear la tarjeta de "24 hr" (o directamente ocultarla) para evitar errores.
+
+Análisis de la Sección 7d: Secado en Camas Africanas (Solar Dry)
+Título de la interfaz: 19. Configurador PWA CraftLab (Sección 7d: Raised Beds / Solar Drying)
+
+Función general: Controlar el ritmo de deshidratación del grano bajo el sol. Educa al usuario sobre cómo un secado lento y prolongado preserva los compuestos aromáticos delicados.
+
+Estructura visual (Responsive):
+
+Integración PWA: Aparece al hacer scroll debajo de la fermentación de mucílago.
+
+Panel de Opciones: Mismo patrón de diseño. Título, texto y tarjetas con rangos de horas muy amplios.
+
+Imagen Dinámica (Sticky): La imagen cambia a una vista espectacular de la finca con las camas de secado al sol. El gráfico superpuesto reacciona a los días/horas de secado.
+
+Colores y estética:
+
+Consistente con el resto del laboratorio: tipografía azul marino y contrastes precisos.
+
+Listado y Función de cada elemento:
+
+Título ("Raised Beds") & Icono "?": Identificador del módulo de secado.
+
+Texto Educativo: "Allows for slow and even dehydration, preserving delicate aromatic compounds...".
+
+Tarjetas de Rango de Horas (Días): Según tu diseño, los rangos son masivos: "384 - 748 hr (Short Dry)", "797 - 937 hr (Med Dry)", "1082 - 1130 hr (Extended Dry)". Estas tarjetas le dan el control sobre la velocidad de secado.
+
+Navegación y flujos:
+
+Interacción táctil fluida. Al seleccionar, se actualiza el estado y el usuario puede bajar al último paso técnico.
+
+Datos y lógica (React/PWA):
+
+Lectura de Base de Datos: Se extraen y agrupan los valores de la columna Solar Dry Hours de tu tabla relacional.
+

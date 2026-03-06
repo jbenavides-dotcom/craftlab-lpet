@@ -1,0 +1,27 @@
+.fb-stepper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    width: 100%;
+    max-width: 240px;
+}
+
+.step-item {
+    color: var(--color-gray-medium);
+    transition: all 0.2s;
+    padding-bottom: 4px;
+    border-bottom: 2px solid transparent;
+}
+
+.step-item.active {
+    color: var(--color-dark-text);
+    border-bottom: 2px solid var(--color-dark-text);
+}
+
+.step-line {
+    flex: 1;
+    height: 1px;
+    background-color: var(--color-gray-medium);
+    opacity: 0.5;
+}

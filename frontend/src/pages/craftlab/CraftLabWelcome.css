@@ -1,0 +1,189 @@
+.cl-welcome-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--color-gray-light);
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-md);
+    position: relative;
+}
+
+/* Modal specific for Welcome */
+.cl-welcome-card {
+    background-color: var(--color-white);
+    border-radius: var(--radius-xl);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 500px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Header with Navy */
+.cl-welcome-header {
+    background-color: var(--color-navy);
+    color: var(--color-white);
+    padding: var(--spacing-xl) var(--spacing-lg);
+    text-align: center;
+    position: relative;
+}
+
+.cl-welcome-logo {
+    height: 48px;
+    margin-bottom: var(--spacing-md);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cl-welcome-title {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.cl-welcome-title .highlight {
+    color: var(--color-pink-hot);
+}
+
+.cl-welcome-close {
+    position: absolute;
+    top: var(--spacing-md);
+    right: var(--spacing-md);
+    color: var(--color-white);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+/* Content */
+.cl-welcome-content {
+    padding: var(--spacing-xxl) var(--spacing-xl);
+    text-align: center;
+}
+
+.cl-welcome-content p {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--color-gray-dark);
+    margin-bottom: var(--spacing-xxl);
+}
+
+/* -----------------------------
+   Roadmap Layout (9.1)
+----------------------------- */
+.cl-roadmap-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--color-gray-light);
+    width: 100%;
+}
+
+.roadmap-header {
+    background-color: var(--color-navy);
+    color: var(--color-white);
+    padding: var(--spacing-md) var(--spacing-xl);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.roadmap-logo-text {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.roadmap-logo-text .highlight {
+    color: var(--color-pink-hot);
+}
+
+.roadmap-body {
+    padding: var(--spacing-xl) var(--spacing-md);
+    max-width: 800px;
+    margin: 0 auto;
+    flex: 1;
+}
+
+.roadmap-greeting {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    color: var(--color-navy);
+    margin-bottom: var(--spacing-md);
+}
+
+.roadmap-intro {
+    font-family: var(--font-sans);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: var(--color-gray-dark);
+    margin-bottom: var(--spacing-xl);
+}
+
+/* List */
+.roadmap-list {
+    background-color: var(--color-white);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+}
+
+.roadmap-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--color-gray-light);
+}
+
+.roadmap-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.roadmap-number {
+    background-color: rgba(26, 43, 76, 0.1);
+    color: var(--color-navy);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    margin-right: var(--spacing-md);
+    flex-shrink: 0;
+}
+
+.roadmap-text h3 {
+    font-family: var(--font-sans);
+    font-size: 1.1rem;
+    color: var(--color-navy);
+    margin-bottom: 4px;
+}
+
+.roadmap-sublist {
+    margin-top: 8px;
+    padding-left: 20px;
+    list-style-type: lower-alpha;
+    color: var(--color-gray-dark);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.roadmap-footer {
+    padding: var(--spacing-xl) var(--spacing-md);
+    background-color: var(--color-white);
+    border-top: 1px solid var(--color-gray-light);
+    display: flex;
+    justify-content: center;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+}

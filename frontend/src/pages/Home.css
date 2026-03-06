@@ -1,0 +1,438 @@
+/* ===================================================
+   HOME — Editorial Layout inspired by La Palma & El Tucán
+   =================================================== */
+
+.home-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--color-white);
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* ---- HEADER ---------------------------------------- */
+.home-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem var(--spacing-lg);
+    background-color: var(--color-white);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.header-icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-dark-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+}
+
+.header-brand-name {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: var(--color-navy);
+    text-transform: uppercase;
+}
+
+/* ---- MAIN ------------------------------------------ */
+.home-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 80px;
+}
+
+/* ---- HERO SECTION ---------------------------------- */
+.hero-section {
+    background-color: var(--color-brand-red);
+    padding: 6rem 2rem 5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    min-height: 420px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.hero-title {
+    font-family: var(--font-serif);
+    font-size: clamp(3rem, 9vw, 6rem);
+    font-weight: 700;
+    color: var(--color-white);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.25rem;
+    animation: fadeSlideUp 0.7s ease-out both;
+}
+
+.hero-title-italic {
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.hero-subtitle {
+    font-family: var(--font-sans);
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.88);
+    letter-spacing: 0.02em;
+    line-height: 1.65;
+    animation: fadeSlideUp 0.7s 0.15s ease-out both;
+    max-width: 380px;
+}
+
+@keyframes fadeSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ---- INTRO SECTION --------------------------------- */
+.intro-section {
+    padding: 2.5rem var(--spacing-lg);
+    background-color: var(--color-white);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.intro-section p {
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: var(--color-dark-text);
+    font-weight: 300;
+    max-width: 680px;
+}
+
+/* ---- PROGRAMS VISUAL SECTION ----------------------- */
+.programs-visual-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 2rem var(--spacing-lg);
+    /* padding on sides */
+    background-color: var(--color-white);
+}
+
+/* Each block */
+.visual-block {
+    position: relative;
+    min-height: 300px;
+    cursor: pointer;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    transition: transform 0.3s ease;
+    border-radius: var(--radius-lg);
+    margin-bottom: 1rem;
+}
+
+.visual-block:hover {
+    transform: scale(1.005);
+}
+
+.visual-block:hover .block-link {
+    gap: 0.6rem;
+}
+
+.block-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(14, 30, 54, 0.75) 0%, transparent 60%);
+}
+
+.block-content {
+    position: relative;
+    z-index: 2;
+    padding: 2rem;
+    color: var(--color-white);
+}
+
+.block-content h2 {
+    font-family: var(--font-serif);
+    font-size: clamp(1.8rem, 5vw, 3.2rem);
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+    letter-spacing: -0.01em;
+}
+
+.block-content p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    opacity: 0.88;
+    max-width: 480px;
+    margin-bottom: 1rem;
+}
+
+.block-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-white);
+    opacity: 0.85;
+    transition: gap 0.2s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.45);
+    padding-bottom: 2px;
+}
+
+/* Forward Booking block — warm dark coffee image feel */
+.block-fb {
+    background-color: var(--color-navy);
+    background-image:
+        linear-gradient(135deg, #1a0a00 0%, #3d1c00 40%, #0e1e36 100%);
+    min-height: 340px;
+}
+
+/* CraftLab block — Experimental/Blueish-Green gradient or similar to keep it distinct */
+.block-cl {
+    background-color: var(--color-navy);
+    background-image:
+        linear-gradient(135deg, #102a43 0%, #243b53 50%, #1e3a5f 100%);
+    min-height: 340px;
+}
+
+/* Reference class kept for structure but unused in home cards now */
+.cl-banner-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.cl-logo-text {
+    font-family: var(--font-sans);
+    font-size: clamp(4rem, 15vw, 8.5rem);
+    font-weight: 800;
+    color: var(--color-white);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    margin: 0;
+}
+
+.cl-logo-light {
+    opacity: 0.45;
+}
+
+.cl-subtitle-text {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    color: var(--color-white);
+    line-height: 1.5;
+    margin: 0;
+    font-style: italic;
+    font-weight: 300;
+}
+
+/* Community block — brand pink */
+.block-pink {
+    background-color: var(--color-pink-bg);
+    background-image:
+        linear-gradient(135deg, #f5b5b7 0%, #e87c80 50%, #c4555a 100%);
+    min-height: 280px;
+    cursor: default;
+}
+
+.block-pink:hover {
+    transform: none;
+}
+
+/* ---- DESKTOP LAYOUT -------------------------------- */
+@media (min-width: 900px) {
+    .home-header {
+        padding: 1.5rem 3rem;
+    }
+
+    .intro-section {
+        padding: 3.5rem;
+        max-width: none;
+        background-color: var(--color-white);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .intro-section p {
+        font-size: 1.25rem;
+        max-width: 740px;
+    }
+
+    .programs-visual-section {
+        flex-direction: row;
+        flex-wrap: wrap;
+        min-height: 480px;
+    }
+
+    /* FB takes left half, CL takes right half */
+    .block-fb {
+        flex: 1 1 50%;
+        min-height: 480px;
+    }
+
+    .block-cl {
+        flex: 1 1 50%;
+        min-height: 480px;
+    }
+
+    /* Community spans full width below */
+    .block-pink {
+        flex: 1 1 100%;
+        min-height: 240px;
+    }
+
+    .block-content {
+        padding: 2.5rem 3rem;
+    }
+
+    .block-content h2 {
+        font-size: 2.8rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .block-content p {
+        font-size: 1rem;
+    }
+}
+
+/* ---- BOTTOM NAV ------------------------------------ */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: var(--color-white);
+    padding: var(--spacing-sm) 0;
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.06), 0 -4px 16px rgba(0, 0, 0, 0.04);
+    z-index: 40;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-gray-medium);
+    transition: color 0.2s;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 4px 16px;
+}
+
+.nav-item.active,
+.nav-item:hover {
+    color: var(--color-navy);
+}
+
+/* ---- FB WELCOME MODAL ------------------------------ */
+.fb-welcome-modal {
+    text-align: left;
+}
+
+.fb-welcome-title {
+    color: var(--color-dark-text);
+    font-size: 1.75rem;
+    margin-bottom: var(--spacing-md);
+    font-weight: 600;
+    font-family: var(--font-serif);
+}
+
+.fb-highlight {
+    color: var(--color-pink-bg);
+    font-style: italic;
+    filter: brightness(0.8) contrast(1.5);
+}
+
+.fb-welcome-body {
+    font-size: 0.9375rem;
+    color: var(--color-dark-text);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+    line-height: 1.6;
+}
+
+/* ---- SPLASH SCREEN ---------------------------------- */
+.splash-screen {
+    position: fixed;
+    inset: 0;
+    background-color: var(--color-tan);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xxl);
+    animation: fadeIn 0.3s ease-out;
+}
+
+.splash-logo-main {
+    max-width: 140px;
+    filter: invert(1);
+}
+
+.splash-logo-fb {
+    font-family: var(--font-serif);
+    color: var(--color-white);
+    font-size: 2.5rem;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.spinner-coffee {
+    width: 36px;
+    height: 36px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: var(--color-white);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
