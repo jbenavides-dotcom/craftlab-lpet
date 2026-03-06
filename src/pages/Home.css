@@ -436,7 +436,7 @@
 
 /* ---- ONBOARDING MODAL ------------------------------- */
 .cl-onboarding-modal {
-    max-width: 600px;
+    max-width: 650px !important;
     padding: 0;
 }
 
@@ -447,8 +447,8 @@
 
 .onboarding-modal-title {
     font-family: var(--font-serif);
-    font-size: 2rem;
-    margin-bottom: var(--spacing-sm);
+    font-size: 2.5rem;
+    margin-bottom: var(--spacing-md);
     color: var(--color-navy);
 }
 
@@ -470,23 +470,23 @@
 }
 
 .modal-choice-card {
-    background: #f8f9fa;
-    border: 1px solid #e9ecef;
+    background: white;
+    border: 1px solid #eee;
     border-radius: var(--radius-lg);
-    padding: var(--spacing-lg);
+    padding: var(--spacing-xl);
     display: flex;
     align-items: center;
-    gap: var(--spacing-lg);
+    gap: var(--spacing-xl);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     text-align: left;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
 }
 
 .modal-choice-card:hover:not(.locked) {
-    background: white;
     border-color: var(--color-brand-red);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    transform: translateY(-4px);
 }
 
 .modal-choice-card.locked {

@@ -11,9 +11,23 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--spacing-md) var(--spacing-lg);
+    padding: 0 var(--spacing-lg);
     background-color: var(--color-white);
     box-shadow: var(--shadow-sm);
+    height: 72px;
+    /* Consistency with selectors */
+}
+
+.fb-header-left {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    flex: 1;
+}
+
+.brand-logo-small {
+    height: 32px;
+    object-fit: contain;
 }
 
 .back-btn {
@@ -28,9 +42,12 @@
 }
 
 .fb-header-logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     font-family: var(--font-serif);
     font-weight: 600;
-    font-size: 1.125rem;
+    font-size: 1.25rem;
     color: var(--color-navy);
 }
 

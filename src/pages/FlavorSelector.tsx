@@ -27,8 +27,15 @@ export const FlavorSelector: React.FC = () => {
                     <button className="back-btn" onClick={() => navigate(-1)}>
                         <ArrowLeft size={24} />
                     </button>
-                    <Stepper currentStep="flavor" />
+                    <img
+                        src="https://res.cloudinary.com/dtkwqoadf/image/upload/v1735702592/logo_horizontal_ss9bvn.png"
+                        alt="Logo"
+                        className="brand-logo-small"
+                    />
                 </div>
+
+                <Stepper currentStep="flavor" />
+
                 <button className="close-btn" onClick={() => setShowExitConfirm(true)}>
                     <X size={24} />
                 </button>

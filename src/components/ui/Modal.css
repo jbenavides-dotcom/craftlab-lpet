@@ -16,14 +16,14 @@
 
 .modal-content {
     position: relative;
-    background-color: var(--color-gray-light);
+    background-color: var(--color-white);
     border-radius: var(--radius-lg);
-    width: 100%;
-    max-width: 400px;
-    max-height: 90vh;
+    width: 90%;
+    max-width: 500px;
+    max-height: 85vh;
     display: flex;
     flex-direction: column;
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-xl);
     animation: slideUp 0.3s ease-out;
     overflow: hidden;
 }

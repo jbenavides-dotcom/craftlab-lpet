@@ -10,16 +10,23 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--spacing-sm) var(--spacing-lg);
+    padding: 0 var(--spacing-lg);
     background-color: var(--color-white);
     box-shadow: var(--shadow-sm);
-    height: 64px;
+    height: 72px;
+    /* Increased height for better visibility */
 }
 
 .header-left-actions {
     display: flex;
     align-items: center;
-    gap: var(--spacing-sm);
+    gap: var(--spacing-md);
+    flex: 1;
+}
+
+.brand-logo-small {
+    height: 32px;
+    object-fit: contain;
 }
 
 .back-btn,
@@ -39,6 +46,16 @@
 .back-btn:hover,
 .close-btn:hover {
     background-color: var(--color-gray-light);
+}
+
+/* Center the Stepper */
+.fb-stepper {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
 }
 
 

@@ -40,9 +40,16 @@ export const ForwardBookingRoute: React.FC = () => {
         <div className="fb-route-container">
             {/* Header */}
             <header className="fb-header">
-                <button className="back-btn" onClick={() => setShowExitConfirm(true)}>
-                    <ChevronLeft size={24} />
-                </button>
+                <div className="fb-header-left">
+                    <button className="back-btn" onClick={() => setShowExitConfirm(true)}>
+                        <ChevronLeft size={24} />
+                    </button>
+                    <img
+                        src="https://res.cloudinary.com/dtkwqoadf/image/upload/v1735702592/logo_horizontal_ss9bvn.png"
+                        alt="Logo"
+                        className="brand-logo-small"
+                    />
+                </div>
                 <span className="fb-header-logo">Forward Booking</span>
                 <div style={{ width: 24 }}></div>
             </header>
