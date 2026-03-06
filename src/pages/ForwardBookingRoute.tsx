@@ -1,13 +1,15 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, Calendar, Leaf, Coffee, TestTube2 } from 'lucide-react';
+import { ChevronLeft, Calendar, Leaf, Coffee, TestTube2, X } from 'lucide-react';
 import { Button } from '../components/ui/Button';
+import { Modal } from '../components/ui/Modal';
 import { startFB } from '../lib/fb-utils';
 import type { FBStep } from '../lib/fb-utils';
 import './ForwardBookingRoute.css';
 
 export const ForwardBookingRoute: React.FC = () => {
     const navigate = useNavigate();
+    const [showExitConfirm, setShowExitConfirm] = React.useState(false);
 
     // Load progress from localStorage
     const [progress] = React.useState({
@@ -38,12 +40,25 @@ export const ForwardBookingRoute: React.FC = () => {
         <div className="fb-route-container">
             {/* Header */}
             <header className="fb-header">
-                <button className="back-btn" onClick={() => navigate('/home')}>
+                <button className="back-btn" onClick={() => setShowExitConfirm(true)}>
                     <ChevronLeft size={24} />
                 </button>
                 <span className="fb-header-logo">Forward Booking</span>
-                <div style={{ width: 24 }}></div> {/* Spacer for center alignment */}
+                <div style={{ width: 24 }}></div>
             </header>
+
+            <Modal isOpen={showExitConfirm} onClose={() => setShowExitConfirm(false)}>
+                <div style={{ padding: '20px', textAlign: 'center' }}>
+                    <h2 style={{ marginBottom: '15px', color: 'var(--color-navy)' }}>Exit Forward Booking?</h2>
+                    <p style={{ marginBottom: '25px', color: 'var(--color-gray-dark)' }}>
+                        Your progress will be saved, but you will leave the booking process.
+                    </p>
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                        <Button variant="outline" size="full" onClick={() => setShowExitConfirm(false)}>Cancel</Button>
+                        <Button variant="secondary" size="full" onClick={() => navigate('/home')}>Exit</Button>
+                    </div>
+                </div>
+            </Modal>
 
             {/* Main Content */}
             <main className="fb-route-main">

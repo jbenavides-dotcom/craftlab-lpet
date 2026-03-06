@@ -10,11 +10,19 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--spacing-md) var(--spacing-lg);
+    padding: var(--spacing-sm) var(--spacing-lg);
     background-color: var(--color-white);
     box-shadow: var(--shadow-sm);
+    height: 64px;
 }
 
+.header-left-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.back-btn,
 .close-btn {
     background: none;
     border: none;
@@ -23,8 +31,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4px;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background 0.2s;
 }
+
+.back-btn:hover,
+.close-btn:hover {
+    background-color: var(--color-gray-light);
+}
+
 
 .selector-main {
     flex: 1;

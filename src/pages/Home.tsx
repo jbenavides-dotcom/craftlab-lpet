@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Menu, User, Home as HomeIcon, ShoppingBag, Info, ArrowRight } from 'lucide-react';
 import { Modal } from '../components/ui/Modal';
@@ -8,17 +8,29 @@ import './Home.css';
 export const Home: React.FC = () => {
     const navigate = useNavigate();
     const [showFBWelcome, setShowFBWelcome] = useState(false);
+    const [showCLOnboarding, setShowCLOnboarding] = useState(false);
     const [isNavigatingToFB, setIsNavigatingToFB] = useState(false);
+    const [educationCompleted, setEducationCompleted] = useState(false);
+
+    useEffect(() => {
+        const checkStatus = async () => {
+            const { checkEducationCompletion } = await import('../lib/user-progress');
+            const completed = await checkEducationCompletion();
+            setEducationCompleted(completed || localStorage.getItem('craftlab_unlocked') === 'true');
+        };
+        checkStatus();
+    }, []);
 
     const handleFBClick = () => {
         setShowFBWelcome(true);
     };
 
     const handleCLClick = () => {
-        navigate('/craftlab/onboarding');
+        setShowCLOnboarding(true);
     };
 
     const startFBCustomization = () => {
+        setShowFBWelcome(false);
         setIsNavigatingToFB(true);
         setTimeout(() => {
             navigate('/forward-booking/route');
@@ -130,6 +142,49 @@ export const Home: React.FC = () => {
                 >
                     Customize your order
                 </Button>
+            </Modal>
+
+            <Modal
+                isOpen={showCLOnboarding}
+                onClose={() => setShowCLOnboarding(false)}
+                className="cl-onboarding-modal"
+            >
+                <div className="onboarding-modal-content">
+                    <h1 className="onboarding-modal-title">
+                        Welcome to Craft<span className="title-highlight">Lab</span>
+                    </h1>
+                    <p className="onboarding-modal-intro">
+                        Discover the science behind extraordinary coffee. La Palma & El Tucán has spent
+                        over a decade perfecting fermentation. Now, we put the lab in your hands.
+                    </p>
+
+                    <div className="modal-choice-container">
+                        <div className="modal-choice-card education" onClick={() => navigate('/craftlab/education/basic')}>
+                            <div className="modal-choice-icon">🎓</div>
+                            <div className="modal-choice-info">
+                                <h3>Education Tool</h3>
+                                <p>Learn the science and master the metabolic routes.</p>
+                                {educationCompleted && <span className="status-tag completed">Completed</span>}
+                            </div>
+                        </div>
+
+                        <div
+                            className={`modal-choice-card configurator ${!educationCompleted ? 'locked' : ''}`}
+                            onClick={() => {
+                                if (educationCompleted) navigate('/craftlab/welcome');
+                            }}
+                        >
+                            <div className="modal-choice-icon">
+                                {educationCompleted ? '🧪' : '🔒'}
+                            </div>
+                            <div className="modal-choice-info">
+                                <h3>CraftLab</h3>
+                                <p>Design your unique fermentation process.</p>
+                                {!educationCompleted && <span className="status-tag locked">Locked</span>}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </Modal>
         </div>
     );

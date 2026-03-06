@@ -433,3 +433,109 @@
         opacity: 1;
     }
 }
+
+/* ---- ONBOARDING MODAL ------------------------------- */
+.cl-onboarding-modal {
+    max-width: 600px;
+    padding: 0;
+}
+
+.onboarding-modal-content {
+    padding: var(--spacing-xxl) var(--spacing-xl);
+    text-align: center;
+}
+
+.onboarding-modal-title {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    margin-bottom: var(--spacing-sm);
+    color: var(--color-navy);
+}
+
+.onboarding-modal-title .title-highlight {
+    color: var(--color-pink-hot);
+}
+
+.onboarding-modal-intro {
+    font-size: 0.95rem;
+    color: var(--color-gray-dark);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-xl);
+}
+
+.modal-choice-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.modal-choice-card {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.modal-choice-card:hover:not(.locked) {
+    background: white;
+    border-color: var(--color-brand-red);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
+}
+
+.modal-choice-card.locked {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: #f1f3f5;
+}
+
+.modal-choice-icon {
+    font-size: 1.75rem;
+    width: 48px;
+    height: 48px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.modal-choice-info h3 {
+    font-size: 1.1rem;
+    margin-bottom: 2px;
+    color: var(--color-navy);
+}
+
+.modal-choice-info p {
+    font-size: 0.85rem;
+    color: var(--color-gray-dark);
+    margin: 0;
+}
+
+.status-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    margin-top: 6px;
+}
+
+.status-tag.completed {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.status-tag.locked {
+    background: #fee2e2;
+    color: #991b1b;
+}
