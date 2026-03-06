@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CheckCircle, Wind, FlaskConical } from 'lucide-react';
-import { Button } from '../../components/ui/Button';
 import './CraftLabQuiz.css';
 import confetti from 'canvas-confetti';
 import { markEducationAsCompleted } from '../../lib/user-progress';
