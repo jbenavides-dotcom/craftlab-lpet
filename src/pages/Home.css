@@ -35,13 +35,17 @@
     padding: 4px;
 }
 
-.header-brand-name {
-    font-family: var(--font-sans);
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    color: var(--color-navy);
-    text-transform: uppercase;
+.header-brand-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+.header-logo-img {
+    height: 32px;
+    width: auto;
+    object-fit: contain;
 }
 
 /* ---- MAIN ------------------------------------------ */
@@ -399,17 +403,10 @@
     animation: fadeIn 0.3s ease-out;
 }
 
-.splash-logo-main {
-    max-width: 140px;
-    filter: invert(1);
-}
-
-.splash-logo-fb {
-    font-family: var(--font-serif);
-    color: var(--color-white);
-    font-size: 2.5rem;
-    text-align: center;
-    letter-spacing: 1px;
+.splash-logo-fb-img {
+    max-width: 240px;
+    height: auto;
+    animation: fadeIn 0.8s ease-out;
 }
 
 .spinner-coffee {

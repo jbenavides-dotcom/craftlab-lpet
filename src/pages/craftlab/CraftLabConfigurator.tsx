@@ -123,7 +123,7 @@ export const CraftLabConfigurator: React.FC = () => {
 
             {/* ──── HEADER (sticky, minimal) ──────────────── */}
             <header className="cl-config-header">
-                <span className="cl-config-brand">CraftLab</span>
+                <img src="https://res.cloudinary.com/dtkwqoadf/image/upload/v1742314508/CL_completo_ly3ecz.png" alt="CraftLab" className="cl-brand-logo-img" />
                 <div className="cl-config-subtitle">Design your coffee</div>
                 <button className="cl-close-btn" onClick={() => setShowExitModal(true)}>
                     <X size={20} />

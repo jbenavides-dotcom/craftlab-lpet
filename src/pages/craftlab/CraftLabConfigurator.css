@@ -24,12 +24,10 @@
     flex-shrink: 0;
 }
 
-.cl-config-brand {
-    font-family: var(--font-serif);
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: var(--color-navy);
-    letter-spacing: -0.01em;
+.cl-brand-logo-img {
+    height: 28px;
+    width: auto;
+    object-fit: contain;
 }
 
 .cl-config-subtitle {

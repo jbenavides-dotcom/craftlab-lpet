@@ -29,15 +29,16 @@ export const Home: React.FC = () => {
         <div className="home-container">
             {isNavigatingToFB && (
                 <div className="splash-screen">
-                    <img src="/logo-placeholder.svg" alt="La Palma & El Tucán" className="splash-logo-main" />
-                    <h1 className="splash-logo-fb">Forward Booking</h1>
+                    <img src="https://res.cloudinary.com/dtkwqoadf/image/upload/v1739544760/Logo_FB_blanco_xnub6p.png" alt="Forward Booking" className="splash-logo-fb-img" />
                     <div className="spinner-coffee"></div>
                 </div>
             )}
 
             <header className="home-header">
                 <button className="header-icon-btn"><Menu size={24} /></button>
-                <div className="header-brand-name">LA PALMA & EL TUCÁN</div>
+                <div className="header-brand-container">
+                    <img src="https://res.cloudinary.com/dtkwqoadf/image/upload/v1735702592/logo_horizontal_ss9bvn.png" alt="La Palma & El Tucán" className="header-logo-img" />
+                </div>
                 <button className="header-icon-btn"><User size={24} /></button>
             </header>
 

@@ -4,7 +4,7 @@
     min-height: 100vh;
     padding: var(--spacing-xxl) var(--spacing-xl) var(--spacing-xl);
     justify-content: space-between;
-    background-color: var(--color-gray-light);
+    background-color: var(--color-pink-bg);
 }
 
 .login-header {

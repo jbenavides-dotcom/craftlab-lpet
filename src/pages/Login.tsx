@@ -48,7 +48,7 @@ export const Login: React.FC = () => {
     return (
         <div className="login-container">
             <div className="login-header">
-                <img src="/logo-placeholder.svg" alt="La Palma & El Tucán" className="login-logo" />
+                <img src="https://res.cloudinary.com/dtkwqoadf/image/upload/v1739499739/logo_blanco_lgulzv.png" alt="La Palma & El Tucán" className="login-logo" />
             </div>
 
             <form className="login-form" onSubmit={handleLogin}>
