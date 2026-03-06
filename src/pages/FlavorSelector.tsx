@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { X } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Stepper } from '../components/ui/Stepper';
+import { navigateNextFBStep } from '../lib/fb-utils';
 import './Selectors.css';
 
 export const FlavorSelector: React.FC = () => {
@@ -13,7 +14,7 @@ export const FlavorSelector: React.FC = () => {
     const handleSave = () => {
         if (selectedProfile) {
             localStorage.setItem('fb_flavor', selectedProfile);
-            navigate('/forward-booking/route');
+            navigateNextFBStep('flavor', navigate);
         }
     };
 

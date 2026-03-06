@@ -2,6 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, Calendar, Leaf, Coffee, TestTube2 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
+import { startFB } from '../lib/fb-utils';
+import type { FBStep } from '../lib/fb-utils';
 import './ForwardBookingRoute.css';
 
 export const ForwardBookingRoute: React.FC = () => {
@@ -14,6 +16,21 @@ export const ForwardBookingRoute: React.FC = () => {
         flavor: localStorage.getItem('fb_flavor'),
         process: localStorage.getItem('fb_process')
     });
+
+    const isStarted = localStorage.getItem('fb_started') === 'true';
+
+    React.useEffect(() => {
+        // If already started and not all completed, go to the next incomplete step automatically
+        // but only if we are specifically on this /route page.
+        // Actually, the user says "it doesn't appear until another order".
+        if (isStarted && !allCompleted) {
+            // Find first incomplete
+            const firstIncomplete = (['date', 'variety', 'flavor', 'process'] as FBStep[]).find(s => !localStorage.getItem(`fb_${s}`));
+            if (firstIncomplete) {
+                navigate(`/forward-booking/${firstIncomplete}`);
+            }
+        }
+    }, [isStarted]);
 
     const allCompleted = progress.date && progress.variety && progress.flavor && progress.process;
 
@@ -36,7 +53,7 @@ export const ForwardBookingRoute: React.FC = () => {
                     {/* Date Card */}
                     <button
                         className={`route-card ${progress.date ? 'completed' : ''}`}
-                        onClick={() => navigate('/forward-booking/date')}
+                        onClick={() => startFB('date', navigate)}
                     >
                         <Calendar size={48} className="route-icon" />
                         <span>Date</span>
@@ -46,7 +63,7 @@ export const ForwardBookingRoute: React.FC = () => {
                     {/* Variety Card */}
                     <button
                         className={`route-card ${progress.variety ? 'completed' : ''}`}
-                        onClick={() => navigate('/forward-booking/variety')}
+                        onClick={() => startFB('variety', navigate)}
                     >
                         <Leaf size={48} className="route-icon" />
                         <span>Variety</span>
@@ -56,7 +73,7 @@ export const ForwardBookingRoute: React.FC = () => {
                     {/* Flavor Card */}
                     <button
                         className={`route-card ${progress.flavor ? 'completed' : ''}`}
-                        onClick={() => navigate('/forward-booking/flavor')}
+                        onClick={() => startFB('flavor', navigate)}
                     >
                         <Coffee size={48} className="route-icon" />
                         <span>Flavor Profile</span>
@@ -66,7 +83,7 @@ export const ForwardBookingRoute: React.FC = () => {
                     {/* Process Card */}
                     <button
                         className={`route-card ${progress.process ? 'completed' : ''}`}
-                        onClick={() => navigate('/forward-booking/process')}
+                        onClick={() => startFB('process', navigate)}
                     >
                         <TestTube2 size={48} className="route-icon" />
                         <span>Process</span>

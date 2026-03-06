@@ -1,35 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FlaskConical, Dna, TerminalSquare } from 'lucide-react';
-import { Button } from '../../components/ui/Button';
+import { FlaskConical, Lock, GraduationCap } from 'lucide-react';
+import { checkEducationCompletion } from '../../lib/user-progress';
 import './CraftLabOnboarding.css';
 
 export const CraftLabOnboarding: React.FC = () => {
     const navigate = useNavigate();
     const [isTransitioning, setIsTransitioning] = useState(false);
+    const [educationCompleted, setEducationCompleted] = useState<boolean>(false);
+    const [loading, setLoading] = useState(true);
 
-    const handleLevelSelection = (level: 'basic' | 'advanced') => {
+    useEffect(() => {
+        const fetchStatus = async () => {
+            try {
+                const completed = await checkEducationCompletion();
+                setEducationCompleted(completed || localStorage.getItem('craftlab_unlocked') === 'true');
+            } catch (err) {
+                console.error("Failed to check education status:", err);
+                setEducationCompleted(localStorage.getItem('craftlab_unlocked') === 'true');
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchStatus();
+    }, []);
+
+    const handleChoice = (choice: 'education' | 'configurator') => {
+        if (choice === 'configurator' && !educationCompleted) return;
+
         setIsTransitioning(true);
-
-        // Store user's selected level
-        localStorage.setItem('craftlab_knowledge_level', level);
-
-        // Smooth transition
         setTimeout(() => {
-            if (level === 'basic') {
+            if (choice === 'education') {
                 navigate('/craftlab/education/basic');
             } else {
-                navigate('/craftlab/education/advanced');
+                navigate('/craftlab/welcome');
             }
         }, 500);
     };
 
+    if (loading) {
+        return <div className="craftlab-loading">Loading...</div>;
+    }
+
     return (
         <div className={`craftlab-onboarding-container ${isTransitioning ? 'fade-out' : ''}`}>
-            {/* 
-        Ideally, use an actual looping mp4 video here. 
-        Falling back to a dark placeholder image for now if video isn't available.
-      */}
             <img
                 src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=2000&auto=format&fit=crop"
                 alt="Coffee Fermentation"
@@ -47,56 +61,30 @@ export const CraftLabOnboarding: React.FC = () => {
                     </p>
                 </div>
 
-                <div className="pillars-container">
-                    <div className="pillar-item">
-                        <div className="pillar-icon-wrapper">
-                            <Dna size={24} />
+                <div className="choice-container">
+                    <div className="choice-card education" onClick={() => handleChoice('education')}>
+                        <div className="choice-icon">
+                            <GraduationCap size={40} />
                         </div>
-                        <div className="pillar-text">
-                            <h3>Metabolic Routes</h3>
-                            <p>Control temperature and Brix to guide complex flavor development.</p>
-                        </div>
-                    </div>
-
-                    <div className="pillar-item">
-                        <div className="pillar-icon-wrapper">
-                            <FlaskConical size={24} />
-                        </div>
-                        <div className="pillar-text">
-                            <h3>Microorganisms</h3>
-                            <p>Utilize indigenous yeast and lactic acid bacteria profiles.</p>
+                        <div className="choice-info">
+                            <h3>Education Tool</h3>
+                            <p>Learn the science and master the metabolic routes.</p>
+                            {educationCompleted && <span className="status-tag completed">Completed</span>}
                         </div>
                     </div>
 
-                    <div className="pillar-item">
-                        <div className="pillar-icon-wrapper">
-                            <TerminalSquare size={24} />
+                    <div
+                        className={`choice-card configurator ${!educationCompleted ? 'locked' : ''}`}
+                        onClick={() => handleChoice('configurator')}
+                    >
+                        <div className="choice-icon">
+                            {educationCompleted ? <FlaskConical size={40} /> : <Lock size={40} />}
                         </div>
-                        <div className="pillar-text">
-                            <h3>Acidification</h3>
-                            <p>Manipulate pH drops over time for crisp, vibrant cup clarity.</p>
+                        <div className="choice-info">
+                            <h3>CraftLab</h3>
+                            <p>Design your unique fermentation process.</p>
+                            {!educationCompleted && <span className="status-tag locked">Locked - Complete Education First</span>}
                         </div>
-                    </div>
-                </div>
-
-                <div className="diagnostic-footer">
-                    <h2 className="diagnostic-question">How much do you know about fermentation?</h2>
-                    <div className="diagnostic-buttons">
-                        <Button
-                            variant="outline"
-                            size="lg"
-                            onClick={() => handleLevelSelection('basic')}
-                            style={{ color: 'white', borderColor: 'rgba(255,255,255,0.5)' }}
-                        >
-                            I'm new to this
-                        </Button>
-                        <Button
-                            variant="primary"
-                            size="lg"
-                            onClick={() => handleLevelSelection('advanced')}
-                        >
-                            I know the basics
-                        </Button>
                     </div>
                 </div>
             </div>

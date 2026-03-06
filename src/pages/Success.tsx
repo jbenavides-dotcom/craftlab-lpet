@@ -7,6 +7,16 @@ import './FinalSteps.css';
 export const Success: React.FC = () => {
     const navigate = useNavigate();
 
+    React.useEffect(() => {
+        // Clear Forward Booking progress for next order
+        const keys = Object.keys(localStorage);
+        keys.forEach(key => {
+            if (key.startsWith('fb_')) {
+                localStorage.removeItem(key);
+            }
+        });
+    }, []);
+
     return (
         <div className="fb-final-container" style={{ backgroundColor: 'var(--color-white)' }}>
             <main className="success-main">

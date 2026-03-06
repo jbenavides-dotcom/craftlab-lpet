@@ -4,6 +4,7 @@ import { CheckCircle, Wind, FlaskConical } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import './CraftLabQuiz.css';
 import confetti from 'canvas-confetti';
+import { markEducationAsCompleted } from '../../lib/user-progress';
 
 export const CraftLabQuiz: React.FC = () => {
     const navigate = useNavigate();
@@ -22,9 +23,9 @@ export const CraftLabQuiz: React.FC = () => {
             });
 
             // Navigate to the Configurator Welcome after delay
-            setTimeout(() => {
+            setTimeout(async () => {
                 // Save flag to bypass education next time
-                localStorage.setItem('craftlab_unlocked', 'true');
+                await markEducationAsCompleted();
                 navigate('/craftlab/welcome');
             }, 3000);
         } else {
