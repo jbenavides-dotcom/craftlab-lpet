@@ -3,8 +3,10 @@
 :root {
   /* Brand Colors */
   --color-brand-red: #c1004a;
-  /* Vibrant red/magenta from reference */
-  --color-pink-bg: var(--color-brand-red);
+  /* Vibrant red from banner */
+  --color-brand-pink: #fbc2c4;
+  /* Soft pink for Login */
+  --color-pink-bg: var(--color-brand-pink);
   --color-navy: #0e1e36;
   /* Navy blue for typography and active states */
   --color-dark-text: #1a1a1a;
