@@ -30,11 +30,33 @@
     object-fit: contain;
 }
 
+.cl-header-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
 .cl-config-subtitle {
     font-size: 0.75rem;
     color: var(--color-gray-medium);
     letter-spacing: 0.08em;
     text-transform: uppercase;
+}
+
+.cl-progress-bar {
+    width: 120px;
+    height: 3px;
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.cl-progress-fill {
+    height: 100%;
+    background: var(--color-navy, #0e1e36);
+    border-radius: 2px;
+    transition: width 0.4s ease-out;
 }
 
 .cl-close-btn {
@@ -260,6 +282,22 @@
     margin-top: 2px;
 }
 
+.topt-why {
+    font-size: 0.75rem;
+    color: var(--color-navy);
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    font-style: italic;
+    line-height: 1.5;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 /* color dot for flavor options */
 .flavor-dot {
     width: 14px;
@@ -301,7 +339,21 @@
 .params-container {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1.75rem;
+}
+
+.param-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.param-hint {
+    font-size: 0.75rem;
+    color: var(--color-gray-medium);
+    line-height: 1.5;
+    font-style: italic;
+    padding-left: 2px;
 }
 
 .params-cta {

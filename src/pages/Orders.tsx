@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, Calendar, Leaf, Coffee, TestTube2, Home as HomeIcon, ShoppingBag, Info } from 'lucide-react';
-import './FinalSteps.css';
-import '../pages/Home.css'; // For bottom nav
+import './Orders.css';
+import './Home.css';
 
 export const Orders: React.FC = () => {
     const navigate = useNavigate();

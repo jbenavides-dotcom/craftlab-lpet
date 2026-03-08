@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, ChevronDown, Check, Loader2 } from 'lucide-react';
+import { X, ChevronDown, Check, Loader2, Sparkles } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Slider } from '../../components/ui/Slider';
 import { loadDraftConfig, saveDraftConfig, submitConfig, deleteDraftConfig } from '../../lib/lot-config';
@@ -21,9 +21,9 @@ interface ConfigState {
 }
 
 const MACRO_PROFILES = [
-    { id: 'fermented', label: 'Fermented', desc: 'Bold, fruity, and complex', color: '#9b2335' },
-    { id: 'bright', label: 'Bright', desc: 'Crisp, acidic, and floral', color: '#e6a817' },
-    { id: 'classic', label: 'Classic', desc: 'Balanced, sweet, and comforting', color: '#6b5344' },
+    { id: 'fermented', label: 'Fermented', desc: 'Bold, fruity, and complex', color: '#9b2335', why: 'Extended fermentation unlocks unique esters and alcohols, creating wine-like complexity.' },
+    { id: 'bright', label: 'Bright', desc: 'Crisp, acidic, and floral', color: '#e6a817', why: 'Controlled lactic fermentation preserves delicate acids and floral aromatics.' },
+    { id: 'classic', label: 'Classic', desc: 'Balanced, sweet, and comforting', color: '#6b5344', why: 'Traditional processing highlights the natural sweetness and terroir of the coffee.' },
 ];
 
 const FLAVOR_PROFILES: Record<string, { id: string, label: string, color: string }[]> = {
@@ -42,9 +42,9 @@ const FLAVOR_PROFILES: Record<string, { id: string, label: string, color: string
 };
 
 const VARIETIES = [
-    { id: 'geisha', label: 'Geisha', desc: 'Delicate, tea-like, jasmine' },
-    { id: 'sidra', label: 'Sidra', desc: 'Complex, tropical, wine-like' },
-    { id: 'gesha-sidra', label: 'Gesha / Sidra Blend', desc: 'Best of both worlds' }
+    { id: 'geisha', label: 'Geisha', desc: 'Delicate, tea-like, jasmine', why: 'Ethiopian origin, prized for its exceptional aromatics and clarity.' },
+    { id: 'sidra', label: 'Sidra', desc: 'Complex, tropical, wine-like', why: 'Colombian heritage variety known for intense fruit notes and body.' },
+    { id: 'gesha-sidra', label: 'Gesha / Sidra Blend', desc: 'Best of both worlds', why: 'Our signature blend combines Geisha elegance with Sidra intensity.' }
 ];
 
 const CATEGORIES: Record<string, { id: string, label: string }[]> = {
@@ -163,6 +163,19 @@ export const CraftLabConfigurator: React.FC = () => {
 
     const currentImage = SECTION_IMAGES[activeSection] ?? SECTION_IMAGES['sec-macro'];
 
+    // Calculate progress (for SDT Competence feedback)
+    const progress = useMemo(() => {
+        let steps = 0;
+        if (config.macro) steps++;
+        if (config.flavor) steps++;
+        if (config.variety) steps++;
+        if (config.quantity) steps++;
+        if (config.category) steps++;
+        if (config.process) steps++;
+        if (config.stabilization !== null && config.solarDry !== null) steps++;
+        return Math.round((steps / 7) * 100);
+    }, [config]);
+
     const updateConfig = (key: keyof ConfigState, value: any) => {
         setConfig(prev => {
             const next = { ...prev, [key]: value };
@@ -212,8 +225,13 @@ export const CraftLabConfigurator: React.FC = () => {
             {/* ──── HEADER (sticky, minimal) ──────────────── */}
             <header className="cl-config-header">
                 <img src="https://res.cloudinary.com/dtkwqoadf/image/upload/v1742314508/CL_completo_ly3ecz.png" alt="CraftLab" className="cl-brand-logo-img" />
-                <div className="cl-config-subtitle">
-                    {isSaving ? 'Saving...' : 'Design your coffee'}
+                <div className="cl-header-center">
+                    <div className="cl-config-subtitle">
+                        {isSaving ? 'Saving...' : progress === 100 ? 'Ready to submit!' : 'Design your coffee'}
+                    </div>
+                    <div className="cl-progress-bar">
+                        <div className="cl-progress-fill" style={{ width: `${progress}%` }} />
+                    </div>
                 </div>
                 <button className="cl-close-btn" onClick={() => setShowExitModal(true)}>
                     <X size={20} />
@@ -257,6 +275,7 @@ export const CraftLabConfigurator: React.FC = () => {
                                     <div>
                                         <div className="topt-name">{m.label}</div>
                                         <div className="topt-desc">{m.desc}</div>
+                                        {config.macro === m.id && <div className="topt-why">{m.why}</div>}
                                     </div>
                                     {config.macro === m.id && <Check size={18} color={m.color} />}
                                 </div>
@@ -305,6 +324,7 @@ export const CraftLabConfigurator: React.FC = () => {
                                         <div>
                                             <div className="topt-name">{v.label}</div>
                                             <div className="topt-desc">{v.desc}</div>
+                                            {config.variety === v.id && <div className="topt-why">{v.why}</div>}
                                         </div>
                                         {config.variety === v.id && <Check size={18} />}
                                     </div>
@@ -383,23 +403,38 @@ export const CraftLabConfigurator: React.FC = () => {
                             <p className="section-desc">Fine-tune the technical parameters for your custom process.</p>
 
                             <div className="params-container">
-                                <Slider label="Stabilization Time" min={0} max={200} step={12}
-                                    value={config.stabilization} onChange={v => updateConfig('stabilization', v)} unit=" hrs" />
+                                <div className="param-group">
+                                    <Slider label="Stabilization Time" min={0} max={200} step={12}
+                                        value={config.stabilization} onChange={v => updateConfig('stabilization', v)} unit=" hrs" />
+                                    <p className="param-hint">Resting period before fermentation begins. Longer times develop more complex precursors.</p>
+                                </div>
 
                                 {config.process === 'cherry-ferm' && (
-                                    <Slider label="Cherry Fermentation" min={0} max={200} step={12}
-                                        value={config.cherryFerm} onChange={v => updateConfig('cherryFerm', v)} unit=" hrs" />
+                                    <div className="param-group">
+                                        <Slider label="Cherry Fermentation" min={0} max={200} step={12}
+                                            value={config.cherryFerm} onChange={v => updateConfig('cherryFerm', v)} unit=" hrs" />
+                                        <p className="param-hint">Whole cherry fermentation creates intense fruit notes and body.</p>
+                                    </div>
                                 )}
                                 {config.process === 'mucilage-ferm' && (
-                                    <Slider label="Mucilage Fermentation" min={0} max={200} step={12}
-                                        value={config.mucilageFerm} onChange={v => updateConfig('mucilageFerm', v)} unit=" hrs" />
+                                    <div className="param-group">
+                                        <Slider label="Mucilage Fermentation" min={0} max={200} step={12}
+                                            value={config.mucilageFerm} onChange={v => updateConfig('mucilageFerm', v)} unit=" hrs" />
+                                        <p className="param-hint">Pulped cherry fermentation balances sweetness with cleaner acidity.</p>
+                                    </div>
                                 )}
 
-                                <Slider label="Solar Dry" min={0} max={100}
-                                    value={config.solarDry} onChange={v => updateConfig('solarDry', v)} unit=" days" />
+                                <div className="param-group">
+                                    <Slider label="Solar Dry" min={0} max={100}
+                                        value={config.solarDry} onChange={v => updateConfig('solarDry', v)} unit=" days" />
+                                    <p className="param-hint">Sun drying preserves delicate aromatics and develops sweetness slowly.</p>
+                                </div>
 
-                                <Slider label="Mechanical Dry" min={0} max={100} step={6}
-                                    value={config.mechDry} onChange={v => updateConfig('mechDry', v)} unit=" hrs" />
+                                <div className="param-group">
+                                    <Slider label="Mechanical Dry" min={0} max={100} step={6}
+                                        value={config.mechDry} onChange={v => updateConfig('mechDry', v)} unit=" hrs" />
+                                    <p className="param-hint">Controlled drying ensures consistent moisture levels for stability.</p>
+                                </div>
                             </div>
 
                             <div className="params-cta">

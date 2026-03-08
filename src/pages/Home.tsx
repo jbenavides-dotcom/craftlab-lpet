@@ -7,9 +7,7 @@ import './Home.css';
 
 export const Home: React.FC = () => {
     const navigate = useNavigate();
-    const [showFBWelcome, setShowFBWelcome] = useState(false);
     const [showCLOnboarding, setShowCLOnboarding] = useState(false);
-    const [isNavigatingToFB, setIsNavigatingToFB] = useState(false);
     const [educationCompleted, setEducationCompleted] = useState(false);
 
     useEffect(() => {
@@ -21,31 +19,12 @@ export const Home: React.FC = () => {
         checkStatus();
     }, []);
 
-    const handleFBClick = () => {
-        setShowFBWelcome(true);
-    };
-
     const handleCLClick = () => {
         setShowCLOnboarding(true);
     };
 
-    const startFBCustomization = () => {
-        setShowFBWelcome(false);
-        setIsNavigatingToFB(true);
-        setTimeout(() => {
-            navigate('/forward-booking/route');
-        }, 1500);
-    };
-
     return (
         <div className="home-container">
-            {isNavigatingToFB && (
-                <div className="splash-screen">
-                    <img src="https://res.cloudinary.com/dtkwqoadf/image/upload/v1739544760/Logo_FB_blanco_xnub6p.png" alt="Forward Booking" className="splash-logo-fb-img" />
-                    <div className="spinner-coffee"></div>
-                </div>
-            )}
-
             <header className="home-header">
                 <button className="header-icon-btn"><Menu size={24} /></button>
                 <div className="header-brand-container">
@@ -73,16 +52,7 @@ export const Home: React.FC = () => {
                 </section>
 
                 <section className="programs-visual-section">
-                    <div className="visual-block block-fb" onClick={handleFBClick}>
-                        <div className="block-overlay"></div>
-                        <div className="block-content">
-                            <h2>Forward Booking</h2>
-                            <p>Pre-order from our finest limited batches. A direct line from soil to cup.</p>
-                            <span className="block-link">Explore the collection <ArrowRight size={16} /></span>
-                        </div>
-                    </div>
-
-                    <div className="visual-block block-cl" onClick={handleCLClick}>
+                    <div className="visual-block block-cl block-featured" onClick={handleCLClick}>
                         <div className="block-overlay"></div>
                         <div className="block-content">
                             <h2>CraftLab</h2>
@@ -116,33 +86,6 @@ export const Home: React.FC = () => {
                     <span>Us</span>
                 </button>
             </nav>
-
-            <Modal
-                isOpen={showFBWelcome}
-                onClose={() => setShowFBWelcome(false)}
-                className="fb-welcome-modal"
-            >
-                <h2 className="fb-welcome-title">
-                    Welcome to <span className="fb-highlight">Forward</span> Booking
-                </h2>
-                <div className="fb-welcome-body">
-                    <p>
-                        By securing your coffee in advance, you guarantee the highest quality selection
-                        and directly support the smallholder farmers of our <strong>Neighbors & Crops</strong> program.
-                    </p>
-                    <p>
-                        Production is strictly limited to <strong>500 bags of 35 kg</strong> per year. Secure your lot before harvest.
-                    </p>
-                </div>
-                <Button
-                    variant="secondary"
-                    size="full"
-                    onClick={startFBCustomization}
-                    className="mt-md"
-                >
-                    Customize your order
-                </Button>
-            </Modal>
 
             <Modal
                 isOpen={showCLOnboarding}
