@@ -83,6 +83,65 @@ git add -A  # o commit
 claude --continue  # después de Ctrl+C
 ```
 
+## Contexto y Referencias
+
+| Símbolo | Uso | Ejemplo |
+|---------|-----|---------|
+| `@` | Añadir archivo como contexto | `@src/pages/Login.tsx` |
+| `#` | Guardar memoria/regla | `# No preguntar npm run dev` |
+| `?` | Cheat sheet de comandos | `?` |
+
+## Comandos Personalizados
+
+Ubicación: `.claude/commands/[nombre].md`
+
+### design-mode.md (prototipar UI)
+```markdown
+You are in DESIGN MODE:
+- Use dummy JSON data only
+- Focus on UI/UX, not backend logic
+- Create visual prototypes
+- Don't connect to database yet
+```
+
+### review-code.md (pre-PR)
+```markdown
+Review this code for:
+- Security vulnerabilities
+- Performance issues
+- React best practices
+- TypeScript strict compliance
+```
+
+## Permisos y Hooks
+
+### Permisos (`.claude/settings.local.json`)
+```json
+{
+  "permissions": {
+    "allow": ["npm run dev", "npm run build", "git *"],
+    "deny": ["rm -rf", "sudo *", "drop table"]
+  }
+}
+```
+
+### Hooks útiles
+```bash
+# Notificación audio cuando Claude termina
+# Instalar: npx claude-code-hooks
+# Ver: github.com/PascualPeredaHN/awesome-claude-code
+```
+
+## Tips de Desarrollo
+
+1. **Skeleton first** - Estructura app antes de features
+2. **Commit frecuente** - Después de cada cambio exitoso
+3. **Branches experimentales** - Cambios arriesgados en branch separado
+4. **Múltiples agentes** - Correr 2+ Claude en paralelo (frontend + backend)
+5. **Context7** - Usar web search para docs actualizados
+6. **Git diff review** - Revisar cambios en VS Code/Cursor antes de commit
+7. **Don't ask npm dev** - Ya está corriendo, agregar a memorias
+
 ## Stack Confirmado
 - [x] Frontend: React 19 + TypeScript + Vite
 - [x] Backend: Supabase (Auth + Database)
@@ -178,23 +237,42 @@ npm run preview      # Preview build
 npm run lint         # ESLint
 ```
 
-## Subagentes Activos
-- ui-ux-specialist → mejoras de interfaz
-- code-reviewer → antes de cada PR
-- api-security-auditor → cambios en auth/datos
-- fullstack-developer → features completos
+## Sub-agentes
+
+### Crear sub-agente
+```bash
+/agents → Create New Agent → Generate with Claude
+```
+
+### Activos para CRAFT LAB
+| Agente | Trigger | Uso |
+|--------|---------|-----|
+| ui-ux-specialist | Cambios UI | Revisar diseño |
+| code-reviewer | Pre-PR | Calidad código |
+| api-security-auditor | Cambios auth | Vulnerabilidades |
+| react-production-engineer | Post-feature | Production readiness |
+
+### Tip
+Escribir buena descripción → Claude los llama automáticamente cuando corresponde
 
 ## Comandos Claude Code
+
 | Comando | Cuándo usar |
 |---------|-------------|
-| `/context` | Antes de cada fase, verificar tokens |
+| `/context` | Verificar tokens antes de cada fase |
 | `/compact` | Cada 10-15 mensajes |
 | `/cost` | Monitorear gasto |
-| `/clear` | Cambiar de tarea |
+| `/clear` | Cambiar de tarea, limpiar contexto |
 | `/memory` | Ver/editar reglas |
+| `/init` | Crear CLAUDE.md inicial |
+| `/ide` | Verificar conexión con Cursor/VS Code |
+| `/agents` | Crear/ver sub-agentes |
+| `?` | Cheat sheet rápido |
 | `Shift+Tab x2` | Plan Mode |
 | `Ctrl+C x2` | Salir |
-| `claude --continue` | Retomar sesión |
+| `claude` | Iniciar sesión |
+| `claude -c` | Continuar última sesión |
+| `claude -r` | Elegir sesión anterior |
 
 ## Áreas de Mejora Identificadas (Pendiente Análisis Detallado)
 1. [ ] Captura de datos del tostador post-configuración
