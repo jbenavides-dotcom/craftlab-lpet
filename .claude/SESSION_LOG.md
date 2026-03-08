@@ -2,6 +2,70 @@
 
 ---
 
+## Sesión: 2025-03-08 (Continuación 2)
+**Rama:** `feature/persist-configuration`
+
+### Objetivo
+Simplificar app eliminando Forward Booking. Mejorar UX con SDT Framework.
+
+### Completado
+- [x] Eliminar Forward Booking (11 archivos, ~1400 líneas)
+- [x] Limpiar rutas en App.tsx
+- [x] Actualizar Home.tsx (solo CraftLab)
+- [x] Crear Orders.css independiente
+- [x] Agregar barra de progreso en configurador
+- [x] Agregar "Why This Matters" a macro profiles
+- [x] Agregar "Why This Matters" a varieties
+- [x] Agregar hints a sliders de parámetros
+
+### Archivos Modificados
+| Archivo | Cambio |
+|---------|--------|
+| src/App.tsx | -8 rutas Forward Booking |
+| src/pages/Home.tsx | -Forward Booking block/modal |
+| src/pages/Orders.tsx | Usa Orders.css |
+| src/pages/craftlab/CraftLabConfigurator.tsx | +progress, +why, +hints |
+| src/pages/craftlab/CraftLabConfigurator.css | +progress-bar, +topt-why, +param-hint |
+
+### Archivos Eliminados
+- DateSelector.tsx
+- FlavorSelector.tsx
+- ForwardBookingRoute.tsx/css
+- ProcessSelector.tsx
+- QuantitySelector.tsx
+- ReviewConfirm.tsx
+- Success.tsx
+- VarietySelector.tsx
+- Selectors.css
+- FinalSteps.css
+
+### Archivos Creados
+| Archivo | Descripción |
+|---------|-------------|
+| src/pages/Orders.css | Estilos para página Orders |
+
+---
+
+## Sesión: 2025-03-08 (Continuación 1)
+**Rama:** `feature/persist-configuration`
+
+### Objetivo
+Implementar persistencia de configuración en Supabase.
+
+### Completado
+- [x] Crear proyecto Supabase "craftlab"
+- [x] Crear tabla lot_configurations
+- [x] Implementar src/lib/lot-config.ts (CRUD)
+- [x] Modificar CraftLabConfigurator con auto-save
+- [x] Crear CraftLabSuccess.tsx
+- [x] Agregar ruta /craftlab/success
+
+### Supabase
+- URL: https://iqvmilaakjfuaacijtip.supabase.co
+- Tablas: user_progress, lot_configurations
+
+---
+
 ## Sesión: 2025-03-08 (Inicial)
 **Costo:** Primera sesión - análisis inicial
 
@@ -12,37 +76,14 @@ Clonar repositorio, analizar arquitectura y preparar entorno de desarrollo.
 - [x] Clonar repositorio desde GitHub
 - [x] Crear rama `feature/initial-analysis`
 - [x] Analizar stack tecnológico completo
-- [x] Identificar flujos principales (CraftLab + Forward Booking)
-- [x] Documentar arquitectura en ARQUITECTURA_CRAFTLAB.md
+- [x] Identificar flujos principales
+- [x] Documentar arquitectura
 - [x] Crear CLAUDE.md con reglas del proyecto
-- [x] Crear prompts de apertura/cierre
-
-### Archivos Creados
-| Archivo | Descripción |
-|---------|-------------|
-| CLAUDE.md | Guía maestra del proyecto |
-| ARQUITECTURA_CRAFTLAB.md | Análisis técnico detallado |
-| .claude/PROMPT_APERTURA.md | Prompt inicio sesión |
-| .claude/PROMPT_CIERRE.md | Prompt cierre sesión |
-| .claude/SESSION_LOG.md | Este archivo |
-| .claude/PROGRESO.md | Estado del trabajo |
 
 ### Stack Identificado
 - Frontend: React 19 + TypeScript + Vite
 - Backend: Supabase (Auth + PostgreSQL)
 - Deploy: Vercel + PWA
 - UI: Componentes custom + Lucide icons
-
-### Oportunidades de Mejora Detectadas
-1. **ALTA** - Configuración no persiste (se pierde al salir)
-2. **ALTA** - Sin tracking de lotes post-compra
-3. **MEDIA** - Sin notificaciones en tiempo real
-4. **MEDIA** - No se capturan preferencias del tostador
-5. **MEDIA** - Sin tests ni tipos Supabase generados
-
-### Notas
-- El configurador tiene 7 pasos pero termina en `alert()` sin guardar
-- localStorage usado como fallback de auth (posible bypass)
-- Imágenes dependen de Unsplash/Cloudinary externos
 
 ---

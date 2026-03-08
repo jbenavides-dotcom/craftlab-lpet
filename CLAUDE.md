@@ -181,49 +181,44 @@ src/
 ├── lib/                       # Utilidades y servicios
 │   ├── supabase.ts           # Cliente Supabase
 │   ├── user-progress.ts      # Progreso educativo usuario
+│   ├── lot-config.ts         # CRUD configuraciones lote
 │   └── fb-utils.ts           # Utilidades adicionales
 └── pages/
     ├── Login.tsx             # Autenticación
     ├── Home.tsx              # Dashboard principal
     ├── Orders.tsx            # Historial de pedidos
-    ├── craftlab/             # Flujo CraftLab
-    │   ├── CraftLabOnboarding.tsx
-    │   ├── CraftLabBasicEducation.tsx
-    │   ├── CraftLabTechEducation.tsx
-    │   ├── CraftLabQuiz.tsx
-    │   ├── CraftLabWelcome.tsx
-    │   └── CraftLabConfigurator.tsx
-    └── [Forward Booking]/    # Flujo de reserva
-        ├── ForwardBookingRoute.tsx
-        ├── DateSelector.tsx
-        ├── VarietySelector.tsx
-        ├── FlavorSelector.tsx
-        ├── ProcessSelector.tsx
-        ├── QuantitySelector.tsx
-        ├── ReviewConfirm.tsx
-        └── Success.tsx
+    └── craftlab/             # Flujo CraftLab
+        ├── CraftLabOnboarding.tsx
+        ├── CraftLabBasicEducation.tsx
+        ├── CraftLabTechEducation.tsx
+        ├── CraftLabQuiz.tsx
+        ├── CraftLabWelcome.tsx
+        ├── CraftLabConfigurator.tsx
+        └── CraftLabSuccess.tsx
 ```
 
-## Flujos Principales
+## Flujo Principal: CraftLab
 
-### 1. Flujo CraftLab (Educación + Configurador)
 ```
-Login → Home → /craftlab/onboarding
+Login → Home → CraftLab Modal
                     ↓
-          [Education Tool]        [CraftLab] (bloqueado hasta completar educación)
-                ↓                       ↓
-    /education/basic            /craftlab/welcome
-    /education/advanced         /craftlab/configurator
-    /education/quiz
+     ┌──────────────┴──────────────┐
+     │                             │
+[Education Tool]            [CraftLab Configurator]
+     │                        (bloqueado hasta completar)
+     ↓                             │
+/education/basic                   ↓
+/education/advanced         /craftlab/welcome
+/education/quiz             /craftlab/configurator
+     │                      /craftlab/success
+     └──────────────────────────────┘
+                    ↓
+              /orders (ver lotes)
 ```
 
-### 2. Flujo Forward Booking (Reserva tradicional)
-```
-/forward-booking/route → /date → /variety → /flavor → /process → /quantity → /review → /success
-```
-
-## Tablas Supabase (Identificadas)
+## Tablas Supabase
 - `user_progress`: user_id, education_completed, updated_at
+- `lot_configurations`: user_id, status, macro, flavor, variety, quantity, category, process, stabilization, cherry_ferm, mucilage_ferm, solar_dry, mech_dry, submitted_at
 
 ## Data Model: Processing Variables (Best Practices)
 
