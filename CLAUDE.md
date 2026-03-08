@@ -257,22 +257,54 @@ Escribir buena descripción → Claude los llama automáticamente cuando corresp
 
 ## Comandos Claude Code
 
+### Esenciales
 | Comando | Cuándo usar |
 |---------|-------------|
 | `/context` | Verificar tokens antes de cada fase |
 | `/compact` | Cada 10-15 mensajes |
 | `/cost` | Monitorear gasto |
-| `/clear` | Cambiar de tarea, limpiar contexto |
-| `/memory` | Ver/editar reglas |
-| `/init` | Crear CLAUDE.md inicial |
-| `/ide` | Verificar conexión con Cursor/VS Code |
-| `/agents` | Crear/ver sub-agentes |
+| `/clear` | Cambiar de tarea |
 | `?` | Cheat sheet rápido |
 | `Shift+Tab x2` | Plan Mode |
-| `Ctrl+C x2` | Salir |
+
+### Nuevos (2025)
+| Comando | Cuándo usar |
+|---------|-------------|
+| `/simplify` | **MUY ÚTIL** - Revisa código: reuse, quality, efficiency |
+| `/batch` | Migraciones grandes (usa worktrees + agentes paralelos) |
+| `/remote` | Controlar sesión desde teléfono/otra máquina |
+| `/memory` | Ver/editar reglas + auto-memory on/off |
+
+### Configuración
+| Comando | Cuándo usar |
+|---------|-------------|
+| `/init` | Crear CLAUDE.md inicial |
+| `/ide` | Verificar conexión Cursor/VS Code |
+| `/agents` | Crear/ver sub-agentes |
+
+### Terminal
+| Comando | Uso |
+|---------|-----|
 | `claude` | Iniciar sesión |
-| `claude -c` | Continuar última sesión |
+| `claude -c` | Continuar última |
 | `claude -r` | Elegir sesión anterior |
+| `Ctrl+C x2` | Salir |
+
+## Advertencias
+
+### Auto-memory: usar con cuidado
+- Puede confundir al modelo
+- Mejor: código limpio > muchas reglas
+- Si usas, podar regularmente
+
+### Outages
+- Claude tiene outages frecuentes
+- **Backup**: tener Cursor configurado
+- Cursor respeta settings de Claude Code
+
+### /simplify > documentación excesiva
+Estudios muestran que CLAUDE.md muy largo puede **bajar** eficacia del agente.
+Mejor: código limpio + reglas mínimas.
 
 ## Áreas de Mejora Identificadas (Pendiente Análisis Detallado)
 1. [ ] Captura de datos del tostador post-configuración
