@@ -1,5 +1,12 @@
 # CRAFT LAB — Agente de Desarrollo
 
+## Estilo de Comunicación
+**Be extremely concise. Sacrifice grammar for concision.**
+- Planes, commits, respuestas: mínimas palabras, máximo valor
+- No explicar lo obvio
+- Bullets > párrafos
+- Código > explicación
+
 ## Contexto del Proyecto
 Plataforma web colaborativa para tostadores especializados que interactúan
 con procesos de fermentación, secado y beneficio de cafés especiales de
@@ -13,11 +20,68 @@ en tiempo real desde cualquier parte del mundo.
 - Garantizar que ningún cambio afecte la rama `main` en producción
 
 ## Reglas Obligatorias
-- NUNCA hacer commits directos a `main` o `master`
-- SIEMPRE trabajar en rama `feature/[nombre-descriptivo]`
-- SIEMPRE crear PR para revisión antes de merge
-- Antes de cualquier cambio estructural: usar Plan Mode (Shift+Tab x2)
-- Cada sesión: /clear al inicio, /compact cada 10-15 mensajes
+- NUNCA commits directos a `main`
+- SIEMPRE rama `feature/[nombre]`
+- SIEMPRE PR antes de merge
+- Plan Mode (Shift+Tab x2) para cambios >3 archivos
+- /compact cada 10-15 mensajes
+- /context antes de cada fase
+
+## Workflow para Features Complejos
+
+### 1. PLAN FIRST (siempre)
+```
+Shift+Tab x2 → Plan Mode → Explorar → Preguntas → Plan Multi-fase
+```
+
+### 2. Al final de cada plan, incluir:
+```markdown
+## Unresolved Questions
+- [ ] Pregunta 1?
+- [ ] Pregunta 2?
+- [ ] Pregunta 3?
+```
+
+### 3. Si feature > 1 context window → GitHub Issue
+```bash
+gh issue create --title "Plan: [feature]" --body "[plan completo]"
+```
+Luego en nueva sesión:
+```
+get GitHub issue #XX and execute Phase N
+```
+
+### 4. Template Plan Multi-fase
+```markdown
+## Plan: [Feature Name]
+
+### Phase 1: [nombre]
+- [ ] Tarea 1
+- [ ] Tarea 2
+Files: `file1.ts`, `file2.ts`
+
+### Phase 2: [nombre]
+- [ ] Tarea 1
+- [ ] Tarea 2
+Files: `file3.ts`
+
+### Phase 3: [nombre]
+...
+
+## Unresolved Questions
+- [ ] ...
+```
+
+### 5. Entre fases
+```bash
+git add -A  # o commit
+/context    # verificar tokens
+```
+
+### 6. Retomar sesión
+```bash
+claude --continue  # después de Ctrl+C
+```
 
 ## Stack Confirmado
 - [x] Frontend: React 19 + TypeScript + Vite
@@ -120,11 +184,17 @@ npm run lint         # ESLint
 - api-security-auditor → cambios en auth/datos
 - fullstack-developer → features completos
 
-## Comandos Frecuentes Claude Code
-- /clear → inicio de sesión
-- /compact → cada 10-15 mensajes
-- /cost → monitoreo de gasto
-- Shift+Tab x2 → Plan Mode para cambios complejos
+## Comandos Claude Code
+| Comando | Cuándo usar |
+|---------|-------------|
+| `/context` | Antes de cada fase, verificar tokens |
+| `/compact` | Cada 10-15 mensajes |
+| `/cost` | Monitorear gasto |
+| `/clear` | Cambiar de tarea |
+| `/memory` | Ver/editar reglas |
+| `Shift+Tab x2` | Plan Mode |
+| `Ctrl+C x2` | Salir |
+| `claude --continue` | Retomar sesión |
 
 ## Áreas de Mejora Identificadas (Pendiente Análisis Detallado)
 1. [ ] Captura de datos del tostador post-configuración
