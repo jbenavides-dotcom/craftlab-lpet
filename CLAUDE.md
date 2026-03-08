@@ -13,6 +13,20 @@ con procesos de fermentación, secado y beneficio de cafés especiales de
 La Palma y El Tucán (Colombia). Los clientes co-crean su perfil de sabor
 en tiempo real desde cualquier parte del mundo.
 
+### North Star
+> Turn process traceability into a **shared project (co-creation)**, not just a report.
+
+### SDT Framework (Self-Determination Theory)
+| Need | Implementation |
+|------|----------------|
+| Autonomy | Choose participation depth, control notifications |
+| Competence | Clear explanations, "why this mattered" summaries |
+| Relatedness | Human connection to origin, processing team |
+
+### Docs de Referencia
+- `docs/BEST_PRACTICES_SUMMARY.md` - UX, arquitectura, traceability
+- `docs/BEST_PRACTICES_ROASTERS_PLATFORM.docx` - Documento completo
+
 ## Mi Rol Como Agente
 - Analizar la arquitectura existente sin modificar producción
 - Proponer y ejecutar mejoras de UX/UI en ramas paralelas (feature branches)
@@ -210,6 +224,33 @@ Login → Home → /craftlab/onboarding
 
 ## Tablas Supabase (Identificadas)
 - `user_progress`: user_id, education_completed, updated_at
+
+## Data Model: Processing Variables (Best Practices)
+
+### "Digital Lot Passport"
+Cada lote debe ser un **narrative + dataset** que:
+1. Preserva identidad a través de transformaciones
+2. Registra qué pasó y por qué
+3. Soporta sharing selectivo
+4. Sirve para auditorías y storytelling
+
+### Variables de Fermentación/Secado
+| Variable | Target | Propósito |
+|----------|--------|-----------|
+| Temperature | - | Control fermentación |
+| Time | - | Duración por etapa |
+| pH | - | Acidez |
+| °Brix | - | Contenido azúcar |
+| O₂/CO₂ | - | Condiciones aeróbicas/anaeróbicas |
+| Moisture % | 10-12% | Endpoint secado |
+| Water Activity (aw) | <0.70 | Estabilidad (SCA standard) |
+
+### UX: Progressive Disclosure (3 capas)
+| Capa | Contenido |
+|------|-----------|
+| 1. Fast scan | Qué pasa ahora, próximo milestone, flags, fotos |
+| 2. Decision support | Trends, comparación vs targets, notas QC |
+| 3. Expert mode | Logs completos, exports, lab results, audit trails |
 
 ## Configurador: Opciones Disponibles
 | Paso | Campo | Opciones |
