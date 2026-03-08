@@ -275,6 +275,38 @@ Escribir buena descripción → Claude los llama automáticamente cuando corresp
 | `/remote` | Controlar sesión desde teléfono/otra máquina |
 | `/memory` | Ver/editar reglas + auto-memory on/off |
 
+### Agent Teams (Opus 4.6)
+Orquestar múltiples agentes trabajando en paralelo.
+
+**Activar:** Agregar a `.claude/settings.json`:
+```json
+{
+  "enableAgentTeams": true
+}
+```
+
+**Ejemplo de uso:**
+```
+Create an agent team:
+- UX specialist
+- Technical architect
+- Devil's advocate
+```
+
+**Controles:**
+| Tecla | Acción |
+|-------|--------|
+| `Shift+Up` | Expandir vista de agentes |
+| `Shift+Down` | Contraer |
+| `Shift+Up/Down` | Navegar entre sub-agentes |
+
+**Cuándo usar:**
+- Explorar problema desde múltiples ángulos
+- Diseño + arquitectura + crítica simultánea
+- Features complejos que necesitan perspectivas
+
+**Costo:** Alto (múltiples agentes Opus). Usar selectivamente.
+
 ### Configuración
 | Comando | Cuándo usar |
 |---------|-------------|
@@ -289,6 +321,33 @@ Escribir buena descripción → Claude los llama automáticamente cuando corresp
 | `claude -c` | Continuar última |
 | `claude -r` | Elegir sesión anterior |
 | `Ctrl+C x2` | Salir |
+
+## Modelos y Cuándo Usarlos
+
+### Opus 4.6 (Junio 2025)
+- **Context:** 1M tokens (pero gestionar igual)
+- **Mejor para:** Prototipos, diseño, features nuevos, entusiasmo creativo
+- **Agent Teams:** Orquestación de múltiples agentes
+- **Advanced compaction:** Compactación automática mejorada
+- **Costo:** Alto (~$15 input, ~$75 output por 1M tokens)
+
+### Sonnet (default)
+- **Mejor para:** Tareas diarias, balance costo/calidad
+- **Costo:** Moderado
+
+### Cuándo usar GPT (Codex 5.3)
+- **Refactors quirúrgicos:** Más preciso, menos "entusiasta"
+- **Brownfield projects:** Cambios específicos en código existente
+- **Costo:** ~75% más barato que Opus
+
+### Recomendación CRAFT LAB
+| Tarea | Modelo |
+|-------|--------|
+| Prototipos UI | Opus/Sonnet |
+| Features nuevos | Opus |
+| Refactors | GPT Codex |
+| Tareas diarias | Sonnet |
+| Agent Teams | Opus |
 
 ## Advertencias
 
@@ -305,6 +364,10 @@ Escribir buena descripción → Claude los llama automáticamente cuando corresp
 ### /simplify > documentación excesiva
 Estudios muestran que CLAUDE.md muy largo puede **bajar** eficacia del agente.
 Mejor: código limpio + reglas mínimas.
+
+### Context window 1M
+No significa 4x más código. Mismos problemas de antes.
+Seguir gestionando contexto con /compact y /clear.
 
 ## Áreas de Mejora Identificadas (Pendiente Análisis Detallado)
 1. [ ] Captura de datos del tostador post-configuración
