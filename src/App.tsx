@@ -16,6 +16,7 @@ import { CraftLabTechEducation } from './pages/craftlab/CraftLabTechEducation';
 import { CraftLabQuiz } from './pages/craftlab/CraftLabQuiz';
 import { CraftLabWelcome } from './pages/craftlab/CraftLabWelcome';
 import { CraftLabConfigurator } from './pages/craftlab/CraftLabConfigurator';
+import { CraftLabSuccess } from './pages/craftlab/CraftLabSuccess';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/craftlab/education/quiz" element={<CraftLabQuiz />} />
         <Route path="/craftlab/welcome" element={<CraftLabWelcome />} />
         <Route path="/craftlab/configurator" element={<CraftLabConfigurator />} />
+        <Route path="/craftlab/success" element={<CraftLabSuccess />} />
         <Route path="/forward-booking/route" element={<ForwardBookingRoute />} />
         <Route path="/forward-booking/date" element={<DateSelector />} />
         <Route path="/forward-booking/variety" element={<VarietySelector />} />

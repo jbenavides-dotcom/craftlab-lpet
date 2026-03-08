@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, ChevronDown, Check } from 'lucide-react';
+import { X, ChevronDown, Check, Loader2 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Slider } from '../../components/ui/Slider';
+import { loadDraftConfig, saveDraftConfig, submitConfig, deleteDraftConfig } from '../../lib/lot-config';
 import './CraftLabConfigurator.css';
 
 interface ConfigState {
@@ -76,13 +77,70 @@ export const CraftLabConfigurator: React.FC = () => {
     const [showExitModal, setShowExitModal] = useState(false);
     const [activeSection, setActiveSection] = useState('sec-macro');
     const [showSummary, setShowSummary] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isSaving, setIsSaving] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const controlsRef = useRef<HTMLDivElement>(null);
+    const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     const [config, setConfig] = useState<ConfigState>({
         macro: null, flavor: null, variety: null, quantity: null,
         category: null, process: null, stabilization: null,
         cherryFerm: null, mucilageFerm: null, solarDry: null, mechDry: null,
     });
+
+    // Load existing draft on mount
+    useEffect(() => {
+        const loadExisting = async () => {
+            try {
+                const draft = await loadDraftConfig();
+                if (draft) {
+                    setConfig({
+                        macro: draft.macro,
+                        flavor: draft.flavor,
+                        variety: draft.variety,
+                        quantity: draft.quantity,
+                        category: draft.category,
+                        process: draft.process,
+                        stabilization: draft.stabilization,
+                        cherryFerm: draft.cherry_ferm,
+                        mucilageFerm: draft.mucilage_ferm,
+                        solarDry: draft.solar_dry,
+                        mechDry: draft.mech_dry,
+                    });
+                }
+            } catch (err) {
+                console.error('Error loading draft:', err);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        loadExisting();
+    }, []);
+
+    // Auto-save with debounce
+    const debouncedSave = useCallback((newConfig: ConfigState) => {
+        if (saveTimeoutRef.current) {
+            clearTimeout(saveTimeoutRef.current);
+        }
+        saveTimeoutRef.current = setTimeout(async () => {
+            setIsSaving(true);
+            await saveDraftConfig({
+                macro: newConfig.macro,
+                flavor: newConfig.flavor,
+                variety: newConfig.variety,
+                quantity: newConfig.quantity,
+                category: newConfig.category,
+                process: newConfig.process,
+                stabilization: newConfig.stabilization,
+                cherry_ferm: newConfig.cherryFerm,
+                mucilage_ferm: newConfig.mucilageFerm,
+                solar_dry: newConfig.solarDry,
+                mech_dry: newConfig.mechDry,
+            });
+            setIsSaving(false);
+        }, 1000); // Save 1 second after last change
+    }, []);
 
     // Scroll spy — update active image as user scrolls through option panels
     useEffect(() => {
@@ -109,14 +167,44 @@ export const CraftLabConfigurator: React.FC = () => {
         setConfig(prev => {
             const next = { ...prev, [key]: value };
             if (key === 'macro' && prev.macro !== value) next.flavor = null;
+            // Trigger auto-save
+            debouncedSave(next);
             return next;
         });
     };
 
-    const confirmExit = () => {
+    const confirmExit = async () => {
+        // Delete draft when user confirms exit
+        await deleteDraftConfig();
         localStorage.removeItem('craftlab_config');
         navigate('/home');
     };
+
+    const handleSubmit = async () => {
+        setIsSubmitting(true);
+        try {
+            const result = await submitConfig();
+            if (result) {
+                navigate('/craftlab/success', { state: { config: result } });
+            } else {
+                alert('Error submitting configuration. Please try again.');
+            }
+        } catch (err) {
+            console.error('Submit error:', err);
+            alert('Error submitting configuration. Please try again.');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    // Show loading state
+    if (isLoading) {
+        return (
+            <div className="cl-config-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Loader2 className="animate-spin" size={32} />
+            </div>
+        );
+    }
 
     return (
         <div className="cl-config-container">
@@ -124,7 +212,9 @@ export const CraftLabConfigurator: React.FC = () => {
             {/* ──── HEADER (sticky, minimal) ──────────────── */}
             <header className="cl-config-header">
                 <img src="https://res.cloudinary.com/dtkwqoadf/image/upload/v1742314508/CL_completo_ly3ecz.png" alt="CraftLab" className="cl-brand-logo-img" />
-                <div className="cl-config-subtitle">Design your coffee</div>
+                <div className="cl-config-subtitle">
+                    {isSaving ? 'Saving...' : 'Design your coffee'}
+                </div>
                 <button className="cl-close-btn" onClick={() => setShowExitModal(true)}>
                     <X size={20} />
                 </button>
@@ -314,9 +404,9 @@ export const CraftLabConfigurator: React.FC = () => {
 
                             <div className="params-cta">
                                 <Button variant="primary" size="full"
-                                    disabled={config.stabilization === null || config.solarDry === null}
-                                    onClick={() => alert('Proceeding to fulfillment...')}>
-                                    Continue to Fulfillment
+                                    disabled={config.stabilization === null || config.solarDry === null || isSubmitting}
+                                    onClick={handleSubmit}>
+                                    {isSubmitting ? 'Submitting...' : 'Continue to Fulfillment'}
                                 </Button>
                             </div>
                         </section>
