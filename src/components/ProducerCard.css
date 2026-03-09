@@ -1,0 +1,219 @@
+/* ===================================================
+   PRODUCER CARD — Origin Storytelling Component
+   =================================================== */
+
+.producer-card {
+    background: linear-gradient(135deg, rgba(183, 138, 72, 0.06) 0%, rgba(14, 30, 54, 0.04) 100%);
+    border: 1px solid rgba(183, 138, 72, 0.2);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    animation: producerFadeIn 0.4s ease-out;
+}
+
+@keyframes producerFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ---- HEADER (photo + info) ---- */
+.producer-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.producer-photo-container {
+    flex-shrink: 0;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid var(--color-tan);
+    box-shadow: 0 4px 12px rgba(183, 138, 72, 0.2);
+}
+
+.producer-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.producer-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.producer-name {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--color-navy);
+    margin-bottom: 2px;
+    line-height: 1.3;
+}
+
+.producer-farm {
+    font-size: 0.875rem;
+    color: var(--color-tan);
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+.producer-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.producer-meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    color: var(--color-gray-medium);
+    font-weight: 500;
+}
+
+.producer-meta-item svg {
+    color: var(--color-tan);
+}
+
+/* ---- QUOTE ---- */
+.producer-quote {
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--color-navy);
+    line-height: 1.6;
+    padding: 1rem;
+    margin: 0;
+    background: rgba(255, 255, 255, 0.6);
+    border-left: 3px solid var(--color-tan);
+    border-radius: var(--radius-sm);
+}
+
+/* ---- EXPAND BUTTON ---- */
+.producer-expand-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.75rem;
+    background: transparent;
+    border: 1px solid rgba(14, 30, 54, 0.15);
+    border-radius: var(--radius-md);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-navy);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.producer-expand-btn:hover {
+    background: rgba(14, 30, 54, 0.04);
+    border-color: rgba(14, 30, 54, 0.25);
+}
+
+.producer-expand-btn.expanded {
+    background: rgba(14, 30, 54, 0.04);
+}
+
+.producer-expand-btn svg {
+    transition: transform 0.25s ease;
+}
+
+.producer-expand-btn svg.rotate {
+    transform: rotate(180deg);
+}
+
+/* ---- EXPANDED CONTENT ---- */
+.producer-expanded {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(14, 30, 54, 0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    animation: expandFadeIn 0.35s ease-out;
+}
+
+@keyframes expandFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.producer-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.producer-section-title {
+    font-family: var(--font-sans);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-tan);
+    margin: 0;
+}
+
+.producer-section-text {
+    font-size: 0.875rem;
+    color: var(--color-dark-text);
+    line-height: 1.65;
+    margin: 0;
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 480px) {
+    .producer-card {
+        padding: 1.25rem;
+    }
+
+    .producer-photo-container {
+        width: 60px;
+        height: 60px;
+    }
+
+    .producer-name {
+        font-size: 1.05rem;
+    }
+
+    .producer-quote {
+        font-size: 0.9rem;
+        padding: 0.875rem;
+    }
+}
+
+@media (min-width: 900px) {
+    .producer-card {
+        padding: 1.75rem;
+    }
+
+    .producer-photo-container {
+        width: 80px;
+        height: 80px;
+    }
+
+    .producer-quote {
+        font-size: 1rem;
+        padding: 1.25rem;
+    }
+}

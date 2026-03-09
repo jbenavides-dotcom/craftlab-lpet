@@ -1,0 +1,212 @@
+/* ===================================================
+   SKELETON LOADER — Shimmer animation component
+   =================================================== */
+
+/* ---- BASE SKELETON --------------------------------- */
+.skeleton {
+    background: var(--color-gray-light);
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-sm);
+}
+
+.skeleton::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.6) 50%,
+        transparent 100%
+    );
+    animation: shimmer 1.5s infinite;
+    transform: translateX(-100%);
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+/* ---- TEXT VARIANT ---------------------------------- */
+.skeleton-text {
+    height: 16px;
+    width: 100%;
+    border-radius: var(--radius-sm);
+    margin-bottom: 8px;
+}
+
+.skeleton-text:last-child {
+    margin-bottom: 0;
+}
+
+/* ---- CARD VARIANT ---------------------------------- */
+.skeleton-card {
+    height: 120px;
+    width: 100%;
+    border-radius: var(--radius-md);
+}
+
+/* ---- CIRCLE VARIANT (Avatar) ----------------------- */
+.skeleton-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* ---- CONFIGURATOR OPTION VARIANT ------------------- */
+.skeleton-configurator-option {
+    height: 72px;
+    width: 100%;
+    border-radius: var(--radius-md);
+    border: 1.5px solid rgba(0, 0, 0, 0.06);
+    margin-bottom: 0.6rem;
+}
+
+.skeleton-configurator-option:last-child {
+    margin-bottom: 0;
+}
+
+/* ---- CONFIGURATOR SECTION SKELETON ----------------- */
+.skeleton-section {
+    padding: 2rem 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+@media (min-width: 900px) {
+    .skeleton-section {
+        padding: 2.5rem 3rem;
+    }
+}
+
+.skeleton-step-label {
+    margin-bottom: 0.5rem;
+}
+
+.skeleton-title {
+    margin-bottom: 0.75rem;
+}
+
+.skeleton-desc {
+    margin-bottom: 1.5rem;
+}
+
+.skeleton-options-list {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ---- CONFIGURATOR FULL LAYOUT SKELETON ------------- */
+.skeleton-configurator-layout {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+}
+
+.skeleton-visual-panel {
+    flex-shrink: 0;
+    position: relative;
+    background: var(--color-gray-light);
+    overflow: hidden;
+    width: 100%;
+    height: 35vh;
+}
+
+.skeleton-visual-panel .skeleton-card {
+    height: 100%;
+    border-radius: 0;
+}
+
+.skeleton-visual-tag {
+    position: absolute;
+    bottom: 1rem;
+    left: 1.25rem;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(8px);
+    border-radius: 99px;
+    padding: 8px 16px;
+}
+
+.skeleton-controls-panel {
+    flex: 1;
+    overflow-y: auto;
+    background: var(--color-white);
+}
+
+/* Mobile */
+@media (max-width: 899px) {
+    .skeleton-configurator-layout {
+        flex-direction: column;
+    }
+
+    .skeleton-visual-panel {
+        height: 35vh;
+        width: 100%;
+    }
+
+    .skeleton-controls-panel {
+        padding-bottom: 80px;
+    }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+    .skeleton-visual-panel {
+        height: 28vh;
+    }
+
+    .skeleton-section {
+        padding: 1.5rem 1rem;
+    }
+
+    .skeleton-configurator-option {
+        height: 64px;
+    }
+}
+
+/* Tablet */
+@media (min-width: 600px) and (max-width: 899px) {
+    .skeleton-visual-panel {
+        height: 30vh;
+    }
+
+    .skeleton-section {
+        padding: 2rem;
+    }
+}
+
+/* Desktop: side-by-side */
+@media (min-width: 900px) {
+    .skeleton-configurator-layout {
+        flex-direction: row;
+    }
+
+    .skeleton-visual-panel {
+        width: 58%;
+        height: 100%;
+    }
+
+    .skeleton-controls-panel {
+        width: 42%;
+        padding-bottom: 80px;
+    }
+}
+
+/* ---- REDUCED MOTION -------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+    .skeleton::after {
+        animation: none;
+        background: rgba(255, 255, 255, 0.4);
+        transform: none;
+    }
+}

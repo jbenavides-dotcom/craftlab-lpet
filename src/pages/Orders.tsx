@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronLeft, Calendar, Leaf, Coffee, TestTube2, Home as HomeIcon, ShoppingBag, Info, Package, Loader2 } from 'lucide-react';
-import { getUserConfigs, LotConfiguration } from '../lib/lot-config';
+import { ChevronLeft, Calendar, Leaf, Coffee, TestTube2, Home as HomeIcon, ShoppingBag, Info, Package, Loader2, Award } from 'lucide-react';
+import { getUserConfigs } from '../lib/lot-config';
+import type { LotConfiguration } from '../lib/lot-config';
 import { Button } from '../components/ui/Button';
+import { AchievementBadgeInline } from '../components/ui/AchievementBadge';
+import { getAchievements, type Achievement } from '../lib/achievements';
 import './Orders.css';
 import './Home.css';
 
@@ -24,6 +27,7 @@ export const Orders: React.FC = () => {
     const navigate = useNavigate();
     const [orders, setOrders] = useState<LotConfiguration[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [achievements, setAchievements] = useState<Achievement[]>([]);
 
     useEffect(() => {
         const loadOrders = async () => {
@@ -38,6 +42,9 @@ export const Orders: React.FC = () => {
             }
         };
         loadOrders();
+
+        // Load achievements
+        setAchievements(getAchievements());
     }, []);
 
     const formatDate = (dateStr?: string) => {
@@ -87,44 +94,67 @@ export const Orders: React.FC = () => {
                         </Button>
                     </div>
                 ) : (
-                    <div className="orders-list">
-                        {orders.map(order => (
-                            <div
-                                key={order.id}
-                                className="order-card"
-                                onClick={() => {/* Future: navigate to order detail */}}
-                            >
-                                <div className="order-header">
-                                    <span>Submitted: {formatDate(order.submitted_at)}</span>
-                                    <span style={{ color: STATUS_COLORS[order.status], fontWeight: 600 }}>
-                                        {STATUS_LABELS[order.status]}
+                    <>
+                        <div className="orders-list">
+                            {orders.map(order => (
+                                <div
+                                    key={order.id}
+                                    className="order-card"
+                                    onClick={() => {/* Future: navigate to order detail */}}
+                                >
+                                    <div className="order-header">
+                                        <span>Submitted: {formatDate(order.submitted_at)}</span>
+                                        <span style={{ color: STATUS_COLORS[order.status], fontWeight: 600 }}>
+                                            {STATUS_LABELS[order.status]}
+                                        </span>
+                                    </div>
+
+                                    <div className="order-details">
+                                        <div className="order-info">
+                                            <p className="order-profile">{order.macro || 'Custom'} Profile</p>
+                                            <p className="order-flavor">{order.flavor || 'Custom blend'}</p>
+                                        </div>
+                                        <div className="order-weight">
+                                            {order.quantity || '35kg'}
+                                        </div>
+                                    </div>
+
+                                    <div className="order-progress">
+                                        {['Order', 'Fermentation', 'Drying', 'Ready'].map((label, idx) => (
+                                            <div key={label} style={{ position: 'relative' }}>
+                                                <div className={`progress-dot ${
+                                                    idx < getProgressStep(order.status) ? 'completed' :
+                                                    idx === getProgressStep(order.status) ? 'active' : ''
+                                                }`}></div>
+                                                <span className="progress-label">{label}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Achievements Section */}
+                        {achievements.some(a => a.unlocked) && (
+                            <div className="orders-achievements">
+                                <div className="orders-achievements-header">
+                                    <Award size={16} />
+                                    <span>Your Achievements</span>
+                                    <span className="achievements-count">
+                                        {achievements.filter(a => a.unlocked).length}/{achievements.length}
                                     </span>
                                 </div>
-
-                                <div className="order-details">
-                                    <div className="order-info">
-                                        <p className="order-profile">{order.macro || 'Custom'} Profile</p>
-                                        <p className="order-flavor">{order.flavor || 'Custom blend'}</p>
-                                    </div>
-                                    <div className="order-weight">
-                                        {order.quantity || '35kg'}
-                                    </div>
-                                </div>
-
-                                <div className="order-progress">
-                                    {['Order', 'Fermentation', 'Drying', 'Ready'].map((label, idx) => (
-                                        <div key={label} style={{ position: 'relative' }}>
-                                            <div className={`progress-dot ${
-                                                idx < getProgressStep(order.status) ? 'completed' :
-                                                idx === getProgressStep(order.status) ? 'active' : ''
-                                            }`}></div>
-                                            <span className="progress-label">{label}</span>
-                                        </div>
+                                <div className="orders-achievements-badges">
+                                    {achievements.map(achievement => (
+                                        <AchievementBadgeInline
+                                            key={achievement.id}
+                                            achievement={achievement}
+                                        />
                                     ))}
                                 </div>
                             </div>
-                        ))}
-                    </div>
+                        )}
+                    </>
                 )}
             </main>
 

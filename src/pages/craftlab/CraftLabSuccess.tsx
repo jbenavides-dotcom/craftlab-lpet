@@ -1,13 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, Award } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
+import { AchievementBadge } from '../../components/ui/AchievementBadge';
+import { checkAndUnlockAchievements, getAchievement, type Achievement } from '../../lib/achievements';
 import './CraftLabSuccess.css';
 
 export const CraftLabSuccess: React.FC = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const config = location.state?.config;
+    const [newAchievements, setNewAchievements] = useState<Achievement[]>([]);
+
+    useEffect(() => {
+        // Check which achievements were unlocked
+        const hasAdvancedParams = config?.stabilization !== null ||
+            config?.cherry_ferm !== null ||
+            config?.mucilage_ferm !== null;
+
+        const unlocked = checkAndUnlockAchievements({
+            configSubmitted: true,
+            usedAdvancedParams: hasAdvancedParams,
+            macroProfile: config?.macro,
+        });
+
+        // Get full achievement data for newly unlocked ones
+        const achievements = unlocked.map(id => getAchievement(id));
+        setNewAchievements(achievements);
+    }, [config]);
 
     return (
         <div className="cl-success-container">
@@ -15,6 +35,26 @@ export const CraftLabSuccess: React.FC = () => {
                 <CheckCircle size={64} className="cl-success-icon" />
                 <h1>Configuration Submitted!</h1>
                 <p>Your custom coffee lot has been configured successfully.</p>
+
+                {/* Achievement Celebration */}
+                {newAchievements.length > 0 && (
+                    <div className="cl-success-achievements">
+                        <div className="cl-achievements-header">
+                            <Award size={16} />
+                            <span>Achievement{newAchievements.length > 1 ? 's' : ''} Unlocked!</span>
+                        </div>
+                        <div className="cl-achievements-list">
+                            {newAchievements.map(achievement => (
+                                <AchievementBadge
+                                    key={achievement.id}
+                                    achievement={achievement}
+                                    size="md"
+                                    showAnimation={true}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                )}
 
                 {config && (
                     <div className="cl-success-summary">

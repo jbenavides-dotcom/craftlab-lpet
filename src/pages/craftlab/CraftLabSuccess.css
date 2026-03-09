@@ -65,3 +65,39 @@
     flex-direction: column;
     gap: 0.75rem;
 }
+
+/* Achievements section */
+.cl-success-achievements {
+    margin-bottom: 1.5rem;
+    animation: achievementSlideIn 0.5s ease-out;
+}
+
+.cl-achievements-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--color-tan, #b78a48);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+}
+
+.cl-achievements-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+@keyframes achievementSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

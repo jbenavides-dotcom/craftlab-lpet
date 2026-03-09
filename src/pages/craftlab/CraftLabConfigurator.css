@@ -56,7 +56,24 @@
     height: 100%;
     background: var(--color-navy, #0e1e36);
     border-radius: 2px;
-    transition: width 0.4s ease-out;
+    transition: width 0.4s ease-out, box-shadow 0.3s ease;
+}
+
+/* Progress bar pulse animation on increase */
+.cl-progress-fill.pulse {
+    animation: progressPulse 0.5s ease-out;
+}
+
+@keyframes progressPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(14, 30, 54, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 8px 2px rgba(14, 30, 54, 0.3);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(14, 30, 54, 0);
+    }
 }
 
 .cl-close-btn {
@@ -254,7 +271,7 @@
 
 /* fade-in when section appears */
 .fade-in {
-    animation: sectionFade 0.35s ease-out;
+    animation: sectionFade 0.3s ease-out;
 }
 
 @keyframes sectionFade {
@@ -269,11 +286,71 @@
     }
 }
 
+/* Smooth section change transitions */
+.config-section {
+    transition: opacity 0.25s ease-out;
+}
+
+.section-enter {
+    animation: sectionEnter 0.3s ease-out;
+}
+
+@keyframes sectionEnter {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.section-exit {
+    animation: sectionExit 0.2s ease-in;
+}
+
+@keyframes sectionExit {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+}
+
 /* ---- TESLA-STYLE OPTION LIST ----------------------- */
 .tesla-options-list {
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
+}
+
+/* Staggered fade-in for options list */
+.tesla-options-list .tesla-option {
+    opacity: 0;
+    animation: optionEnter 0.25s ease-out forwards;
+}
+
+.tesla-options-list .tesla-option:nth-child(1) { animation-delay: 0.03s; }
+.tesla-options-list .tesla-option:nth-child(2) { animation-delay: 0.06s; }
+.tesla-options-list .tesla-option:nth-child(3) { animation-delay: 0.09s; }
+.tesla-options-list .tesla-option:nth-child(4) { animation-delay: 0.12s; }
+.tesla-options-list .tesla-option:nth-child(5) { animation-delay: 0.15s; }
+.tesla-options-list .tesla-option:nth-child(6) { animation-delay: 0.18s; }
+
+/* Option enter animation (scale from 0.95 to 1, fade in) */
+@keyframes optionEnter {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 .tesla-option {
@@ -285,18 +362,40 @@
     border-radius: var(--radius-md);
     cursor: pointer;
     background: var(--color-white);
-    transition: border-color 0.18s, background 0.18s;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
     gap: 1rem;
 }
 
 .tesla-option:hover {
     border-color: rgba(0, 0, 0, 0.25);
+    transform: scale(1.01);
+}
+
+.tesla-option:active {
+    transform: scale(0.98);
 }
 
 .tesla-option.selected {
     background: rgba(14, 30, 54, 0.03);
     border-color: var(--color-navy);
     /* default; overridden per macro color */
+}
+
+/* Option selected animation (brief scale pulse to 1.02 then back) */
+.tesla-option.option-selected {
+    animation: optionSelectedPulse 0.25s ease-out;
+}
+
+@keyframes optionSelectedPulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
 .topt-name {
@@ -342,6 +441,17 @@
     gap: 0.6rem;
 }
 
+/* Staggered fade-in for quantity chips */
+.quantity-chips .qty-chip {
+    opacity: 0;
+    animation: optionEnter 0.25s ease-out forwards;
+}
+
+.quantity-chips .qty-chip:nth-child(1) { animation-delay: 0.03s; }
+.quantity-chips .qty-chip:nth-child(2) { animation-delay: 0.06s; }
+.quantity-chips .qty-chip:nth-child(3) { animation-delay: 0.09s; }
+.quantity-chips .qty-chip:nth-child(4) { animation-delay: 0.12s; }
+
 .qty-chip {
     text-align: left;
     padding: 1rem 1.25rem;
@@ -352,16 +462,26 @@
     font-weight: 500;
     color: var(--color-navy);
     cursor: pointer;
-    transition: border-color 0.18s, background 0.18s;
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
 }
 
 .qty-chip:hover {
     border-color: rgba(0, 0, 0, 0.25);
+    transform: scale(1.01);
+}
+
+.qty-chip:active {
+    transform: scale(0.98);
 }
 
 .qty-chip.selected {
     border-color: var(--color-navy);
     background: rgba(14, 30, 54, 0.04);
+}
+
+/* Quantity chip selected animation */
+.qty-chip.option-selected {
+    animation: optionSelectedPulse 0.25s ease-out;
 }
 
 /* ---- PARAMS SECTION -------------------------------- */
@@ -524,4 +644,90 @@
     display: flex;
     flex-direction: column;
     gap: 0.6rem;
+}
+
+/* ---- PRICING SYSTEM -------------------------------- */
+
+/* Premium badge on options */
+.topt-name-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.premium-badge {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--color-white);
+    background: linear-gradient(135deg, #b78a48, #9b7040);
+    padding: 2px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+/* Quantity chip with price */
+.qty-chip {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.qty-chip-text {
+    flex: 1;
+}
+
+.qty-chip-price {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-gray-medium);
+    margin-left: 1rem;
+}
+
+.qty-chip.selected .qty-chip-price {
+    color: var(--color-navy);
+}
+
+/* Summary bar price display */
+.summary-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.summary-bar-price {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-navy);
+    background: rgba(14, 30, 54, 0.06);
+    padding: 4px 10px;
+    border-radius: 6px;
+}
+
+/* Summary drawer price breakdown */
+.summary-drawer-divider {
+    height: 1px;
+    background: rgba(0, 0, 0, 0.1);
+    margin: 0.5rem 1.5rem;
+}
+
+.summary-drawer-val.premium {
+    color: #b78a48;
+    font-weight: 600;
+}
+
+.summary-drawer-row.total {
+    background: rgba(14, 30, 54, 0.03);
+    margin-top: 0.25rem;
+}
+
+.summary-drawer-row.total .summary-drawer-key {
+    font-weight: 600;
+    color: var(--color-navy);
+}
+
+.summary-drawer-val.total-price {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-navy);
 }

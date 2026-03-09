@@ -1,12 +1,44 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo, KeyboardEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, ChevronDown, Check, Loader2 } from 'lucide-react';
+import { X, ChevronDown, Check } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { Button } from '../../components/ui/Button';
 import { Slider } from '../../components/ui/Slider';
 import { ToastContainer, useToast } from '../../components/ui/Toast';
+import { ConfiguratorLoadingSkeleton } from '../../components/ui/Skeleton';
+import { ProducerCard, PRODUCERS } from '../../components/ProducerCard';
 import { loadDraftConfig, saveDraftConfig, submitConfig, deleteDraftConfig } from '../../lib/lot-config';
 import './CraftLabConfigurator.css';
+
+// Keyboard navigation handler for option lists
+const handleOptionKeyDown = (
+    e: KeyboardEvent<HTMLDivElement>,
+    onSelect: () => void,
+    container: HTMLElement | null
+) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        onSelect();
+        // Scroll the selected option into view
+        (e.target as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        const options = container?.querySelectorAll('[role="option"]') as NodeListOf<HTMLElement>;
+        if (!options || options.length === 0) return;
+
+        const currentIndex = Array.from(options).findIndex(opt => opt === e.target);
+        let nextIndex: number;
+
+        if (e.key === 'ArrowDown') {
+            nextIndex = currentIndex < options.length - 1 ? currentIndex + 1 : 0;
+        } else {
+            nextIndex = currentIndex > 0 ? currentIndex - 1 : options.length - 1;
+        }
+
+        options[nextIndex]?.focus();
+        options[nextIndex]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+};
 
 interface ConfigState {
     macro: string | null;
@@ -63,6 +95,44 @@ const METHODS: Record<string, { id: string, label: string }[]> = {
     'honey': [{ id: 'honey-std', label: 'Honey Standard' }]
 };
 
+// ── PRICING SYSTEM ──────────────────────────────────────
+const BASE_PRICES: Record<string, number> = {
+    '35kg': 420,
+    '70kg': 780,
+    '105kg': 1100,
+};
+
+const MACRO_PREMIUMS: Record<string, { percent: number, label: string }> = {
+    'fermented': { percent: 15, label: '+15%' },
+    'bright': { percent: 10, label: '+10%' },
+    'classic': { percent: 0, label: '' },
+};
+
+const VARIETY_PREMIUMS: Record<string, { percent: number, label: string }> = {
+    'geisha': { percent: 25, label: '+25%' },
+    'sidra': { percent: 15, label: '+15%' },
+    'gesha-sidra': { percent: 20, label: '+20%' },
+};
+
+interface PriceBreakdown {
+    basePrice: number;
+    macroPremium: number;
+    varietyPremium: number;
+    total: number;
+}
+
+const calculatePrice = (quantity: string | null, macro: string | null, variety: string | null): PriceBreakdown => {
+    const basePrice = quantity ? BASE_PRICES[quantity] || 0 : 0;
+    const macroPercent = macro ? MACRO_PREMIUMS[macro]?.percent || 0 : 0;
+    const varietyPercent = variety ? VARIETY_PREMIUMS[variety]?.percent || 0 : 0;
+
+    const macroPremium = Math.round(basePrice * (macroPercent / 100));
+    const varietyPremium = Math.round(basePrice * (varietyPercent / 100));
+    const total = basePrice + macroPremium + varietyPremium;
+
+    return { basePrice, macroPremium, varietyPremium, total };
+};
+
 // Section ID -> image mapping
 const SECTION_IMAGES: Record<string, string> = {
     'sec-macro': 'https://images.unsplash.com/photo-1498804103079-a6351b050096?q=80&w=1200&auto=format&fit=crop',
@@ -86,6 +156,13 @@ export const CraftLabConfigurator: React.FC = () => {
     const controlsRef = useRef<HTMLDivElement>(null);
     const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const lastSaveSuccessRef = useRef<boolean>(true);
+
+    // Refs for keyboard navigation containers
+    const macroListRef = useRef<HTMLDivElement>(null);
+    const flavorListRef = useRef<HTMLDivElement>(null);
+    const varietyListRef = useRef<HTMLDivElement>(null);
+    const categoryListRef = useRef<HTMLDivElement>(null);
+    const methodListRef = useRef<HTMLDivElement>(null);
 
     const [config, setConfig] = useState<ConfigState>({
         macro: null, flavor: null, variety: null, quantity: null,
@@ -189,6 +266,11 @@ export const CraftLabConfigurator: React.FC = () => {
         return Math.round((steps / 7) * 100);
     }, [config]);
 
+    // Calculate price reactively
+    const priceBreakdown = useMemo(() => {
+        return calculatePrice(config.quantity, config.macro, config.variety);
+    }, [config.quantity, config.macro, config.variety]);
+
     const updateConfig = (key: keyof ConfigState, value: any) => {
         setConfig(prev => {
             const next = { ...prev, [key]: value };
@@ -254,11 +336,23 @@ export const CraftLabConfigurator: React.FC = () => {
         }
     };
 
-    // Show loading state
+    // Show loading state with skeleton
     if (isLoading) {
         return (
-            <div className="cl-config-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Loader2 className="animate-spin" size={32} />
+            <div className="cl-config-container">
+                <header className="cl-config-header">
+                    <img src="https://res.cloudinary.com/dtkwqoadf/image/upload/v1742314508/CL_completo_ly3ecz.png" alt="CraftLab" className="cl-brand-logo-img" />
+                    <div className="cl-header-center">
+                        <div className="cl-config-subtitle">Loading your configuration...</div>
+                        <div className="cl-progress-bar">
+                            <div className="cl-progress-fill" style={{ width: '0%' }} />
+                        </div>
+                    </div>
+                    <div style={{ width: 28 }} /> {/* Spacer for close button */}
+                </header>
+                <div className="cl-body">
+                    <ConfiguratorLoadingSkeleton />
+                </div>
             </div>
         );
     }
@@ -307,18 +401,27 @@ export const CraftLabConfigurator: React.FC = () => {
                     {/* SECTION 1: MACRO PROFILE */}
                     <section className="config-section" id="sec-macro">
                         <div className="section-label">Step 01</div>
-                        <h2 className="section-title">Macro Profile</h2>
+                        <h2 className="section-title" id="macro-label">Macro Profile</h2>
                         <p className="section-desc">Choose the flavor direction that defines your lot.</p>
-                        <div className="tesla-options-list">
+                        <div className="tesla-options-list" role="listbox" aria-labelledby="macro-label" ref={macroListRef}>
                             {MACRO_PROFILES.map(m => (
                                 <div
                                     key={m.id}
                                     className={`tesla-option ${config.macro === m.id ? 'selected' : ''}`}
                                     onClick={() => updateConfig('macro', m.id)}
+                                    onKeyDown={(e) => handleOptionKeyDown(e, () => updateConfig('macro', m.id), macroListRef.current)}
                                     style={config.macro === m.id ? { borderColor: m.color } : {}}
+                                    tabIndex={0}
+                                    role="option"
+                                    aria-selected={config.macro === m.id}
                                 >
                                     <div>
-                                        <div className="topt-name">{m.label}</div>
+                                        <div className="topt-name-row">
+                                            <span className="topt-name">{m.label}</span>
+                                            {MACRO_PREMIUMS[m.id]?.label && (
+                                                <span className="premium-badge">{MACRO_PREMIUMS[m.id].label}</span>
+                                            )}
+                                        </div>
                                         <div className="topt-desc">{m.desc}</div>
                                         {config.macro === m.id && <div className="topt-why">{m.why}</div>}
                                     </div>
@@ -332,15 +435,19 @@ export const CraftLabConfigurator: React.FC = () => {
                     {config.macro && (
                         <section className="config-section fade-in" id="sec-flavor">
                             <div className="section-label">Step 02</div>
-                            <h2 className="section-title">Flavor Profile</h2>
+                            <h2 className="section-title" id="flavor-label">Flavor Profile</h2>
                             <p className="section-desc">Select the specific tasting notes for your coffee.</p>
-                            <div className="tesla-options-list">
+                            <div className="tesla-options-list" role="listbox" aria-labelledby="flavor-label" ref={flavorListRef}>
                                 {FLAVOR_PROFILES[config.macro].map(f => (
                                     <div
                                         key={f.id}
                                         className={`tesla-option ${config.flavor === f.label ? 'selected' : ''}`}
                                         onClick={() => updateConfig('flavor', f.label)}
+                                        onKeyDown={(e) => handleOptionKeyDown(e, () => updateConfig('flavor', f.label), flavorListRef.current)}
                                         style={config.flavor === f.label ? { borderColor: f.color } : {}}
+                                        tabIndex={0}
+                                        role="option"
+                                        aria-selected={config.flavor === f.label}
                                     >
                                         <div className="flavor-dot" style={{ background: f.color }} />
                                         <div style={{ flex: 1 }}>
@@ -357,17 +464,26 @@ export const CraftLabConfigurator: React.FC = () => {
                     {config.flavor && (
                         <section className="config-section fade-in" id="sec-variety">
                             <div className="section-label">Step 03</div>
-                            <h2 className="section-title">Coffee Variety</h2>
+                            <h2 className="section-title" id="variety-label">Coffee Variety</h2>
                             <p className="section-desc">Each variety brings its own genetic expression to the cup.</p>
-                            <div className="tesla-options-list">
+                            <div className="tesla-options-list" role="listbox" aria-labelledby="variety-label" ref={varietyListRef}>
                                 {VARIETIES.map(v => (
                                     <div
                                         key={v.id}
                                         className={`tesla-option ${config.variety === v.id ? 'selected' : ''}`}
                                         onClick={() => updateConfig('variety', v.id)}
+                                        onKeyDown={(e) => handleOptionKeyDown(e, () => updateConfig('variety', v.id), varietyListRef.current)}
+                                        tabIndex={0}
+                                        role="option"
+                                        aria-selected={config.variety === v.id}
                                     >
                                         <div>
-                                            <div className="topt-name">{v.label}</div>
+                                            <div className="topt-name-row">
+                                                <span className="topt-name">{v.label}</span>
+                                                {VARIETY_PREMIUMS[v.id]?.label && (
+                                                    <span className="premium-badge">{VARIETY_PREMIUMS[v.id].label}</span>
+                                                )}
+                                            </div>
                                             <div className="topt-desc">{v.desc}</div>
                                             {config.variety === v.id && <div className="topt-why">{v.why}</div>}
                                         </div>
@@ -375,6 +491,11 @@ export const CraftLabConfigurator: React.FC = () => {
                                     </div>
                                 ))}
                             </div>
+
+                            {/* PRODUCER STORYTELLING CARD */}
+                            {config.variety && PRODUCERS[config.variety] && (
+                                <ProducerCard producer={PRODUCERS[config.variety]} />
+                            )}
                         </section>
                     )}
 
@@ -385,13 +506,16 @@ export const CraftLabConfigurator: React.FC = () => {
                             <h2 className="section-title">Quantity</h2>
                             <p className="section-desc">Each box is 35 kg of green coffee. Max. 500 boxes per season.</p>
                             <div className="quantity-chips">
-                                {['35kg', '70kg', '105kg'].map(q => (
+                                {(['35kg', '70kg', '105kg'] as const).map(q => (
                                     <button
                                         key={q}
                                         className={`qty-chip ${config.quantity === q ? 'selected' : ''}`}
                                         onClick={() => updateConfig('quantity', q)}
                                     >
-                                        {q === '35kg' ? '1 Box · 35 kg' : q === '70kg' ? '2 Boxes · 70 kg' : '3 Boxes · 105 kg'}
+                                        <span className="qty-chip-text">
+                                            {q === '35kg' ? '1 Box · 35 kg' : q === '70kg' ? '2 Boxes · 70 kg' : '3 Boxes · 105 kg'}
+                                        </span>
+                                        <span className="qty-chip-price">${BASE_PRICES[q]}</span>
                                     </button>
                                 ))}
                             </div>
@@ -402,14 +526,18 @@ export const CraftLabConfigurator: React.FC = () => {
                     {config.quantity && config.macro && (
                         <section className="config-section fade-in" id="sec-category">
                             <div className="section-label">Step 05</div>
-                            <h2 className="section-title">Processing Category</h2>
+                            <h2 className="section-title" id="category-label">Processing Category</h2>
                             <p className="section-desc">The processing route shapes the final character of your coffee.</p>
-                            <div className="tesla-options-list">
+                            <div className="tesla-options-list" role="listbox" aria-labelledby="category-label" ref={categoryListRef}>
                                 {(CATEGORIES[config.macro] || []).map(c => (
                                     <div
                                         key={c.id}
                                         className={`tesla-option ${config.category === c.id ? 'selected' : ''}`}
                                         onClick={() => updateConfig('category', c.id)}
+                                        onKeyDown={(e) => handleOptionKeyDown(e, () => updateConfig('category', c.id), categoryListRef.current)}
+                                        tabIndex={0}
+                                        role="option"
+                                        aria-selected={config.category === c.id}
                                     >
                                         <div className="topt-name">{c.label}</div>
                                         {config.category === c.id && <Check size={18} />}
@@ -423,14 +551,18 @@ export const CraftLabConfigurator: React.FC = () => {
                     {config.category && (
                         <section className="config-section fade-in" id="sec-method">
                             <div className="section-label">Step 06</div>
-                            <h2 className="section-title">Processing Method</h2>
+                            <h2 className="section-title" id="method-label">Processing Method</h2>
                             <p className="section-desc">Select the specific fermentation technique for this lot.</p>
-                            <div className="tesla-options-list">
+                            <div className="tesla-options-list" role="listbox" aria-labelledby="method-label" ref={methodListRef}>
                                 {(METHODS[config.category] || []).map(m => (
                                     <div
                                         key={m.id}
                                         className={`tesla-option ${config.process === m.id ? 'selected' : ''}`}
                                         onClick={() => updateConfig('process', m.id)}
+                                        onKeyDown={(e) => handleOptionKeyDown(e, () => updateConfig('process', m.id), methodListRef.current)}
+                                        tabIndex={0}
+                                        role="option"
+                                        aria-selected={config.process === m.id}
                                     >
                                         <div className="topt-name">{m.label}</div>
                                         {config.process === m.id && <Check size={18} />}
@@ -501,7 +633,12 @@ export const CraftLabConfigurator: React.FC = () => {
                     <span>{config.macro ? config.macro.toUpperCase() : 'Configure your lot'}</span>
                     {config.flavor && <span className="summary-bar-sub">{config.flavor}</span>}
                 </div>
-                <ChevronDown size={18} className={showSummary ? 'rotate-180' : ''} />
+                <div className="summary-bar-right">
+                    {priceBreakdown.total > 0 && (
+                        <span className="summary-bar-price">${priceBreakdown.total.toLocaleString()}</span>
+                    )}
+                    <ChevronDown size={18} className={showSummary ? 'rotate-180' : ''} />
+                </div>
             </div>
 
             {/* summary drawer */}
@@ -522,6 +659,33 @@ export const CraftLabConfigurator: React.FC = () => {
                             </span>
                         </div>
                     ))}
+
+                    {/* Price Breakdown Section */}
+                    {priceBreakdown.total > 0 && (
+                        <>
+                            <div className="summary-drawer-divider" />
+                            <div className="summary-drawer-row">
+                                <span className="summary-drawer-key">Base Price ({config.quantity})</span>
+                                <span className="summary-drawer-val">${priceBreakdown.basePrice.toLocaleString()}</span>
+                            </div>
+                            {priceBreakdown.macroPremium > 0 && (
+                                <div className="summary-drawer-row">
+                                    <span className="summary-drawer-key">Processing Premium ({MACRO_PREMIUMS[config.macro!]?.label})</span>
+                                    <span className="summary-drawer-val premium">+${priceBreakdown.macroPremium.toLocaleString()}</span>
+                                </div>
+                            )}
+                            {priceBreakdown.varietyPremium > 0 && (
+                                <div className="summary-drawer-row">
+                                    <span className="summary-drawer-key">Variety Premium ({VARIETY_PREMIUMS[config.variety!]?.label})</span>
+                                    <span className="summary-drawer-val premium">+${priceBreakdown.varietyPremium.toLocaleString()}</span>
+                                </div>
+                            )}
+                            <div className="summary-drawer-row total">
+                                <span className="summary-drawer-key">Total</span>
+                                <span className="summary-drawer-val total-price">${priceBreakdown.total.toLocaleString()}</span>
+                            </div>
+                        </>
+                    )}
                 </div>
             )}
 

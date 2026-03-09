@@ -4,6 +4,7 @@ import { CheckCircle, Wind, FlaskConical } from 'lucide-react';
 import './CraftLabQuiz.css';
 import confetti from 'canvas-confetti';
 import { markEducationAsCompleted } from '../../lib/user-progress';
+import { checkAndUnlockAchievements } from '../../lib/achievements';
 
 export const CraftLabQuiz: React.FC = () => {
     const navigate = useNavigate();
@@ -25,6 +26,8 @@ export const CraftLabQuiz: React.FC = () => {
             setTimeout(async () => {
                 // Save flag to bypass education next time
                 await markEducationAsCompleted();
+                // Unlock "First Steps" achievement
+                checkAndUnlockAchievements({ educationCompleted: true });
                 navigate('/craftlab/welcome');
             }, 3000);
         } else {
