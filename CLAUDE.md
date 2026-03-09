@@ -247,16 +247,45 @@ Cada lote debe ser un **narrative + dataset** que:
 | 2. Decision support | Trends, comparación vs targets, notas QC |
 | 3. Expert mode | Logs completos, exports, lab results, audit trails |
 
-## Configurador: Opciones Disponibles
-| Paso | Campo | Opciones |
-|------|-------|----------|
-| 1 | Macro Profile | Fermented, Bright, Classic |
-| 2 | Flavor Profile | Depende del macro seleccionado |
-| 3 | Variety | Geisha, Sidra, Gesha/Sidra Blend |
-| 4 | Quantity | 35kg, 70kg, 105kg (boxes) |
-| 5 | Category | Bio-Innovation, Lactic, Natural, Washed, Honey |
-| 6 | Method | Mucilage, Cherry fermentation, etc. |
-| 7 | Parameters | Stabilization, Fermentation time, Solar/Mech dry |
+## Configurador: Flujo de 4 Pasos (v2 - Marzo 2026)
+
+| Step | Field | Options |
+|------|-------|---------|
+| 1 | Goal | Competition Lot, Retail/Café, Experimental, Blend Component |
+| 2 | Variety | Geisha (350kg), Sidra (347kg), Yellow Bourbon (125kg), Java (75kg), Mokka (15kg) |
+| 3 | Protocol | 5 protocolos LP&ET (ver abajo) |
+| 4 | Quantity + Options | 1/2/3 boxes (12.5/25/37.5 kg) + Advanced params |
+
+### 5 Fermentation Protocols (Real LP&ET Science)
+
+| Protocol | Duration | pH | Temp | SCA | Flavor Profile |
+|----------|----------|-----|------|-----|----------------|
+| **Lactic LPX** | 96h cherry + 24-36h mucilage | 5.2→3.8 | 18-22°C | 89.5-90.5 | Citric, Floral, Lactic acidity, Clean |
+| **Bio-Innovation Washed** | 90-110h cherry + 12-24h oxidative | 5.2→3.8 | 18-24°C | 89.5-91 | Winey, Florals, Persistence, Elegant |
+| **Natural Oscillating 120** | 120h whole cherry | 5.2→3.9-4.1 | 16-26°C | 89-90.5 | Ripe fruit, Rum, Dark chocolate, Body |
+| **Clarity Select pH** | 48h cherry + 24h mucilage | 5.2→3.9 | 20-24°C | 90-91.25 | Jasmine, Sweet lemon, White flower |
+| **Bionatural Selection X** | 72-100h native inoculants | 5.2→3.8-4.0 | 18-24°C | 89-90 | Plum, Black grape, Cacao, Winey |
+
+### Reference Lots (Past Successes)
+- **WBC-2024-001**: Geisha + Clarity → SCA 91.25 (WBC Milan finalist)
+- **COE-2023-015**: Sidra + Lactic → SCA 90.5 (COE Colombia #3)
+- **RETAIL-2024-089**: Bourbon + Bio-Innovation → SCA 89.5 (12+ EU roasters)
+- **EXP-2024-007**: Java + Bionatural → SCA 89.0 (CL-113 strain)
+- **NAT-2023-042**: Geisha + Natural → SCA 90.0 (Perfect fruit bomb)
+
+### Advanced Options Features
+- **Lot Prediction**: SCA range, timeline, risk level, flavor profile
+- **Reference Lots**: Similar successful lots with exact parameters
+- **Smart Tips**: Protocol-specific recommendations from science team
+- **Warnings**: Real-time alerts for risky parameter combinations
+- **Parameter Controls**: Cherry ferm (24-144h), Mucilage ferm (12-48h), Solar days (10-50)
+
+### Drying Methods
+| Method | Duration | Best For |
+|--------|----------|----------|
+| 100% Solar | 15-45 days | Maximum aromatic preservation |
+| Hybrid | 10-20 days + 12-24h | Balance quality/consistency |
+| Controlled Mechanical | 24-48h | Maximum consistency |
 
 ## Variables de Entorno Requeridas
 ```
@@ -405,11 +434,28 @@ Mejor: código limpio + reglas mínimas.
 No significa 4x más código. Mismos problemas de antes.
 Seguir gestionando contexto con /compact y /clear.
 
-## Áreas de Mejora Identificadas (Pendiente Análisis Detallado)
-1. [ ] Captura de datos del tostador post-configuración
-2. [ ] Dashboard de seguimiento del lote
-3. [ ] Sistema de notificaciones en tiempo real
-4. [ ] Feedback loop tostador ↔ finca
-5. [ ] Persistencia de configuración en progreso
-6. [ ] Responsive/mobile optimization
-7. [ ] Internacionalización (i18n)
+## Cloudinary Assets
+- **Base URL**: `https://res.cloudinary.com/dsylu9a7k/image/upload/`
+- **CraftLab folder**: `lpet-craftlab/`
+- **Images**:
+  - `cultivo-cafetales.jpg` - Hero/farm view
+  - `cereza-madura.jpg` - Ripe cherry
+  - `fermentacion-tanques.jpg` - Fermentation tanks
+  - `secado-marquesinas.jpg` - Solar drying beds
+  - `cafe-pergamino.jpg` - Parchment coffee
+  - `tostado-stronghold.jpg` - Roasting
+
+## Team (Real LP&ET Data)
+- **Sergio Barrera**: Head of Processing, fermentation science
+- **Ismelda Cubillos**: Quality Lab Manager
+- **Katherine**: Inventory & logistics
+
+## Áreas de Mejora
+- [x] ~~Persistencia de configuración en progreso~~ (auto-save implemented)
+- [x] ~~Responsive/mobile optimization~~ (mobile-first CSS)
+- [x] ~~Internacionalización (i18n)~~ (English UI implemented)
+- [ ] Captura de datos del tostador post-configuración
+- [ ] Dashboard de seguimiento del lote
+- [ ] Sistema de notificaciones en tiempo real
+- [ ] Feedback loop tostador ↔ finca
+- [ ] Tracking module (lot status updates)
