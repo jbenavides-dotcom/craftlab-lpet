@@ -75,25 +75,120 @@ const FLAVOR_PROFILES: Record<string, { id: string, label: string, color: string
     ]
 };
 
-const VARIETIES = [
-    { id: 'geisha', label: 'Geisha', desc: 'Delicate, tea-like, jasmine', why: 'Ethiopian origin, prized for its exceptional aromatics and clarity.' },
-    { id: 'sidra', label: 'Sidra', desc: 'Complex, tropical, wine-like', why: 'Colombian heritage variety known for intense fruit notes and body.' },
-    { id: 'gesha-sidra', label: 'Gesha / Sidra Blend', desc: 'Best of both worlds', why: 'Our signature blend combines Geisha elegance with Sidra intensity.' }
+// ── REAL VARIETY OPTIONS FROM LA PALMA & EL TUCAN ──
+const VARIETY_OPTIONS = [
+    { id: 'geisha', label: 'Geisha', description: 'Variedad de campeonato', details: 'Jazmin, bergamota, miel | 350kg disponibles', premium: 60 },
+    { id: 'sidra', label: 'Sidra', description: 'Rareza extrema', details: 'Yogurt fresa, rosas, cremoso | 347kg disponibles', premium: 45 },
+    { id: 'java', label: 'Java', description: 'Variedad exotica', details: 'Complejo, especiado | 75kg disponibles', premium: 25 },
+    { id: 'bourbon', label: 'Bourbon Amarillo', description: 'Dulzura excepcional', details: 'Caramelo, frutas maduras | 125kg disponibles', premium: 20 },
+    { id: 'mokka', label: 'Mokka', description: 'Variedad historica', details: 'Distintivo, grano pequeno | 15kg disponibles', premium: 30 }
 ];
 
+// Keep legacy VARIETIES for backward compatibility
+const VARIETIES = [
+    { id: 'geisha', label: 'Geisha', desc: 'Variedad de campeonato', why: 'Jazmin, bergamota, miel | 350kg disponibles' },
+    { id: 'sidra', label: 'Sidra', desc: 'Rareza extrema', why: 'Yogurt fresa, rosas, cremoso | 347kg disponibles' },
+    { id: 'java', label: 'Java', desc: 'Variedad exotica', why: 'Complejo, especiado | 75kg disponibles' },
+    { id: 'bourbon', label: 'Bourbon Amarillo', desc: 'Dulzura excepcional', why: 'Caramelo, frutas maduras | 125kg disponibles' },
+    { id: 'mokka', label: 'Mokka', desc: 'Variedad historica', why: 'Distintivo, grano pequeno | 15kg disponibles' }
+];
+
+// ── REAL LA PALMA & EL TUCAN FERMENTATION PROTOCOLS ──
+const CATEGORY_OPTIONS = [
+    {
+        id: 'lactico',
+        label: 'Lactico LPX',
+        description: 'Fermentacion lactica controlada con acidez brillante',
+        details: '96h cereza + 24-36h mucilago | pH 3.8 | SCA 89.5-90.5',
+        flavor: 'Citrico, floral, acidez lactica marcada'
+    },
+    {
+        id: 'bio-innovation',
+        label: 'Bio-Innovation Washed',
+        description: 'Expresion compleja con notas vinosas y florales',
+        details: '90-110h cereza + 12-24h oxidativa | pH 3.8 | SCA 89.5-91',
+        flavor: 'Vinoso, florales, persistencia elegante'
+    },
+    {
+        id: 'natural',
+        label: 'Natural Oscilante 120',
+        description: 'Fermentacion extendida con oscilacion termica natural',
+        details: '120h cereza completa | pH 3.9-4.1 | SCA 89-90.5',
+        flavor: 'Fruta madura, ron, chocolate oscuro'
+    },
+    {
+        id: 'clarity',
+        label: 'Clarity Select pH',
+        description: 'Control estricto de pH para acidez elegante',
+        details: '48h cereza + 24h mucilago | pH 3.9 | SCA 90-91.25',
+        flavor: 'Jazmin, limon dulce, flor blanca'
+    },
+    {
+        id: 'bionatural',
+        label: 'Bionatural Selection X',
+        description: 'Cepas nativas aisladas de la finca',
+        details: '72-100h con inoculos nativos | pH 3.8-4.0 | SCA 89-90',
+        flavor: 'Ciruela, uva negra, cacao, vinosidad'
+    }
+];
+
+// Process parameters for technical display
+const PROCESS_PARAMS: Record<string, { phFinal: string, duration: string, tempRange: string }> = {
+    'lactico': { phFinal: '3.8', duration: '96h + 24-36h', tempRange: '18-22°C' },
+    'bio-innovation': { phFinal: '3.8', duration: '90-110h + 12-24h', tempRange: '18-24°C' },
+    'natural': { phFinal: '3.9-4.1', duration: '120h', tempRange: '16-26°C (oscilante)' },
+    'clarity': { phFinal: '3.9', duration: '48h + 24h', tempRange: '20-24°C' },
+    'bionatural': { phFinal: '3.8-4.0', duration: '72-100h', tempRange: '18-24°C' }
+};
+
 const CATEGORIES: Record<string, { id: string, label: string }[]> = {
-    fermented: [{ id: 'bio-innovation', label: 'Bio-Innovation' }],
-    bright: [{ id: 'lactic', label: 'Lactic' }, { id: 'natural', label: 'Natural' }],
-    classic: [{ id: 'washed', label: 'Washed' }, { id: 'honey', label: 'Honey' }]
+    fermented: [{ id: 'bio-innovation', label: 'Bio-Innovation' }, { id: 'bionatural', label: 'Bionatural Selection X' }],
+    bright: [{ id: 'lactico', label: 'Lactico LPX' }, { id: 'clarity', label: 'Clarity Select pH' }],
+    classic: [{ id: 'natural', label: 'Natural Oscilante 120' }]
 };
 
 const METHODS: Record<string, { id: string, label: string }[]> = {
     'bio-innovation': [{ id: 'mucilage-ferm', label: 'Mucilage' }, { id: 'cherry-ferm', label: 'Cherry' }],
-    'lactic': [{ id: 'lactic-std', label: 'Lactic Standard' }],
-    'natural': [{ id: 'natural-std', label: 'Natural Standard' }],
-    'washed': [{ id: 'washed-std', label: 'Washed Standard' }],
-    'honey': [{ id: 'honey-std', label: 'Honey Standard' }]
+    'lactico': [{ id: 'lactic-std', label: 'Lactic Standard' }, { id: 'lactic-extended', label: 'Lactic Extended' }],
+    'natural': [{ id: 'natural-120', label: 'Natural 120h' }, { id: 'natural-extended', label: 'Natural 150h' }],
+    'clarity': [{ id: 'clarity-std', label: 'Clarity Standard' }],
+    'bionatural': [{ id: 'bionatural-std', label: 'Native Inoculum' }]
 };
+
+// ── EDUCATIONAL CONTENT WITH REAL DATA ──────────────────
+const EDUCATIONAL_CONTENT = {
+    variety: {
+        title: 'Por que importa la variedad',
+        content: 'Cultivamos 5 variedades de especialidad en 10.91 hectareas a 1,700 msnm. Cada variedad tiene una expresion genetica unica que define su potencial de sabor.',
+        highlight: 'La altura, el suelo volcanico y el microclima de La Palma crean condiciones ideales para el desarrollo de azucares y acidos complejos.'
+    },
+    category: {
+        title: 'Por que importa el proceso',
+        content: 'El proceso de fermentacion determina hasta el 40% del perfil final. En La Palma & El Tucan usamos 5 protocolos desarrollados cientificamente:',
+        bullets: [
+            'pH controlado de 5.2 a 3.8-4.1 durante fermentacion',
+            'Temperaturas entre 16-29C segun protocolo',
+            'Duracion de 48 a 120 horas segun objetivo',
+            'Inoculos nativos aislados de nuestra propia finca'
+        ]
+    },
+    quantity: {
+        title: 'Trazabilidad completa',
+        content: 'Cada caja contiene 12.5kg de cafe verde (27.5 lbs). Nuestros nanolotes se conforman de 1 o mas baches con trazabilidad completa.',
+        example: 'Codigo: PTNLG26001 = La Palma (PT), Nanolote (NL), Geisha (G), 2026, Lote #001'
+    }
+};
+
+// ── PROCESS TIMELINE STEPS ──────────────────────────────
+const PROCESS_TIMELINE = [
+    { stage: 'CEREZA', duration: 'Dia 0', desc: 'Recoleccion selectiva' },
+    { stage: 'FERMENTACION', duration: '48-120h', desc: 'Protocolo controlado' },
+    { stage: 'DESPULPE', duration: 'Post-ferm', desc: 'Remocion de pulpa' },
+    { stage: 'LAVADO', duration: '3-5min', desc: 'Limpieza final' },
+    { stage: 'SECADO', duration: '15-45d', desc: 'Camas africanas' },
+    { stage: 'REPOSO', duration: '60d', desc: 'Estabilizacion' },
+    { stage: 'CATACION', duration: 'Dia 60+', desc: 'Evaluacion SCA' }
+];
 
 // ── PRICING SYSTEM ──────────────────────────────────────
 const BASE_PRICES: Record<string, number> = {
@@ -109,9 +204,11 @@ const MACRO_PREMIUMS: Record<string, { percent: number, label: string }> = {
 };
 
 const VARIETY_PREMIUMS: Record<string, { percent: number, label: string }> = {
-    'geisha': { percent: 25, label: '+25%' },
-    'sidra': { percent: 15, label: '+15%' },
-    'gesha-sidra': { percent: 20, label: '+20%' },
+    'geisha': { percent: 60, label: '+60%' },
+    'sidra': { percent: 45, label: '+45%' },
+    'java': { percent: 25, label: '+25%' },
+    'bourbon': { percent: 20, label: '+20%' },
+    'mokka': { percent: 30, label: '+30%' },
 };
 
 interface PriceBreakdown {
@@ -466,6 +563,17 @@ export const CraftLabConfigurator: React.FC = () => {
                             <div className="section-label">Step 03</div>
                             <h2 className="section-title" id="variety-label">Coffee Variety</h2>
                             <p className="section-desc">Each variety brings its own genetic expression to the cup.</p>
+
+                            {/* Educational Box - Variety */}
+                            <div className="edu-box">
+                                <div className="edu-box-header">
+                                    <span className="edu-box-icon">&#127793;</span>
+                                    <h4 className="edu-box-title">{EDUCATIONAL_CONTENT.variety.title}</h4>
+                                </div>
+                                <p className="edu-box-content">{EDUCATIONAL_CONTENT.variety.content}</p>
+                                <p className="edu-box-highlight">{EDUCATIONAL_CONTENT.variety.highlight}</p>
+                            </div>
+
                             <div className="tesla-options-list" role="listbox" aria-labelledby="variety-label" ref={varietyListRef}>
                                 {VARIETIES.map(v => (
                                     <div
@@ -504,7 +612,20 @@ export const CraftLabConfigurator: React.FC = () => {
                         <section className="config-section fade-in" id="sec-quantity">
                             <div className="section-label">Step 04</div>
                             <h2 className="section-title">Quantity</h2>
-                            <p className="section-desc">Each box is 35 kg of green coffee. Max. 500 boxes per season.</p>
+                            <p className="section-desc">Each box is 12.5 kg of green coffee (27.5 lbs). Max. 500 boxes per season.</p>
+
+                            {/* Educational Box - Quantity/Traceability */}
+                            <div className="edu-box">
+                                <div className="edu-box-header">
+                                    <span className="edu-box-icon">&#128230;</span>
+                                    <h4 className="edu-box-title">{EDUCATIONAL_CONTENT.quantity.title}</h4>
+                                </div>
+                                <p className="edu-box-content">{EDUCATIONAL_CONTENT.quantity.content}</p>
+                                <div className="edu-box-code">
+                                    <code>{EDUCATIONAL_CONTENT.quantity.example}</code>
+                                </div>
+                            </div>
+
                             <div className="quantity-chips">
                                 {(['35kg', '70kg', '105kg'] as const).map(q => (
                                     <button
@@ -513,7 +634,7 @@ export const CraftLabConfigurator: React.FC = () => {
                                         onClick={() => updateConfig('quantity', q)}
                                     >
                                         <span className="qty-chip-text">
-                                            {q === '35kg' ? '1 Box · 35 kg' : q === '70kg' ? '2 Boxes · 70 kg' : '3 Boxes · 105 kg'}
+                                            {q === '35kg' ? '1 Box · 12.5 kg' : q === '70kg' ? '2 Boxes · 25 kg' : '3 Boxes · 37.5 kg'}
                                         </span>
                                         <span className="qty-chip-price">${BASE_PRICES[q]}</span>
                                     </button>
@@ -522,28 +643,104 @@ export const CraftLabConfigurator: React.FC = () => {
                         </section>
                     )}
 
-                    {/* SECTION 5: PROCESSING CATEGORY */}
+                    {/* SECTION 5: PROCESSING CATEGORY - La Palma & El Tucan Protocols */}
                     {config.quantity && config.macro && (
                         <section className="config-section fade-in" id="sec-category">
                             <div className="section-label">Step 05</div>
-                            <h2 className="section-title" id="category-label">Processing Category</h2>
-                            <p className="section-desc">The processing route shapes the final character of your coffee.</p>
-                            <div className="tesla-options-list" role="listbox" aria-labelledby="category-label" ref={categoryListRef}>
-                                {(CATEGORIES[config.macro] || []).map(c => (
-                                    <div
-                                        key={c.id}
-                                        className={`tesla-option ${config.category === c.id ? 'selected' : ''}`}
-                                        onClick={() => updateConfig('category', c.id)}
-                                        onKeyDown={(e) => handleOptionKeyDown(e, () => updateConfig('category', c.id), categoryListRef.current)}
-                                        tabIndex={0}
-                                        role="option"
-                                        aria-selected={config.category === c.id}
-                                    >
-                                        <div className="topt-name">{c.label}</div>
-                                        {config.category === c.id && <Check size={18} />}
-                                    </div>
-                                ))}
+                            <h2 className="section-title" id="category-label">Protocolo de Fermentacion</h2>
+                            <p className="section-desc">Selecciona el protocolo de fermentacion desarrollado por La Palma y El Tucan.</p>
+
+                            {/* Educational Box - Category/Fermentation */}
+                            <div className="edu-box">
+                                <div className="edu-box-header">
+                                    <span className="edu-box-icon">&#129514;</span>
+                                    <h4 className="edu-box-title">{EDUCATIONAL_CONTENT.category.title}</h4>
+                                </div>
+                                <p className="edu-box-content">{EDUCATIONAL_CONTENT.category.content}</p>
+                                <ul className="edu-box-bullets">
+                                    {EDUCATIONAL_CONTENT.category.bullets.map((bullet, idx) => (
+                                        <li key={idx}>{bullet}</li>
+                                    ))}
+                                </ul>
                             </div>
+
+                            {/* Process Timeline Visual */}
+                            <div className="process-timeline">
+                                <h4 className="timeline-title">Linea de Tiempo del Proceso</h4>
+                                <div className="timeline-container">
+                                    {PROCESS_TIMELINE.map((step, idx) => (
+                                        <div key={idx} className="timeline-step">
+                                            <div className="timeline-node">
+                                                <div className="timeline-dot"></div>
+                                                {idx < PROCESS_TIMELINE.length - 1 && <div className="timeline-line"></div>}
+                                            </div>
+                                            <div className="timeline-content">
+                                                <span className="timeline-stage">{step.stage}</span>
+                                                <span className="timeline-duration">{step.duration}</span>
+                                                <span className="timeline-desc">{step.desc}</span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            <div className="tesla-options-list" role="listbox" aria-labelledby="category-label" ref={categoryListRef}>
+                                {(CATEGORIES[config.macro] || []).map(c => {
+                                    const categoryData = CATEGORY_OPTIONS.find(cat => cat.id === c.id);
+                                    return (
+                                        <div
+                                            key={c.id}
+                                            className={`tesla-option ${config.category === c.id ? 'selected' : ''}`}
+                                            onClick={() => updateConfig('category', c.id)}
+                                            onKeyDown={(e) => handleOptionKeyDown(e, () => updateConfig('category', c.id), categoryListRef.current)}
+                                            tabIndex={0}
+                                            role="option"
+                                            aria-selected={config.category === c.id}
+                                        >
+                                            <div style={{ flex: 1 }}>
+                                                <div className="topt-name">{categoryData?.label || c.label}</div>
+                                                {categoryData && (
+                                                    <>
+                                                        <div className="topt-desc">{categoryData.description}</div>
+                                                        {config.category === c.id && (
+                                                            <>
+                                                                <div className="topt-details">{categoryData.details}</div>
+                                                                <div className="topt-flavor">Perfil: {categoryData.flavor}</div>
+                                                            </>
+                                                        )}
+                                                    </>
+                                                )}
+                                            </div>
+                                            {config.category === c.id && <Check size={18} />}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                            {/* Technical Parameters Display */}
+                            {config.category && PROCESS_PARAMS[config.category] && (
+                                <div className="process-parameters">
+                                    <h4>Parametros de Control</h4>
+                                    <div className="param-grid">
+                                        <div className="param">
+                                            <span className="param-label">pH Inicial</span>
+                                            <span className="param-value">5.2</span>
+                                        </div>
+                                        <div className="param">
+                                            <span className="param-label">pH Final</span>
+                                            <span className="param-value">{PROCESS_PARAMS[config.category].phFinal}</span>
+                                        </div>
+                                        <div className="param">
+                                            <span className="param-label">Temperatura</span>
+                                            <span className="param-value">{PROCESS_PARAMS[config.category].tempRange}</span>
+                                        </div>
+                                        <div className="param">
+                                            <span className="param-label">Duracion</span>
+                                            <span className="param-value">{PROCESS_PARAMS[config.category].duration}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </section>
                     )}
 
