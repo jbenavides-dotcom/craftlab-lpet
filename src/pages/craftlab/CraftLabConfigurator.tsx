@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, ChevronDown, Check, Loader2, Sparkles } from 'lucide-react';
+import { X, ChevronDown, Check, Loader2 } from 'lucide-react';
+import confetti from 'canvas-confetti';
 import { Button } from '../../components/ui/Button';
 import { Slider } from '../../components/ui/Slider';
+import { ToastContainer, useToast } from '../../components/ui/Toast';
 import { loadDraftConfig, saveDraftConfig, submitConfig, deleteDraftConfig } from '../../lib/lot-config';
 import './CraftLabConfigurator.css';
 
@@ -74,6 +76,7 @@ const SECTION_IMAGES: Record<string, string> = {
 
 export const CraftLabConfigurator: React.FC = () => {
     const navigate = useNavigate();
+    const { toasts, addToast, removeToast } = useToast();
     const [showExitModal, setShowExitModal] = useState(false);
     const [activeSection, setActiveSection] = useState('sec-macro');
     const [showSummary, setShowSummary] = useState(false);
@@ -82,6 +85,7 @@ export const CraftLabConfigurator: React.FC = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const controlsRef = useRef<HTMLDivElement>(null);
     const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const lastSaveSuccessRef = useRef<boolean>(true);
 
     const [config, setConfig] = useState<ConfigState>({
         macro: null, flavor: null, variety: null, quantity: null,
@@ -125,7 +129,7 @@ export const CraftLabConfigurator: React.FC = () => {
         }
         saveTimeoutRef.current = setTimeout(async () => {
             setIsSaving(true);
-            await saveDraftConfig({
+            const result = await saveDraftConfig({
                 macro: newConfig.macro,
                 flavor: newConfig.flavor,
                 variety: newConfig.variety,
@@ -139,8 +143,17 @@ export const CraftLabConfigurator: React.FC = () => {
                 mech_dry: newConfig.mechDry,
             });
             setIsSaving(false);
-        }, 1000); // Save 1 second after last change
-    }, []);
+
+            // Show toast only on state change (success after failure, or failure)
+            if (result && !lastSaveSuccessRef.current) {
+                addToast('Configuration saved', 'success');
+                lastSaveSuccessRef.current = true;
+            } else if (!result) {
+                addToast('Failed to save. Check connection.', 'error');
+                lastSaveSuccessRef.current = false;
+            }
+        }, 1000);
+    }, [addToast]);
 
     // Scroll spy — update active image as user scrolls through option panels
     useEffect(() => {
@@ -198,13 +211,44 @@ export const CraftLabConfigurator: React.FC = () => {
         try {
             const result = await submitConfig();
             if (result) {
-                navigate('/craftlab/success', { state: { config: result } });
+                // Fire celebration confetti
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#c1004a', '#b78a48', '#0e1e36', '#4ade80']
+                });
+
+                // Second burst
+                setTimeout(() => {
+                    confetti({
+                        particleCount: 50,
+                        angle: 60,
+                        spread: 55,
+                        origin: { x: 0 },
+                        colors: ['#c1004a', '#b78a48']
+                    });
+                    confetti({
+                        particleCount: 50,
+                        angle: 120,
+                        spread: 55,
+                        origin: { x: 1 },
+                        colors: ['#0e1e36', '#4ade80']
+                    });
+                }, 200);
+
+                addToast('Configuration submitted!', 'success');
+
+                // Navigate after brief celebration
+                setTimeout(() => {
+                    navigate('/craftlab/success', { state: { config: result } });
+                }, 1500);
             } else {
-                alert('Error submitting configuration. Please try again.');
+                addToast('Error submitting. Please try again.', 'error');
             }
         } catch (err) {
             console.error('Submit error:', err);
-            alert('Error submitting configuration. Please try again.');
+            addToast('Error submitting. Please try again.', 'error');
         } finally {
             setIsSubmitting(false);
         }
@@ -221,6 +265,7 @@ export const CraftLabConfigurator: React.FC = () => {
 
     return (
         <div className="cl-config-container">
+            <ToastContainer toasts={toasts} onRemove={removeToast} />
 
             {/* ──── HEADER (sticky, minimal) ──────────────── */}
             <header className="cl-config-header">

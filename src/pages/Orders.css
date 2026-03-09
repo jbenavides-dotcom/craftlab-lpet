@@ -122,3 +122,71 @@
     color: #737373;
     white-space: nowrap;
 }
+
+/* Order info */
+.order-info {
+    flex: 1;
+}
+
+.order-profile {
+    font-weight: 600;
+    color: #fff;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+    text-transform: capitalize;
+}
+
+.order-flavor {
+    font-size: 0.875rem;
+    color: #a3a3a3;
+}
+
+/* Loading state */
+.orders-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 4rem 2rem;
+    color: #a3a3a3;
+}
+
+.orders-loading .animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Empty state */
+.orders-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    gap: 1rem;
+    color: #a3a3a3;
+}
+
+.orders-empty svg {
+    opacity: 0.5;
+}
+
+.orders-empty h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #fff;
+    margin-top: 0.5rem;
+}
+
+.orders-empty p {
+    font-size: 0.875rem;
+    max-width: 280px;
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+}

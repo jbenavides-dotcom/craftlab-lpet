@@ -3,19 +3,19 @@
 :root {
   /* Brand Colors */
   --color-brand-red: #c1004a;
-  /* Vibrant red from banner */
   --color-brand-pink: #fbc2c4;
-  /* Soft pink for Login */
   --color-pink-bg: var(--color-brand-pink);
+  --color-pink-hot: #e6007e;
   --color-navy: #0e1e36;
-  /* Navy blue for typography and active states */
   --color-dark-text: #1a1a1a;
   --color-gray-light: #ececec;
-  /* Light gray for inputs/modals */
   --color-gray-medium: #b3b3b3;
+  --color-gray-dark: #4a4a4a;
   --color-white: #ffffff;
   --color-tan: #b78a48;
-  /* Ocher / Coffee earth for FB */
+  --color-success: #4ade80;
+  --color-warning: #fbbf24;
+  --color-error: #ef4444;
 
   /* Typography */
   --font-serif: 'Playfair Display', serif;
@@ -48,7 +48,6 @@ body {
   font-family: var(--font-sans);
   color: var(--color-dark-text);
   background-color: var(--color-gray-light);
-  /* Changed from pink to neutral light gray */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -56,15 +55,22 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   overflow-y: auto;
-  position: fixed;
-  /* Lock viewport movement on mobile */
   width: 100%;
   height: 100%;
-  touch-action: pan-y;
-  /* Allow vertical scroll but no horizontal or bounce */
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-touch-callout: none;
+}
+
+/* Focus visible for accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-navy);
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--color-navy);
+  outline-offset: 2px;
 }
 
 #root {
