@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, ChevronDown, Check, Target, Coffee, FlaskConical, SlidersHorizontal, Package, Leaf, Award, Beaker, Sun } from 'lucide-react';
+import { X, ChevronDown, Check, Target, Coffee, FlaskConical, SlidersHorizontal, Package, Leaf, Award, Beaker, Sun, AlertTriangle, Lightbulb, Trophy, Clock, Thermometer, Droplets, TrendingUp, Star } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { Button } from '../../components/ui/Button';
 import { Slider } from '../../components/ui/Slider';
@@ -23,6 +23,20 @@ interface ConfigState {
     fermTime: number | null;
     dryMethod: string | null;
     solarDays: number | null;
+    cherryFerm: number | null;
+    mucilFerm: number | null;
+}
+
+interface Warning {
+    message: string;
+    severity: 'warning' | 'caution';
+}
+
+interface LotPrediction {
+    scaRange: [number, number];
+    estimatedTimeline: string;
+    flavorProfile: string[];
+    riskLevel: 'low' | 'medium' | 'high';
 }
 
 // ── CLOUDINARY IMAGES (Real LP&ET photos) ─────────────────────────────────────
@@ -240,6 +254,167 @@ const DRYING_METHODS = [
     }
 ];
 
+// ── REFERENCE LOTS (Past excellent lots for customer reference) ───────────────
+const REFERENCE_LOTS = [
+    {
+        id: 'WBC-2024-001',
+        name: 'World Barista Championship 2024',
+        variety: 'geisha',
+        protocol: 'clarity',
+        sca: 91.25,
+        year: 2024,
+        dryMethod: 'solar',
+        solarDays: 28,
+        cherryFerm: 48,
+        mucilFerm: 24,
+        notes: 'Used by finalist at WBC Milan. Exceptional jasmine and bergamot.',
+        highlight: 'competition'
+    },
+    {
+        id: 'COE-2023-015',
+        name: 'Cup of Excellence Colombia #3',
+        variety: 'sidra',
+        protocol: 'lactico',
+        sca: 90.5,
+        year: 2023,
+        dryMethod: 'solar',
+        solarDays: 32,
+        cherryFerm: 96,
+        mucilFerm: 30,
+        notes: 'Ranked 3rd in COE Colombia. Intense strawberry and cream.',
+        highlight: 'competition'
+    },
+    {
+        id: 'RETAIL-2024-089',
+        name: 'Specialty Roaster Favorite',
+        variety: 'bourbon',
+        protocol: 'bio-innovation',
+        sca: 89.5,
+        year: 2024,
+        dryMethod: 'hybrid',
+        solarDays: 18,
+        cherryFerm: 100,
+        mucilFerm: 18,
+        notes: 'Best-seller for 12+ specialty roasters in Europe. Balanced and complex.',
+        highlight: 'retail'
+    },
+    {
+        id: 'EXP-2024-007',
+        name: 'Native Strain Experiment',
+        variety: 'java',
+        protocol: 'bionatural',
+        sca: 89.0,
+        year: 2024,
+        dryMethod: 'solar',
+        solarDays: 35,
+        cherryFerm: 88,
+        mucilFerm: null,
+        notes: 'First lot with CL-113 strain. Unique plum and spice combination.',
+        highlight: 'experimental'
+    },
+    {
+        id: 'NAT-2023-042',
+        name: 'Natural Process Master',
+        variety: 'geisha',
+        protocol: 'natural',
+        sca: 90.0,
+        year: 2023,
+        dryMethod: 'solar',
+        solarDays: 42,
+        cherryFerm: 120,
+        mucilFerm: null,
+        notes: 'Perfect fruit bomb. Deep rum and chocolate notes.',
+        highlight: 'retail'
+    }
+];
+
+// ── PROTOCOL RECOMMENDATIONS (Smart suggestions per protocol) ─────────────────
+const PROTOCOL_RECOMMENDATIONS: Record<string, {
+    optimalDrying: string;
+    solarDaysRange: [number, number];
+    cherryFermRange: [number, number];
+    mucilFermRange: [number, number] | null;
+    warnings: Array<{ condition: string; message: string; severity: 'warning' | 'caution' }>;
+    tips: string[];
+}> = {
+    'lactico': {
+        optimalDrying: 'solar',
+        solarDaysRange: [25, 35],
+        cherryFermRange: [84, 108],
+        mucilFermRange: [24, 36],
+        warnings: [
+            { condition: 'solarDays < 20', message: 'Short solar drying may not fully develop lactic character', severity: 'caution' },
+            { condition: 'cherryFerm < 72', message: 'Cherry fermentation under 72h reduces lactic acid development', severity: 'warning' },
+            { condition: 'dryMethod === "mechanical"', message: 'Mechanical drying can diminish delicate lactic notes', severity: 'caution' }
+        ],
+        tips: [
+            'Optimal pH endpoint: 3.8 for maximum citric brightness',
+            'Best paired with Geisha or Sidra for floral complexity',
+            'Mucilage fermentation is critical - don\'t skip it'
+        ]
+    },
+    'bio-innovation': {
+        optimalDrying: 'hybrid',
+        solarDaysRange: [15, 25],
+        cherryFermRange: [90, 110],
+        mucilFermRange: [12, 24],
+        warnings: [
+            { condition: 'cherryFerm > 120', message: 'Extended fermentation may cause over-fermented notes', severity: 'warning' },
+            { condition: 'solarDays > 30', message: 'Long solar drying can mute the winey character', severity: 'caution' }
+        ],
+        tips: [
+            'T08 strain works best at 20-22°C',
+            'The oxidative phase is key - allow 12-24h post-wash',
+            'Excellent choice for competition and retail'
+        ]
+    },
+    'natural': {
+        optimalDrying: 'solar',
+        solarDaysRange: [35, 45],
+        cherryFermRange: [110, 130],
+        mucilFermRange: null,
+        warnings: [
+            { condition: 'solarDays < 30', message: 'Naturals need extended drying - risk of mold with short cycles', severity: 'warning' },
+            { condition: 'dryMethod === "mechanical"', message: 'Full mechanical drying removes natural complexity', severity: 'warning' }
+        ],
+        tips: [
+            'Thermal oscillation is automatic at our farm (16-26°C)',
+            'Best with Yellow Bourbon or Geisha for fruit intensity',
+            'Patience in drying = better cup quality'
+        ]
+    },
+    'clarity': {
+        optimalDrying: 'solar',
+        solarDaysRange: [22, 32],
+        cherryFermRange: [42, 54],
+        mucilFermRange: [20, 28],
+        warnings: [
+            { condition: 'cherryFerm > 60', message: 'Extended cherry fermentation masks terroir clarity', severity: 'warning' },
+            { condition: 'dryMethod !== "solar"', message: 'Non-solar drying reduces aromatic transparency', severity: 'caution' }
+        ],
+        tips: [
+            'Designed for competition - maximum SCA potential',
+            'Real-time pH monitoring stops at 3.9 exactly',
+            'Best with Geisha for jasmine/bergamot expression'
+        ]
+    },
+    'bionatural': {
+        optimalDrying: 'solar',
+        solarDaysRange: [28, 40],
+        cherryFermRange: [72, 100],
+        mucilFermRange: null,
+        warnings: [
+            { condition: 'cherryFerm < 60', message: 'Native strains need time to express - extend fermentation', severity: 'warning' },
+            { condition: 'solarDays < 25', message: 'Allow adequate drying for strain development', severity: 'caution' }
+        ],
+        tips: [
+            'CL-113 and CB-113/114 strains are unique to our farm',
+            'Each lot will have slightly different character',
+            'Great for experimental roasters seeking uniqueness'
+        ]
+    }
+};
+
 // ── PRICING ───────────────────────────────────────────────────────────────────
 const BASE_PRICE_PER_KG = 35; // USD per kg green coffee
 
@@ -279,7 +454,12 @@ export const CraftLabConfigurator: React.FC = () => {
         fermTime: null,
         dryMethod: null,
         solarDays: null,
+        cherryFerm: null,
+        mucilFerm: null,
     });
+
+    // Reference lots state
+    const [showReferenceLots, setShowReferenceLots] = useState(false);
 
     // Current step calculation
     const currentStep = useMemo(() => {
@@ -317,6 +497,114 @@ export const CraftLabConfigurator: React.FC = () => {
             isRecommended: goal?.recommended.includes(p.id) || false
         })).sort((a, b) => (b.isRecommended ? 1 : 0) - (a.isRecommended ? 1 : 0));
     }, [config.goal]);
+
+    // Get current protocol recommendations
+    const currentRecommendations = useMemo(() => {
+        if (!config.protocol) return null;
+        return PROTOCOL_RECOMMENDATIONS[config.protocol] || null;
+    }, [config.protocol]);
+
+    // Calculate warnings based on current configuration
+    const activeWarnings = useMemo((): Warning[] => {
+        if (!config.protocol || !currentRecommendations) return [];
+        const warnings: Warning[] = [];
+
+        // Check drying method warnings
+        if (config.dryMethod === 'mechanical') {
+            const mechWarning = currentRecommendations.warnings.find(w => w.condition.includes('mechanical'));
+            if (mechWarning) warnings.push({ message: mechWarning.message, severity: mechWarning.severity });
+        }
+
+        // Check solar days warnings
+        if (config.solarDays !== null) {
+            if (config.solarDays < currentRecommendations.solarDaysRange[0]) {
+                warnings.push({
+                    message: `Solar drying under ${currentRecommendations.solarDaysRange[0]} days may affect quality for this protocol`,
+                    severity: 'caution'
+                });
+            }
+            if (config.solarDays > currentRecommendations.solarDaysRange[1]) {
+                warnings.push({
+                    message: `Extended drying over ${currentRecommendations.solarDaysRange[1]} days may mute flavors`,
+                    severity: 'caution'
+                });
+            }
+        }
+
+        // Check cherry fermentation warnings
+        if (config.cherryFerm !== null) {
+            if (config.cherryFerm < currentRecommendations.cherryFermRange[0]) {
+                warnings.push({
+                    message: `Cherry fermentation under ${currentRecommendations.cherryFermRange[0]}h may not fully develop protocol character`,
+                    severity: 'warning'
+                });
+            }
+            if (config.cherryFerm > currentRecommendations.cherryFermRange[1]) {
+                warnings.push({
+                    message: `Extended fermentation over ${currentRecommendations.cherryFermRange[1]}h risks over-fermented notes`,
+                    severity: 'warning'
+                });
+            }
+        }
+
+        // Check mucilage fermentation (if applicable)
+        if (currentRecommendations.mucilFermRange && config.mucilFerm !== null) {
+            if (config.mucilFerm < currentRecommendations.mucilFermRange[0]) {
+                warnings.push({
+                    message: `Short mucilage fermentation under ${currentRecommendations.mucilFermRange[0]}h may reduce complexity`,
+                    severity: 'caution'
+                });
+            }
+        }
+
+        return warnings;
+    }, [config.protocol, config.dryMethod, config.solarDays, config.cherryFerm, config.mucilFerm, currentRecommendations]);
+
+    // Get matching reference lots
+    const matchingReferenceLots = useMemo(() => {
+        return REFERENCE_LOTS.filter(lot => {
+            // Match by protocol or variety
+            if (config.protocol && lot.protocol === config.protocol) return true;
+            if (config.variety && lot.variety === config.variety) return true;
+            // Match by goal/highlight
+            if (config.goal && lot.highlight === config.goal) return true;
+            return false;
+        }).slice(0, 3); // Show max 3
+    }, [config.protocol, config.variety, config.goal]);
+
+    // Lot prediction based on configuration
+    const lotPrediction = useMemo((): LotPrediction | null => {
+        if (!config.variety || !config.protocol) return null;
+
+        const variety = VARIETIES.find(v => v.id === config.variety);
+        const protocol = PROTOCOLS.find(p => p.id === config.protocol);
+        if (!variety || !protocol) return null;
+
+        // Parse SCA ranges
+        const varietySca = variety.sca.split('-').map(Number);
+        const protocolSca = protocol.sca.split('-').map(Number);
+
+        // Calculate estimated SCA (weighted average)
+        const minSca = Math.max(varietySca[0], protocolSca[0]);
+        const maxSca = Math.min(varietySca[1] || varietySca[0], protocolSca[1] || protocolSca[0]);
+
+        // Adjust based on warnings
+        let riskLevel: 'low' | 'medium' | 'high' = 'low';
+        if (activeWarnings.length > 0) riskLevel = 'medium';
+        if (activeWarnings.filter(w => w.severity === 'warning').length > 1) riskLevel = 'high';
+
+        // Estimate timeline
+        const dryingDays = config.solarDays || (currentRecommendations?.solarDaysRange[0] || 25);
+        const fermDays = Math.ceil((config.cherryFerm || currentRecommendations?.cherryFermRange[0] || 72) / 24);
+        const totalDays = fermDays + dryingDays + 7; // +7 for stabilization
+
+        return {
+            scaRange: [minSca, maxSca],
+            estimatedTimeline: `${totalDays}-${totalDays + 10} days`,
+            flavorProfile: protocol.flavor,
+            riskLevel
+        };
+    }, [config.variety, config.protocol, config.solarDays, config.cherryFerm, activeWarnings, currentRecommendations]);
 
     // Load draft on mount
     useEffect(() => {
@@ -634,44 +922,202 @@ export const CraftLabConfigurator: React.FC = () => {
                                 ))}
                             </div>
 
+                            {/* ═══ LOT PREDICTION PREVIEW ═══ */}
+                            {lotPrediction && (
+                                <div className="lot-prediction fade-in">
+                                    <div className="prediction-header">
+                                        <TrendingUp size={18} />
+                                        <span>Lot Preview</span>
+                                    </div>
+                                    <div className="prediction-grid">
+                                        <div className="prediction-item">
+                                            <span className="pred-label">Expected SCA</span>
+                                            <span className="pred-value sca">{lotPrediction.scaRange[0]}-{lotPrediction.scaRange[1]}</span>
+                                        </div>
+                                        <div className="prediction-item">
+                                            <span className="pred-label">Timeline</span>
+                                            <span className="pred-value">{lotPrediction.estimatedTimeline}</span>
+                                        </div>
+                                        <div className="prediction-item">
+                                            <span className="pred-label">Risk Level</span>
+                                            <span className={`pred-value risk-${lotPrediction.riskLevel}`}>
+                                                {lotPrediction.riskLevel === 'low' ? '✓ Low' : lotPrediction.riskLevel === 'medium' ? '◐ Medium' : '⚠ High'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="prediction-flavors">
+                                        {lotPrediction.flavorProfile.map((f, i) => (
+                                            <span key={i} className="pred-flavor">{f}</span>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* ═══ REFERENCE LOTS ═══ */}
+                            {matchingReferenceLots.length > 0 && (
+                                <div className="reference-lots-section">
+                                    <button
+                                        className="reference-lots-toggle"
+                                        onClick={() => setShowReferenceLots(!showReferenceLots)}
+                                    >
+                                        <Trophy size={16} />
+                                        <span>View similar successful lots ({matchingReferenceLots.length})</span>
+                                        <ChevronDown size={16} className={showReferenceLots ? 'rotate-180' : ''} />
+                                    </button>
+
+                                    {showReferenceLots && (
+                                        <div className="reference-lots-list fade-in">
+                                            {matchingReferenceLots.map(lot => (
+                                                <div key={lot.id} className="reference-lot-card">
+                                                    <div className="ref-lot-header">
+                                                        <div className="ref-lot-info">
+                                                            <span className="ref-lot-name">{lot.name}</span>
+                                                            <span className="ref-lot-id">{lot.id}</span>
+                                                        </div>
+                                                        <div className="ref-lot-sca">
+                                                            <Star size={14} />
+                                                            <span>{lot.sca}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div className="ref-lot-details">
+                                                        <span>{VARIETIES.find(v => v.id === lot.variety)?.label}</span>
+                                                        <span>•</span>
+                                                        <span>{PROTOCOLS.find(p => p.id === lot.protocol)?.label}</span>
+                                                        <span>•</span>
+                                                        <span>{lot.year}</span>
+                                                    </div>
+                                                    <div className="ref-lot-params">
+                                                        <span><Clock size={12} /> {lot.cherryFerm}h cherry</span>
+                                                        {lot.mucilFerm && <span><Droplets size={12} /> {lot.mucilFerm}h mucilage</span>}
+                                                        <span><Sun size={12} /> {lot.solarDays} days</span>
+                                                    </div>
+                                                    <p className="ref-lot-notes">{lot.notes}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
                             {/* Advanced Options Toggle */}
                             <button className="advanced-toggle" onClick={() => setShowAdvanced(!showAdvanced)}>
                                 <SlidersHorizontal size={16} />
-                                <span>Advanced options</span>
+                                <span>Fine-tune parameters</span>
                                 <ChevronDown size={16} className={showAdvanced ? 'rotate-180' : ''} />
                             </button>
 
                             {showAdvanced && (
                                 <div className="advanced-options fade-in">
-                                    <h4>Drying Method</h4>
-                                    <div className="drying-options">
-                                        {DRYING_METHODS.map(d => (
-                                            <div
-                                                key={d.id}
-                                                className={`drying-card ${config.dryMethod === d.id ? 'selected' : ''}`}
-                                                onClick={() => updateConfig('dryMethod', d.id)}
-                                            >
-                                                <Sun size={18} />
-                                                <div className="drying-content">
-                                                    <span className="drying-label">{d.label}</span>
-                                                    <span className="drying-desc">{d.description}</span>
-                                                </div>
-                                                {config.dryMethod === d.id && <Check size={16} />}
+
+                                    {/* ═══ SMART TIPS ═══ */}
+                                    {currentRecommendations && (
+                                        <div className="smart-tips">
+                                            <div className="tips-header">
+                                                <Lightbulb size={16} />
+                                                <span>Recommendations for {PROTOCOLS.find(p => p.id === config.protocol)?.label}</span>
                                             </div>
-                                        ))}
+                                            <ul className="tips-list">
+                                                {currentRecommendations.tips.map((tip, i) => (
+                                                    <li key={i}>{tip}</li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+
+                                    {/* ═══ WARNINGS ═══ */}
+                                    {activeWarnings.length > 0 && (
+                                        <div className="warnings-panel">
+                                            {activeWarnings.map((warning, i) => (
+                                                <div key={i} className={`warning-item ${warning.severity}`}>
+                                                    <AlertTriangle size={16} />
+                                                    <span>{warning.message}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {/* ═══ FERMENTATION PARAMETERS ═══ */}
+                                    <div className="param-section">
+                                        <h4><FlaskConical size={16} /> Fermentation Time</h4>
+
+                                        <div className="param-slider">
+                                            <Slider
+                                                label="Cherry fermentation"
+                                                min={24}
+                                                max={144}
+                                                step={6}
+                                                value={config.cherryFerm}
+                                                onChange={v => updateConfig('cherryFerm', v)}
+                                                unit="h"
+                                            />
+                                            {currentRecommendations && (
+                                                <div className="param-hint">
+                                                    Optimal: {currentRecommendations.cherryFermRange[0]}-{currentRecommendations.cherryFermRange[1]}h
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {currentRecommendations?.mucilFermRange && (
+                                            <div className="param-slider">
+                                                <Slider
+                                                    label="Mucilage fermentation"
+                                                    min={12}
+                                                    max={48}
+                                                    step={2}
+                                                    value={config.mucilFerm}
+                                                    onChange={v => updateConfig('mucilFerm', v)}
+                                                    unit="h"
+                                                />
+                                                <div className="param-hint">
+                                                    Optimal: {currentRecommendations.mucilFermRange[0]}-{currentRecommendations.mucilFermRange[1]}h
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
 
-                                    {config.dryMethod === 'solar' && (
+                                    {/* ═══ DRYING METHOD ═══ */}
+                                    <div className="param-section">
+                                        <h4><Sun size={16} /> Drying Method</h4>
+                                        {currentRecommendations && (
+                                            <div className="optimal-badge">
+                                                Recommended: {DRYING_METHODS.find(d => d.id === currentRecommendations.optimalDrying)?.label}
+                                            </div>
+                                        )}
+                                        <div className="drying-options">
+                                            {DRYING_METHODS.map(d => (
+                                                <div
+                                                    key={d.id}
+                                                    className={`drying-card ${config.dryMethod === d.id ? 'selected' : ''} ${currentRecommendations?.optimalDrying === d.id ? 'optimal' : ''}`}
+                                                    onClick={() => updateConfig('dryMethod', d.id)}
+                                                >
+                                                    <Sun size={18} />
+                                                    <div className="drying-content">
+                                                        <span className="drying-label">{d.label}</span>
+                                                        <span className="drying-desc">{d.description}</span>
+                                                    </div>
+                                                    {config.dryMethod === d.id && <Check size={16} />}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* ═══ SOLAR DAYS SLIDER ═══ */}
+                                    {(config.dryMethod === 'solar' || config.dryMethod === 'hybrid') && (
                                         <div className="param-slider fade-in">
                                             <Slider
                                                 label="Solar drying days"
-                                                min={15}
-                                                max={45}
+                                                min={10}
+                                                max={50}
                                                 step={1}
                                                 value={config.solarDays}
                                                 onChange={v => updateConfig('solarDays', v)}
                                                 unit=" days"
                                             />
+                                            {currentRecommendations && (
+                                                <div className="param-hint">
+                                                    Optimal: {currentRecommendations.solarDaysRange[0]}-{currentRecommendations.solarDaysRange[1]} days
+                                                </div>
+                                            )}
                                         </div>
                                     )}
                                 </div>
