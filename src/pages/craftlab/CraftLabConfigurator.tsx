@@ -40,9 +40,9 @@ const IMAGES = {
 const GOALS = [
     {
         id: 'competition',
-        label: 'Lote de Competencia',
-        sublabel: 'Para baristas y campeonatos',
-        description: 'Buscas el puntaje SCA más alto posible. Protocolos de precisión máxima.',
+        label: 'Competition Lot',
+        sublabel: 'For baristas & championships',
+        description: 'Targeting the highest possible SCA score. Maximum precision protocols.',
         icon: Award,
         recommended: ['lactico', 'clarity'],
         color: '#c1004a'
@@ -50,8 +50,8 @@ const GOALS = [
     {
         id: 'retail',
         label: 'Retail / Café',
-        sublabel: 'Para tu tienda o menú',
-        description: 'Balance entre complejidad y accesibilidad. Perfil que tus clientes amarán.',
+        sublabel: 'For your shop or menu',
+        description: 'Balance between complexity and accessibility. A profile your customers will love.',
         icon: Coffee,
         recommended: ['bio-innovation', 'natural'],
         color: '#b78a48'
@@ -59,17 +59,17 @@ const GOALS = [
     {
         id: 'experimental',
         label: 'Experimental',
-        sublabel: 'Quiero probar algo nuevo',
-        description: 'Acceso a protocolos de innovación. Fermentaciones con cepas nativas únicas.',
+        sublabel: 'I want to try something new',
+        description: 'Access to innovation protocols. Fermentations with unique native strains.',
         icon: Beaker,
         recommended: ['bionatural'],
         color: '#0e1e36'
     },
     {
         id: 'blend',
-        label: 'Componente de Blend',
-        sublabel: 'Para mezclar con otros orígenes',
-        description: 'Cafés con características definidas que aportan notas específicas a tu blend.',
+        label: 'Blend Component',
+        sublabel: 'To blend with other origins',
+        description: 'Coffees with defined characteristics that contribute specific notes to your blend.',
         icon: Leaf,
         recommended: ['natural', 'bio-innovation'],
         color: '#5c8a4a'
@@ -84,10 +84,10 @@ const VARIETIES = [
         category: 'Heroes',
         available: 350, // kg from inventario_actual.json
         sca: '89-91',
-        profile: 'Jazmín, bergamota, miel, té Earl Grey',
-        description: 'La variedad más premiada del mundo. Originaria de Etiopía, cultivada en nuestra finca desde 2014.',
-        altitude: '1,700 msnm',
-        harvest: 'Mayo-Julio',
+        profile: 'Jasmine, bergamot, honey, Earl Grey tea',
+        description: 'The most awarded variety in the world. Originally from Ethiopia, cultivated at our farm since 2014.',
+        altitude: '1,700 masl',
+        harvest: 'May-July',
         premium: 60
     },
     {
@@ -96,22 +96,22 @@ const VARIETIES = [
         category: 'Heroes',
         available: 347,
         sca: '88-90',
-        profile: 'Yogurt de fresa, rosas, textura cremosa',
-        description: 'Variedad rara de excepcional dulzura. Perfil único que recuerda a lácteos fermentados.',
-        altitude: '1,700 msnm',
-        harvest: 'Mayo-Julio',
+        profile: 'Strawberry yogurt, roses, creamy texture',
+        description: 'Rare variety with exceptional sweetness. Unique profile reminiscent of fermented dairy.',
+        altitude: '1,700 masl',
+        harvest: 'May-July',
         premium: 45
     },
     {
         id: 'bourbon',
-        label: 'Bourbon Amarillo',
+        label: 'Yellow Bourbon',
         category: 'Warrior',
         available: 125,
         sca: '86-88',
-        profile: 'Caramelo, frutas maduras, cuerpo redondo',
-        description: 'Variedad tradicional con dulzura excepcional. Base perfecta para blends complejos.',
-        altitude: '1,700 msnm',
-        harvest: 'Abril-Junio',
+        profile: 'Caramel, ripe fruits, round body',
+        description: 'Traditional variety with exceptional sweetness. Perfect base for complex blends.',
+        altitude: '1,700 masl',
+        harvest: 'April-June',
         premium: 20
     },
     {
@@ -120,10 +120,10 @@ const VARIETIES = [
         category: 'Warrior',
         available: 75,
         sca: '86-88',
-        profile: 'Especias, madera, complejidad herbal',
-        description: 'Variedad exótica con perfil distintivo. Notas especiadas únicas.',
-        altitude: '1,700 msnm',
-        harvest: 'Mayo-Julio',
+        profile: 'Spices, wood, herbal complexity',
+        description: 'Exotic variety with a distinctive profile. Unique spiced notes.',
+        altitude: '1,700 masl',
+        harvest: 'May-July',
         premium: 25
     },
     {
@@ -132,84 +132,84 @@ const VARIETIES = [
         category: 'Warrior',
         available: 15,
         sca: '87-89',
-        profile: 'Chocolate, frutas secas, intenso',
-        description: 'Variedad histórica de granos pequeños. Producción muy limitada.',
-        altitude: '1,700 msnm',
-        harvest: 'Junio-Agosto',
+        profile: 'Chocolate, dried fruits, intense',
+        description: 'Historic small-bean variety. Very limited production.',
+        altitude: '1,700 masl',
+        harvest: 'June-August',
         premium: 30,
         limited: true
     }
 ];
 
-// ── STEP 3: FERMENTATION PROTOCOLS (Real LP&ET science) ───────────────────────
+// ── STEP 3: FERMENTATION PROTOCOLS (Real LP&ET science — names preserved) ─────
 const PROTOCOLS = [
     {
         id: 'lactico',
-        label: 'Láctico LPX',
-        tagline: 'Acidez brillante, perfil limpio',
-        description: 'Fermentación láctica controlada con inoculación de bacterias ácido-lácticas. Desarrollado para maximizar la acidez cítrica mientras preserva la dulzura.',
-        duration: '96h cereza + 24-36h mucílago',
+        label: 'Lactic LPX',
+        tagline: 'Bright acidity, clean profile',
+        description: 'Controlled lactic fermentation with LAB (lactic acid bacteria) inoculation. Developed to maximize citric acidity while preserving sweetness.',
+        duration: '96h cherry + 24-36h mucilage',
         ph: { start: 5.2, end: 3.8 },
         temp: '18-22°C',
         sca: '89.5-90.5',
-        flavor: ['Cítrico', 'Floral', 'Acidez láctica', 'Limpio'],
-        science: 'Las BAL (bacterias ácido-lácticas) convierten azúcares en ácido láctico, creando una acidez suave y prolongada.',
+        flavor: ['Citric', 'Floral', 'Lactic acidity', 'Clean'],
+        science: 'LAB (lactic acid bacteria) convert sugars into lactic acid, creating a smooth and prolonged acidity.',
         bestFor: ['competition', 'retail'],
         color: '#e6a817'
     },
     {
         id: 'bio-innovation',
         label: 'Bio-Innovation Washed',
-        tagline: 'Complejidad vinosa, florales intensos',
-        description: 'Protocolo propietario con cepa T08 (levaduras + BAL). Combina lo mejor de la fermentación natural con la limpieza del lavado.',
-        duration: '90-110h cereza + 12-24h oxidativa',
+        tagline: 'Winey complexity, intense florals',
+        description: 'Proprietary protocol with T08 strain (yeast + LAB). Combines the best of natural fermentation with washed cleanliness.',
+        duration: '90-110h cherry + 12-24h oxidative',
         ph: { start: 5.2, end: 3.8 },
         temp: '18-24°C',
         sca: '89.5-91',
-        flavor: ['Vinoso', 'Florales', 'Persistencia', 'Elegante'],
-        science: 'La fase oxidativa post-fermentación desarrolla compuestos fenólicos que aportan estructura y persistencia.',
+        flavor: ['Winey', 'Florals', 'Persistence', 'Elegant'],
+        science: 'The post-fermentation oxidative phase develops phenolic compounds that add structure and persistence.',
         bestFor: ['competition', 'retail', 'blend'],
         color: '#9b2335'
     },
     {
         id: 'natural',
-        label: 'Natural Oscilante 120',
-        tagline: 'Fruta madura, cuerpo intenso',
-        description: 'Secado de cereza completa con oscilación térmica día/noche. La cereza fermenta mientras seca, intensificando los azúcares.',
-        duration: '120h cereza completa',
+        label: 'Natural Oscillating 120',
+        tagline: 'Ripe fruit, full body',
+        description: 'Whole cherry drying with day/night thermal oscillation. The cherry ferments while drying, intensifying sugars.',
+        duration: '120h whole cherry',
         ph: { start: 5.2, end: '3.9-4.1' },
-        temp: '16-26°C (oscilante)',
+        temp: '16-26°C (oscillating)',
         sca: '89-90.5',
-        flavor: ['Fruta madura', 'Ron', 'Chocolate oscuro', 'Cuerpo'],
-        science: 'La oscilación térmica natural (frío nocturno, calor diurno) crea ciclos de fermentación que desarrollan ésteres frutales complejos.',
+        flavor: ['Ripe fruit', 'Rum', 'Dark chocolate', 'Body'],
+        science: 'Natural thermal oscillation (cold nights, warm days) creates fermentation cycles that develop complex fruit esters.',
         bestFor: ['retail', 'blend', 'experimental'],
         color: '#6b5344'
     },
     {
         id: 'clarity',
         label: 'Clarity Select pH',
-        tagline: 'Elegancia extrema, transparencia',
-        description: 'Control estricto de pH en tiempo real. Fermentación corta que preserva la claridad del terroir sin enmascarar.',
-        duration: '48h cereza + 24h mucílago',
+        tagline: 'Extreme elegance, transparency',
+        description: 'Strict real-time pH control. Short fermentation that preserves terroir clarity without masking.',
+        duration: '48h cherry + 24h mucilage',
         ph: { start: 5.2, end: 3.9 },
         temp: '20-24°C',
         sca: '90-91.25',
-        flavor: ['Jazmín', 'Limón dulce', 'Flor blanca', 'Transparente'],
-        science: 'El monitoreo constante de pH permite detener la fermentación en el punto exacto de máxima expresión aromática.',
+        flavor: ['Jasmine', 'Sweet lemon', 'White flower', 'Transparent'],
+        science: 'Constant pH monitoring allows stopping fermentation at the exact point of maximum aromatic expression.',
         bestFor: ['competition'],
         color: '#4a90a8'
     },
     {
         id: 'bionatural',
         label: 'Bionatural Selection X',
-        tagline: 'Cepas nativas, terroir amplificado',
-        description: 'Fermentación con microorganismos aislados de nuestra propia finca. Cada lote expresa el ecosistema único de La Palma.',
-        duration: '72-100h con inóculos nativos',
+        tagline: 'Native strains, amplified terroir',
+        description: 'Fermentation with microorganisms isolated from our own farm. Each lot expresses the unique La Palma ecosystem.',
+        duration: '72-100h with native inoculants',
         ph: { start: 5.2, end: '3.8-4.0' },
         temp: '18-24°C',
         sca: '89-90',
-        flavor: ['Ciruela', 'Uva negra', 'Cacao', 'Vinosidad'],
-        science: 'Las cepas CL-113 y CB-113/114 fueron aisladas del microbioma de nuestra finca, creando un perfil irrepetible.',
+        flavor: ['Plum', 'Black grape', 'Cacao', 'Winey'],
+        science: 'Strains CL-113 and CB-113/114 were isolated from our farm microbiome, creating an unrepeatable profile.',
         bestFor: ['experimental', 'blend'],
         color: '#7a4a8a'
     }
@@ -219,24 +219,24 @@ const PROTOCOLS = [
 const DRYING_METHODS = [
     {
         id: 'solar',
-        label: 'Secado Solar 100%',
-        description: 'Camas africanas elevadas. 15-45 días según clima.',
+        label: '100% Solar Drying',
+        description: 'Raised African beds. 15-45 days depending on weather.',
         days: '15-45',
-        benefit: 'Máxima preservación de aromáticos'
+        benefit: 'Maximum aromatic preservation'
     },
     {
         id: 'hybrid',
-        label: 'Híbrido (Solar + Mecánico)',
-        description: 'Solar hasta 18% humedad, luego secado mecánico controlado.',
+        label: 'Hybrid (Solar + Mechanical)',
+        description: 'Solar until 18% moisture, then controlled mechanical drying.',
         days: '10-20 + 12-24h',
-        benefit: 'Balance entre calidad y consistencia'
+        benefit: 'Balance between quality and consistency'
     },
     {
         id: 'mechanical',
-        label: 'Mecánico Controlado',
-        description: 'Secado en silos con temperatura y flujo de aire controlados.',
+        label: 'Controlled Mechanical',
+        description: 'Silo drying with controlled temperature and airflow.',
         days: '24-48h',
-        benefit: 'Máxima consistencia y control'
+        benefit: 'Maximum consistency and control'
     }
 ];
 
@@ -384,13 +384,13 @@ export const CraftLabConfigurator: React.FC = () => {
                     confetti({ particleCount: 50, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#c1004a', '#b78a48'] });
                     confetti({ particleCount: 50, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#0e1e36', '#4ade80'] });
                 }, 200);
-                addToast('¡Configuración enviada!', 'success');
+                addToast('Configuration submitted!', 'success');
                 setTimeout(() => navigate('/craftlab/success', { state: { config: result } }), 1500);
             } else {
-                addToast('Error al enviar. Intenta de nuevo.', 'error');
+                addToast('Error submitting. Please try again.', 'error');
             }
         } catch (err) {
-            addToast('Error al enviar. Intenta de nuevo.', 'error');
+            addToast('Error submitting. Please try again.', 'error');
         } finally {
             setIsSubmitting(false);
         }
@@ -402,7 +402,7 @@ export const CraftLabConfigurator: React.FC = () => {
                 <header className="cl-config-header">
                     <img src="https://res.cloudinary.com/dtkwqoadf/image/upload/v1742314508/CL_completo_ly3ecz.png" alt="CraftLab" className="cl-brand-logo-img" />
                     <div className="cl-header-center">
-                        <div className="cl-config-subtitle">Cargando tu configuración...</div>
+                        <div className="cl-config-subtitle">Loading your configuration...</div>
                     </div>
                     <div style={{ width: 28 }} />
                 </header>
@@ -420,7 +420,7 @@ export const CraftLabConfigurator: React.FC = () => {
                 <img src="https://res.cloudinary.com/dtkwqoadf/image/upload/v1742314508/CL_completo_ly3ecz.png" alt="CraftLab" className="cl-brand-logo-img" />
                 <div className="cl-header-center">
                     <div className="cl-config-subtitle">
-                        {isSaving ? 'Guardando...' : `Paso ${currentStep} de 4`}
+                        {isSaving ? 'Saving...' : `Step ${currentStep} of 4`}
                     </div>
                     <div className="cl-progress-bar">
                         <div className="cl-progress-fill" style={{ width: `${progress}%` }} />
@@ -437,7 +437,7 @@ export const CraftLabConfigurator: React.FC = () => {
                     <img key={currentImage} src={currentImage} alt="Coffee process" className="cl-visual-image" />
                     <div className="cl-visual-gradient" />
                     <div className="cl-visual-tag">
-                        {config.variety ? VARIETIES.find(v => v.id === config.variety)?.label : 'DISEÑA TU LOTE'}
+                        {config.variety ? VARIETIES.find(v => v.id === config.variety)?.label : 'DESIGN YOUR LOT'}
                         {config.protocol && ` · ${PROTOCOLS.find(p => p.id === config.protocol)?.label}`}
                     </div>
                 </div>
@@ -447,9 +447,9 @@ export const CraftLabConfigurator: React.FC = () => {
 
                     {/* ═══ STEP 1: GOAL ═══ */}
                     <section className="config-section" id="sec-goal">
-                        <div className="section-label">Paso 01</div>
-                        <h2 className="section-title">¿Cuál es tu objetivo?</h2>
-                        <p className="section-desc">Esto nos ayuda a recomendarte el protocolo ideal.</p>
+                        <div className="section-label">Step 01</div>
+                        <h2 className="section-title">What's your goal?</h2>
+                        <p className="section-desc">This helps us recommend the ideal protocol for you.</p>
 
                         <div className="goal-grid">
                             {GOALS.map(g => {
@@ -484,9 +484,9 @@ export const CraftLabConfigurator: React.FC = () => {
                     {/* ═══ STEP 2: VARIETY ═══ */}
                     {config.goal && (
                         <section className="config-section fade-in" id="sec-variety">
-                            <div className="section-label">Paso 02</div>
-                            <h2 className="section-title">Selecciona la variedad</h2>
-                            <p className="section-desc">Cultivadas en nuestra finca a 1,700 msnm en Zipacón, Colombia.</p>
+                            <div className="section-label">Step 02</div>
+                            <h2 className="section-title">Select the variety</h2>
+                            <p className="section-desc">Grown at our farm at 1,700 masl in Zipacón, Colombia.</p>
 
                             <div className="variety-list">
                                 {VARIETIES.map(v => (
@@ -511,17 +511,17 @@ export const CraftLabConfigurator: React.FC = () => {
                                         <div className="variety-footer">
                                             <div className="variety-available">
                                                 <span className={`availability-dot ${v.available < 50 ? 'low' : ''}`}></span>
-                                                {v.available} kg disponibles
+                                                {v.available} kg available
                                             </div>
-                                            {v.limited && <span className="variety-limited">Muy limitado</span>}
+                                            {v.limited && <span className="variety-limited">Very limited</span>}
                                         </div>
 
                                         {config.variety === v.id && (
                                             <div className="variety-expanded fade-in">
                                                 <p>{v.description}</p>
                                                 <div className="variety-meta">
-                                                    <span>Altitud: {v.altitude}</span>
-                                                    <span>Cosecha: {v.harvest}</span>
+                                                    <span>Altitude: {v.altitude}</span>
+                                                    <span>Harvest: {v.harvest}</span>
                                                 </div>
                                             </div>
                                         )}
@@ -536,9 +536,9 @@ export const CraftLabConfigurator: React.FC = () => {
                     {/* ═══ STEP 3: PROTOCOL ═══ */}
                     {config.variety && (
                         <section className="config-section fade-in" id="sec-protocol">
-                            <div className="section-label">Paso 03</div>
-                            <h2 className="section-title">Protocolo de fermentación</h2>
-                            <p className="section-desc">5 protocolos desarrollados científicamente por nuestro equipo.</p>
+                            <div className="section-label">Step 03</div>
+                            <h2 className="section-title">Fermentation Protocol</h2>
+                            <p className="section-desc">5 scientifically developed protocols by our team.</p>
 
                             <div className="protocol-list">
                                 {recommendedProtocols.map(p => (
@@ -552,7 +552,7 @@ export const CraftLabConfigurator: React.FC = () => {
                                         style={config.protocol === p.id ? { borderColor: p.color } : {}}
                                     >
                                         {(p as any).isRecommended && (
-                                            <div className="protocol-recommended-badge">Recomendado</div>
+                                            <div className="protocol-recommended-badge">Recommended</div>
                                         )}
 
                                         <div className="protocol-header">
@@ -572,7 +572,7 @@ export const CraftLabConfigurator: React.FC = () => {
 
                                         <div className="protocol-params">
                                             <div className="param-item">
-                                                <span className="param-label">Duración</span>
+                                                <span className="param-label">Duration</span>
                                                 <span className="param-value">{p.duration}</span>
                                             </div>
                                             <div className="param-item">
@@ -605,9 +605,9 @@ export const CraftLabConfigurator: React.FC = () => {
                     {/* ═══ STEP 4: QUANTITY ═══ */}
                     {config.protocol && (
                         <section className="config-section fade-in" id="sec-quantity">
-                            <div className="section-label">Paso 04</div>
-                            <h2 className="section-title">Cantidad</h2>
-                            <p className="section-desc">Cada caja contiene 12.5 kg de café verde (27.5 lbs).</p>
+                            <div className="section-label">Step 04</div>
+                            <h2 className="section-title">Quantity</h2>
+                            <p className="section-desc">Each box contains 12.5 kg of green coffee (27.5 lbs).</p>
 
                             <div className="quantity-options">
                                 {[
@@ -626,7 +626,7 @@ export const CraftLabConfigurator: React.FC = () => {
                                             ))}
                                         </div>
                                         <div className="quantity-info">
-                                            <span className="quantity-label">{q.boxes} {q.boxes === 1 ? 'Caja' : 'Cajas'}</span>
+                                            <span className="quantity-label">{q.boxes} {q.boxes === 1 ? 'Box' : 'Boxes'}</span>
                                             <span className="quantity-kg">{q.kg} kg</span>
                                         </div>
                                         {config.quantity === q.id && <Check size={18} className="quantity-check" />}
@@ -637,13 +637,13 @@ export const CraftLabConfigurator: React.FC = () => {
                             {/* Advanced Options Toggle */}
                             <button className="advanced-toggle" onClick={() => setShowAdvanced(!showAdvanced)}>
                                 <SlidersHorizontal size={16} />
-                                <span>Opciones avanzadas</span>
+                                <span>Advanced options</span>
                                 <ChevronDown size={16} className={showAdvanced ? 'rotate-180' : ''} />
                             </button>
 
                             {showAdvanced && (
                                 <div className="advanced-options fade-in">
-                                    <h4>Método de secado</h4>
+                                    <h4>Drying Method</h4>
                                     <div className="drying-options">
                                         {DRYING_METHODS.map(d => (
                                             <div
@@ -664,13 +664,13 @@ export const CraftLabConfigurator: React.FC = () => {
                                     {config.dryMethod === 'solar' && (
                                         <div className="param-slider fade-in">
                                             <Slider
-                                                label="Días de secado solar"
+                                                label="Solar drying days"
                                                 min={15}
                                                 max={45}
                                                 step={1}
                                                 value={config.solarDays}
                                                 onChange={v => updateConfig('solarDays', v)}
-                                                unit=" días"
+                                                unit=" days"
                                             />
                                         </div>
                                     )}
@@ -682,32 +682,32 @@ export const CraftLabConfigurator: React.FC = () => {
                     {/* ═══ SUMMARY & SUBMIT ═══ */}
                     {config.quantity && (
                         <section className="config-section fade-in" id="sec-summary">
-                            <div className="section-label">Resumen</div>
-                            <h2 className="section-title">Tu lote personalizado</h2>
+                            <div className="section-label">Summary</div>
+                            <h2 className="section-title">Your custom lot</h2>
 
                             <div className="summary-card">
                                 <div className="summary-row">
-                                    <span className="summary-label">Variedad</span>
+                                    <span className="summary-label">Variety</span>
                                     <span className="summary-value">{VARIETIES.find(v => v.id === config.variety)?.label}</span>
                                 </div>
                                 <div className="summary-row">
-                                    <span className="summary-label">Protocolo</span>
+                                    <span className="summary-label">Protocol</span>
                                     <span className="summary-value">{PROTOCOLS.find(p => p.id === config.protocol)?.label}</span>
                                 </div>
                                 <div className="summary-row">
-                                    <span className="summary-label">Cantidad</span>
+                                    <span className="summary-label">Quantity</span>
                                     <span className="summary-value">{config.quantity === '1box' ? '12.5 kg' : config.quantity === '2box' ? '25 kg' : '37.5 kg'}</span>
                                 </div>
 
                                 <div className="summary-divider"></div>
 
                                 <div className="summary-row">
-                                    <span className="summary-label">Precio base</span>
+                                    <span className="summary-label">Base price</span>
                                     <span className="summary-value">${pricing.base}</span>
                                 </div>
                                 {pricing.premium > 0 && (
                                     <div className="summary-row premium">
-                                        <span className="summary-label">Premium variedad</span>
+                                        <span className="summary-label">Variety premium</span>
                                         <span className="summary-value">+${pricing.premium}</span>
                                     </div>
                                 )}
@@ -724,10 +724,10 @@ export const CraftLabConfigurator: React.FC = () => {
                                     disabled={isSubmitting}
                                     onClick={handleSubmit}
                                 >
-                                    {isSubmitting ? 'Enviando...' : 'Confirmar y Enviar'}
+                                    {isSubmitting ? 'Submitting...' : 'Confirm & Submit'}
                                 </Button>
                                 <p className="submit-note">
-                                    Te contactaremos en 24h para confirmar disponibilidad y coordinar el pago.
+                                    We'll contact you within 24h to confirm availability and arrange payment.
                                 </p>
                             </div>
                         </section>
@@ -739,7 +739,7 @@ export const CraftLabConfigurator: React.FC = () => {
             {/* STICKY SUMMARY BAR */}
             <div className="cl-summary-bar">
                 <div className="summary-bar-left">
-                    <span>{config.variety ? VARIETIES.find(v => v.id === config.variety)?.label : 'Configura tu lote'}</span>
+                    <span>{config.variety ? VARIETIES.find(v => v.id === config.variety)?.label : 'Configure your lot'}</span>
                 </div>
                 <div className="summary-bar-right">
                     {pricing.total > 0 && <span className="summary-bar-price">${pricing.total}</span>}
@@ -750,11 +750,11 @@ export const CraftLabConfigurator: React.FC = () => {
             {showExitModal && (
                 <div className="modal-overlay">
                     <div className="modal-content">
-                        <h2>¿Estás seguro?</h2>
-                        <p>Tu configuración se perderá si sales ahora.</p>
+                        <h2>Are you sure?</h2>
+                        <p>Your configuration will be lost if you exit now.</p>
                         <div className="modal-actions">
-                            <Button variant="primary" size="full" onClick={confirmExit}>Sí, salir</Button>
-                            <Button variant="outline" size="full" onClick={() => setShowExitModal(false)}>Quedarme</Button>
+                            <Button variant="primary" size="full" onClick={confirmExit}>Yes, exit</Button>
+                            <Button variant="outline" size="full" onClick={() => setShowExitModal(false)}>Stay</Button>
                         </div>
                     </div>
                 </div>
