@@ -57,7 +57,11 @@ export const CraftLabBasicEducation: React.FC = () => {
     const [progress, setProgress] = useState(0); // 0 to 100 for current slide
     const navigate = useNavigate();
 
-    // Progress bar animation loop
+    // Progress bar animation loop.
+    // Captures `currentSlideIndex` via the dependency array so it restarts
+    // cleanly on every slide change. Uses functional setState to avoid stale
+    // closures — the "advance or navigate" decision reads `slides.length`
+    // (stable constant) rather than the captured index.
     useEffect(() => {
         let animationFrameId: number;
         const startTime = Date.now();
@@ -70,12 +74,26 @@ export const CraftLabBasicEducation: React.FC = () => {
             if (percentage < 100) {
                 animationFrameId = requestAnimationFrame(animateProgress);
             } else {
-                handleNext();
+                // Use functional updater — avoids capturing stale currentSlideIndex
+                setCurrentSlideIndex((prev) => {
+                    if (prev < slides.length - 1) {
+                        return prev + 1;
+                    }
+                    // Last slide reached: navigate to quiz
+                    // Schedule outside the setState call to avoid side effects in updater
+                    return prev;
+                });
+                setProgress(0);
+                // Navigate only if we are on the last slide (read via ref-like snapshot)
+                if (currentSlideIndex >= slides.length - 1) {
+                    navigate('/craftlab/education/quiz');
+                }
             }
         };
 
         animationFrameId = requestAnimationFrame(animateProgress);
         return () => cancelAnimationFrame(animationFrameId);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentSlideIndex]);
 
     const handleNext = () => {

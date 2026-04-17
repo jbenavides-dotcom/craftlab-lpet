@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FlaskConical, Lock, GraduationCap } from 'lucide-react';
-import { checkEducationCompletion } from '../../lib/user-progress';
+import { checkCraftLabUnlocked } from '../../lib/user-progress';
 import './CraftLabOnboarding.css';
 
 export const CraftLabOnboarding: React.FC = () => {
@@ -13,10 +13,10 @@ export const CraftLabOnboarding: React.FC = () => {
     useEffect(() => {
         const fetchStatus = async () => {
             try {
-                const completed = await checkEducationCompletion();
-                setEducationCompleted(completed || localStorage.getItem('craftlab_unlocked') === 'true');
+                const completed = await checkCraftLabUnlocked();
+                setEducationCompleted(completed);
             } catch (err) {
-                console.error("Failed to check education status:", err);
+                console.error("Failed to check CraftLab unlock status:", err);
                 setEducationCompleted(localStorage.getItem('craftlab_unlocked') === 'true');
             } finally {
                 setLoading(false);

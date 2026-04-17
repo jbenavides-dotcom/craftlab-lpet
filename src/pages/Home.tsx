@@ -14,9 +14,9 @@ export const Home: React.FC = () => {
 
     useEffect(() => {
         const checkStatus = async () => {
-            const { checkEducationCompletion } = await import('../lib/user-progress');
-            const completed = await checkEducationCompletion();
-            setEducationCompleted(completed || localStorage.getItem('craftlab_unlocked') === 'true');
+            const { checkCraftLabUnlocked } = await import('../lib/user-progress');
+            const completed = await checkCraftLabUnlocked();
+            setEducationCompleted(completed);
         };
         checkStatus();
     }, []);
