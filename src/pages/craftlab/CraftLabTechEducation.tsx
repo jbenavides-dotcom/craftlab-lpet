@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X, Dna, Activity, FlaskConical, Unlock } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
+import { ExitConfirmModal } from '../../components/ExitConfirmModal';
 import './CraftLabTechEducation.css';
 
 type HotspotId = 'microbes' | 'routes' | 'ph' | null;
@@ -10,6 +11,7 @@ export const CraftLabTechEducation: React.FC = () => {
     const navigate = useNavigate();
     const [activeSpot, setActiveSpot] = useState<HotspotId>(null);
     const [readSpots, setReadSpots] = useState<Set<HotspotId>>(new Set());
+    const [showExitModal, setShowExitModal] = useState(false);
 
     const handleSpotClick = (id: HotspotId) => {
         setActiveSpot(id);
@@ -59,10 +61,15 @@ export const CraftLabTechEducation: React.FC = () => {
     };
 
     return (
+        <>
         <div className="tech-edu-container">
             <div className="tech-header">
                 <h1 className="tech-title">Technical Explorer</h1>
-                <button className="tech-close-btn" onClick={() => navigate('/home')}>
+                <button
+                    className="tech-close-btn"
+                    onClick={() => setShowExitModal(true)}
+                    aria-label="Exit technical education"
+                >
                     <X size={28} />
                 </button>
             </div>
@@ -112,5 +119,13 @@ export const CraftLabTechEducation: React.FC = () => {
             </div>
 
         </div>
+
+            <ExitConfirmModal
+                isOpen={showExitModal}
+                onConfirm={() => { navigate('/home'); }}
+                onCancel={() => setShowExitModal(false)}
+                variant="craftlab"
+            />
+        </>
     );
 };

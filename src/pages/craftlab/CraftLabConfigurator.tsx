@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { X, ChevronDown, Check } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Slider } from '../../components/ui/Slider';
+import { ExitConfirmModal } from '../../components/ExitConfirmModal';
 import './CraftLabConfigurator.css';
 
 interface ConfigState {
@@ -41,9 +42,16 @@ const FLAVOR_PROFILES: Record<string, { id: string, label: string, color: string
 };
 
 const VARIETIES = [
-    { id: 'geisha', label: 'Geisha', desc: 'Delicate, tea-like, jasmine' },
-    { id: 'sidra', label: 'Sidra', desc: 'Complex, tropical, wine-like' },
-    { id: 'gesha-sidra', label: 'Gesha / Sidra Blend', desc: 'Best of both worlds' }
+    { id: 'geisha',       label: 'Geisha',             desc: 'Delicate, tea-like, jasmine' },
+    { id: 'sidra',        label: 'Sidra',              desc: 'Complex, tropical, wine-like' },
+    { id: 'gesha-sidra',  label: 'Gesha / Sidra Blend', desc: 'Best of both worlds' },
+    { id: 'pink-bourbon', label: 'Pink Bourbon',        desc: 'Rare mutation of Bourbon. Floral, tea-like, delicate acidity.' },
+    { id: 'java',         label: 'Java',               desc: 'Indonesian origin, high altitude. Spicy, earthy, with herbal notes.' },
+    { id: 'pacamara',     label: 'Pacamara',           desc: 'Cross of Pacas and Maragogype. Large beans, creamy body, citric.' },
+    { id: 'tabi',         label: 'Tabi',               desc: 'Colombian hybrid. Sweet, balanced, notes of stone fruit.' },
+    { id: 'mokka',        label: 'Mokka',              desc: 'Miniature beans from Ethiopian heritage. Chocolate, wine-like.' },
+    { id: 'caturra',      label: 'Caturra',            desc: 'Brazilian Bourbon mutation. Clean acidity, medium body, classic.' },
+    { id: 'tekisik',      label: 'Tekisik',            desc: 'Salvadoran selection. Bright citrus, honey sweetness, refined.' },
 ];
 
 const CATEGORIES: Record<string, { id: string, label: string }[]> = {
@@ -356,22 +364,15 @@ export const CraftLabConfigurator: React.FC = () => {
             )}
 
             {/* ──── EXIT MODAL ─────────────────────────── */}
-            {showExitModal && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <h2>Are you sure?</h2>
-                        <p>Your configuration will be lost if you leave now.</p>
-                        <div className="modal-actions">
-                            <Button variant="primary" size="full" onClick={confirmExit}>
-                                Yes, leave
-                            </Button>
-                            <Button variant="outline" size="full" onClick={() => setShowExitModal(false)}>
-                                Stay here
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-            )}
+            <ExitConfirmModal
+                isOpen={showExitModal}
+                onConfirm={confirmExit}
+                onCancel={() => setShowExitModal(false)}
+                message="Your configuration will be lost if you leave now."
+                confirmLabel="Yes, leave"
+                cancelLabel="Stay here"
+                variant="craftlab"
+            />
 
         </div>
     );
