@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, Sparkles, Droplet, Sprout, Sun, Check } from 'lucide-react';
+import { X, Crown, Cherry, Coffee, Sprout, Check } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Modal } from '../components/ui/Modal';
 import { navigateNextFBStep } from '../lib/fb-utils';
@@ -16,10 +16,10 @@ interface VarietyOption {
 }
 
 const VARIETY_OPTIONS: VarietyOption[] = [
-    { key: 'Geisha',  label: 'Geisha',  sub: 'Floral · Jasmine · Bergamot',  Icon: Sparkles, bgColor: '#fce7f3', iconColor: '#9d174d' },
-    { key: 'Sidra',   label: 'Sidra',   sub: 'Tropical · Fruit-forward',     Icon: Droplet,  bgColor: '#fee2e2', iconColor: '#991b1b' },
-    { key: 'Java',    label: 'Java',    sub: 'Chocolate · Full body',        Icon: Sprout,   bgColor: '#d1fae5', iconColor: '#065f46' },
-    { key: 'Caturra', label: 'Caturra', sub: 'Balanced · Sweet · Mild',      Icon: Sun,      bgColor: '#fef3c7', iconColor: '#b45309' },
+    { key: 'Geisha',  label: 'Geisha',  sub: 'Floral · Jasmine · Bergamot',  Icon: Crown,  bgColor: '#fce7f3', iconColor: '#9d174d' },
+    { key: 'Sidra',   label: 'Sidra',   sub: 'Tropical · Fruit-forward',     Icon: Cherry, bgColor: '#fee2e2', iconColor: '#991b1b' },
+    { key: 'Java',    label: 'Java',    sub: 'Chocolate · Full body',        Icon: Coffee, bgColor: '#d1fae5', iconColor: '#065f46' },
+    { key: 'Caturra', label: 'Caturra', sub: 'Balanced · Sweet · Mild',      Icon: Sprout, bgColor: '#fef3c7', iconColor: '#b45309' },
 ];
 
 const TOTAL_STEPS = 4;
