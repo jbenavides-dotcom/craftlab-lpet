@@ -48,8 +48,9 @@
     height: 200px;
     flex-shrink: 0;
     overflow: hidden;
-    /* Parchment-green gradient (placeholder until Felipe shares macro photo of green parchment beans) */
-    background: linear-gradient(135deg, #2d3b1a 0%, #556b2f 45%, #8aa66b 100%);
+    background-image: url('/craftlab/green-beans.jpg');
+    background-size: cover;
+    background-position: center;
 }
 
 .cl-onb-hero-video {
@@ -75,8 +76,8 @@
     inset: 0;
     background: linear-gradient(
         to bottom,
-        rgba(45, 59, 26, 0.15) 0%,
-        rgba(45, 59, 26, 0.55) 100%
+        rgba(45, 59, 26, 0.1) 0%,
+        rgba(20, 30, 12, 0.75) 100%
     );
     z-index: 1;
 }
