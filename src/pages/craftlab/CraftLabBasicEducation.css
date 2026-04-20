@@ -1,138 +1,168 @@
-.education-stories-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    width: 100vw;
-    background-color: var(--color-gray-light);
-    position: relative;
-    overflow: hidden;
+/* ============================================================
+   CraftLabBasicEducation.css
+   Sistema visual CraftLab — fondo blanco + fucsia signature
+   Tokens duplicados del Onboarding para aislamiento total
+   ============================================================ */
+
+:root {
+    --cl-accent: #c1004a;
+    --cl-accent-soft: #fce7f3;
+    --cl-text: #0A1E3F;
+    --cl-text-muted: #6b7280;
+    --cl-border: #e5e7eb;
 }
 
-/* Progress Bar Container */
+/* Container principal */
+.education-stories-container {
+    position: relative;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #fafaf5 0%, #ffffff 50%);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-sans, system-ui);
+}
+
+/* ============================================================
+   Progress bars — estilo IG sobre fondo claro
+   ============================================================ */
 .stories-progress-container {
     display: flex;
     gap: 4px;
-    padding: var(--spacing-md) var(--spacing-sm);
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+    padding: 16px 20px 8px;
+    position: relative;
     z-index: 10;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), transparent);
 }
 
 .story-progress-segment {
     flex: 1;
     height: 3px;
-    background-color: rgba(255, 255, 255, 0.4);
-    border-radius: 2px;
+    background: #e5e7eb;
+    border-radius: 999px;
     overflow: hidden;
 }
 
 .story-progress-fill {
     height: 100%;
-    background-color: var(--color-white);
+    background: var(--cl-accent);
     width: 0%;
-    transition: width 0.1s linear;
+    transition: width 0.05s linear;
+    border-radius: 999px;
 }
 
 .story-progress-fill.completed {
     width: 100%;
 }
 
-/* Story Content Area */
-.story-content {
+/* ============================================================
+   Close button — círculo blanco con borde sutil
+   ============================================================ */
+.story-close {
+    position: absolute;
+    top: 32px;
+    right: 16px;
+    z-index: 20;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 1px solid var(--cl-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--cl-text);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: background 0.2s;
+    padding: 0;
+}
+
+.story-close:hover {
+    background: #f9fafb;
+}
+
+/* ============================================================
+   Tap zones — overlay invisible para navegar con tap
+   ============================================================ */
+.story-tap-zones {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    z-index: 5;
+}
+
+.tap-zone-left,
+.tap-zone-right {
+    flex: 1;
+    cursor: pointer;
+}
+
+/* ============================================================
+   Contenido central del slide
+   ============================================================ */
+.be-content {
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-xl);
+    padding: 40px 28px 60px;
+    gap: 28px;
     text-align: center;
     position: relative;
-    z-index: 1;
+    z-index: 6;
+    animation: be-fadein 0.4s ease;
 }
 
-/* Tapping Overlay Zones */
-.story-tap-zones {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    z-index: 5;
-}
-
-.tap-zone-left {
-    flex: 1;
-    cursor: pointer;
-}
-
-.tap-zone-right {
-    flex: 2;
-    /* Larger area for advancing */
-    cursor: pointer;
-}
-
-/* Visual Elements */
-.story-visual {
-    width: 200px;
-    height: 200px;
-    margin-bottom: var(--spacing-xl);
+/* Círculo con gradient por slide */
+.be-icon-circle {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
-    background-color: var(--color-white);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    animation: float 4s ease-in-out infinite;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    flex-shrink: 0;
 }
 
-@keyframes float {
-    0% {
-        transform: translateY(0px);
-    }
-
-    50% {
-        transform: translateY(-10px);
-    }
-
-    100% {
-        transform: translateY(0px);
-    }
+.be-icon-circle svg {
+    color: inherit;
 }
 
-.story-visual svg {
-    color: var(--color-navy);
-}
-
-.story-title {
-    font-family: var(--font-serif);
+/* Título serif editorial */
+.be-title {
+    font-family: Georgia, 'Times New Roman', serif;
     font-size: 2rem;
-    color: var(--color-navy);
-    margin-bottom: var(--spacing-md);
+    font-weight: 700;
+    color: var(--cl-text);
+    margin: 0;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
 }
 
-.story-text {
-    font-family: var(--font-sans);
-    font-size: 1.1rem;
-    line-height: 1.6;
-    color: var(--color-gray-dark);
-    max-width: 400px;
+/* Palabra destacada en fucsia */
+.be-title-accent {
+    color: var(--cl-accent);
 }
 
-/* Close button */
-.story-close {
-    position: absolute;
-    top: calc(var(--spacing-md) + 10px);
-    right: var(--spacing-md);
-    z-index: 20;
-    color: var(--color-white);
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 8px;
+/* Texto descriptivo */
+.be-text {
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--cl-text-muted);
+    margin: 0;
+    max-width: 340px;
 }
 
-/* Removed desktop layout constraint so it acts as full screen slider */
+/* Fade-in por slide */
+@keyframes be-fadein {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

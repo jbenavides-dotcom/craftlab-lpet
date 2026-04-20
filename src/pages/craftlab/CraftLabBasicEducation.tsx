@@ -7,9 +7,11 @@ import './CraftLabBasicEducation.css';
 interface StorySlide {
     id: number;
     title: string;
+    highlight?: string;  // palabra del title a destacar en fucsia
     text: string;
     icon: React.ReactNode;
-    color: string;
+    gradient: string;
+    iconColor: string;
 }
 
 // Inline SVG: pH curve from ~6.0 → ~4.0 over 110 hours
@@ -68,39 +70,49 @@ const PH_CURVE_SVG = (
 const slides: StorySlide[] = [
     {
         id: 1,
-        title: "The Magic of Fermentation",
-        text: "Fermentation isn't just a step in coffee processing; it's where the raw potential of the bean is unlocked and shaped.",
-        icon: <Beaker size={80} />,
-        color: "var(--color-pink-bg)"
+        title: "It's a Process",
+        highlight: "Process",
+        text: "Fermentation transforms raw cherries into the beans that define your coffee's character. It's where science meets craft.",
+        icon: <Beaker size={64} />,
+        gradient: 'linear-gradient(135deg, #fce7f3 0%, #f9a8d4 100%)',
+        iconColor: '#9d174d',
     },
     {
         id: 2,
         title: "Metabolic Routes",
+        highlight: "Metabolic",
         text: "Temperature and Brix (sugar content) act as the steering wheel. Warmer temps speed up the process, bringing out intense fruit notes.",
-        icon: <Thermometer size={80} />,
-        color: "#fdf0d5" // Warm ochre tint
+        icon: <Thermometer size={64} />,
+        gradient: 'linear-gradient(135deg, #fef3c7 0%, #fbbf24 100%)',
+        iconColor: '#92400e',
     },
     {
         id: 3,
         title: "Oxygen Matters",
+        highlight: "Oxygen",
         text: "An open tank (Aerobic) yields clean, smooth notes. A closed tank (Anaerobic) creates pressure and intense, boozy, tropical flavors.",
-        icon: <Wind size={80} />,
-        color: "#e0f2fe" // Light blue tint
+        icon: <Wind size={64} />,
+        gradient: 'linear-gradient(135deg, #dbeafe 0%, #60a5fa 100%)',
+        iconColor: '#1e40af',
     },
     {
         id: 4,
         title: "Seeing it in Action",
-        text: "At our farm, cherries are floated, sorted, and placed into dedicated tanks where the magic begins. (Imagine a 15s video here).",
-        icon: <Play size={80} />,
-        color: "#f3e8ff" // Pale purple
+        highlight: "Action",
+        text: "At our farm, cherries are floated, sorted, and placed into dedicated tanks where the magic begins.",
+        icon: <Play size={64} />,
+        gradient: 'linear-gradient(135deg, #ede9fe 0%, #a78bfa 100%)',
+        iconColor: '#5b21b6',
     },
     {
         id: 5,
         title: "Acidification",
+        highlight: "Acidification",
         text: "As fermentation progresses, lactobacilli and yeasts produce organic acids. pH drops from ~6.0 to ~4.0 over 110 hours — this curve determines whether your coffee tastes bright, balanced or fermented.",
         icon: PH_CURVE_SVG,
-        color: "#e8f5e9" // Pale green
-    }
+        gradient: 'linear-gradient(135deg, #d1fae5 0%, #6ee7b7 100%)',
+        iconColor: '#065f46',
+    },
 ];
 
 // Duration for auto-advance per slide (in ms)
@@ -174,7 +186,7 @@ export const CraftLabBasicEducation: React.FC = () => {
     const currentSlide = slides[currentSlideIndex];
 
     return (
-        <div className="education-stories-container" style={{ backgroundColor: currentSlide.color }}>
+        <div className="education-stories-container">
 
             {/* Progress Bars */}
             <div className="stories-progress-container">
@@ -203,12 +215,25 @@ export const CraftLabBasicEducation: React.FC = () => {
             </div>
 
             {/* Content */}
-            <div className="story-content">
-                <div className="story-visual">
+            <div className="be-content">
+                <div
+                    className="be-icon-circle"
+                    style={{ background: currentSlide.gradient, color: currentSlide.iconColor }}
+                >
                     {currentSlide.icon}
                 </div>
-                <h2 className="story-title">{currentSlide.title}</h2>
-                <p className="story-text">{currentSlide.text}</p>
+                <h2 className="be-title">
+                    {currentSlide.highlight ? (
+                        <>
+                            {currentSlide.title.split(currentSlide.highlight)[0]}
+                            <span className="be-title-accent">{currentSlide.highlight}</span>
+                            {currentSlide.title.split(currentSlide.highlight)[1]}
+                        </>
+                    ) : (
+                        currentSlide.title
+                    )}
+                </h2>
+                <p className="be-text">{currentSlide.text}</p>
             </div>
 
             <ExitConfirmModal
