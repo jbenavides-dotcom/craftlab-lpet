@@ -89,10 +89,8 @@ export const Home: React.FC = () => {
                             style={{ backgroundImage: `url(${coffeeCherries})` }}
                             role="img"
                             aria-label="Coffee cherries on the branch"
-                        >
-                            <span className="pc-num">01 — FORWARD BOOKING</span>
-                            <span className="pc-tag">Harvest 2026</span>
-                        </div>
+                        />
+
                         <div className="pc-block">
                             <div className="pc-kicker">Secure your harvest</div>
                             <h2 className="pc-title">A direct line from <em>soil to cup.</em></h2>
@@ -122,10 +120,8 @@ export const Home: React.FC = () => {
                             style={{ backgroundImage: `url(${coffeeFermentation})` }}
                             role="img"
                             aria-label="Coffee fermentation process"
-                        >
-                            <span className="pc-num">02 — CRAFTLAB</span>
-                            <span className="pc-tag">Custom lab</span>
-                        </div>
+                        />
+
                         <div className="pc-block">
                             <div className="pc-kicker">Design your fermentation</div>
                             <h2 className="pc-title">Your profile, <em>our lab.</em></h2>
@@ -155,10 +151,8 @@ export const Home: React.FC = () => {
                             style={{ backgroundImage: `url(${singleEstateImage})` }}
                             role="img"
                             aria-label="Single Estate coffee lot placeholder"
-                        >
-                            <span className="pc-num">03 — SINGLE ESTATE</span>
-                            <span className="pc-tag">Ready to ship</span>
-                        </div>
+                        />
+
                         <div className="pc-block">
                             <div className="pc-kicker">From our own cup</div>
                             <h2 className="pc-title">The farm's <em>current selection.</em></h2>

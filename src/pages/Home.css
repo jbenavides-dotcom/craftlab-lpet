@@ -176,37 +176,6 @@
 .program-card.cl .pc-photo { background: linear-gradient(135deg, #c9a67e 0%, #8e6b43 55%, #4d3820 100%); }
 .program-card.se .pc-photo { background: linear-gradient(135deg, #9aa678 0%, #5a6840 100%); }
 
-.pc-num {
-    position: absolute;
-    top: 12px;
-    left: 14px;
-    color: #fff;
-    font-size: 0.6rem;
-    letter-spacing: 0.22em;
-    font-weight: 700;
-    background: rgba(255, 255, 255, 0.18);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    padding: 5px 10px;
-    border-radius: 99px;
-}
-
-.pc-tag {
-    position: absolute;
-    top: 12px;
-    right: 14px;
-    color: #fff;
-    font-size: 0.58rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    font-weight: 700;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    padding: 5px 10px;
-    border-radius: 99px;
-}
-
 .pc-block {
     padding: 1.35rem 1.4rem 1.5rem;
     display: flex;
