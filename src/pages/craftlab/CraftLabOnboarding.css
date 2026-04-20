@@ -29,11 +29,10 @@
 .cl-onb-container {
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    max-height: 100dvh;
+    min-height: 100vh;
+    min-height: 100dvh;
     background: linear-gradient(180deg, #f5f7f0 0%, #fafaf5 50%, #ffffff 100%);
     color: var(--cl-text);
-    overflow: hidden;
     transition: opacity 0.4s ease;
 }
 
@@ -117,13 +116,10 @@
 
 /* ── CONTENT AREA ── */
 .cl-onb-content {
-    flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
-    gap: 16px;
-    padding: 20px 20px 32px;
-    overflow: hidden;
+    gap: 20px;
+    padding: 20px 20px 28px;
 }
 
 /* ── 3 PILARES ── */
