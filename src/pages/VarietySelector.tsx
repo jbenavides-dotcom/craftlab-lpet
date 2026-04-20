@@ -24,7 +24,6 @@ const VARIETY_OPTIONS: VarietyOption[] = [
         Icon: Crown,
         gradient: 'linear-gradient(135deg, #fce7f3 0%, #f9a8d4 100%)',
         iconColor: '#9d174d',
-        image: 'https://res.cloudinary.com/dkqocgknd/image/upload/f_auto,q_auto/v1773329707/lp-usa/productos/legendary-geisha-bag.png',
     },
     {
         key: 'Sidra',
@@ -33,7 +32,6 @@ const VARIETY_OPTIONS: VarietyOption[] = [
         Icon: Cherry,
         gradient: 'linear-gradient(135deg, #fee2e2 0%, #fca5a5 100%)',
         iconColor: '#991b1b',
-        image: 'https://res.cloudinary.com/dkqocgknd/image/upload/f_auto,q_auto/v1773329710/lp-usa/productos/sidra-bag.png',
     },
     {
         key: 'Java',
