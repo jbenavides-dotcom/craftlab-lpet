@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Dna, Droplets, TrendingDown } from 'lucide-react';
+import { Atom, Microscope, FlaskConical } from 'lucide-react';
 import { checkCraftLabUnlocked } from '../../lib/user-progress';
 import './CraftLabOnboarding.css';
 
@@ -9,7 +9,7 @@ export const CraftLabOnboarding: React.FC = () => {
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [loading, setLoading] = useState(true);
 
-    // Check unlock status — if already unlocked, skip straight to welcome
+    // Si ya completó el quiz → skip directo a welcome
     useEffect(() => {
         const fetchStatus = async () => {
             try {
@@ -19,8 +19,8 @@ export const CraftLabOnboarding: React.FC = () => {
                     return;
                 }
             } catch (err) {
-                console.error("Failed to check CraftLab unlock status:", err);
-                // Fallback: localStorage check
+                console.error('Failed to check CraftLab unlock status:', err);
+                // Fallback: localStorage
                 if (localStorage.getItem('craftlab_unlocked') === 'true') {
                     navigate('/craftlab/welcome', { replace: true });
                     return;
@@ -40,103 +40,102 @@ export const CraftLabOnboarding: React.FC = () => {
     };
 
     if (loading) {
-        return <div className="craftlab-loading">Loading...</div>;
+        return <div className="cl-onb-loading">Loading…</div>;
     }
 
     return (
-        <div className={`craftlab-onboarding-container ${isTransitioning ? 'fade-out' : ''}`}>
+        <div className={`cl-onb-container${isTransitioning ? ' fade-out' : ''}`}>
 
-            {/* ── HERO VIDEO (fullwidth, ~40% height) ── */}
-            <div className="onboarding-hero">
-                {/* TODO: provide /public/hero-ferment.mp4 from LP&ET assets */}
+            {/* ── HERO VIDEO — 200px fijo ── */}
+            <div className="cl-onb-hero">
                 <video
-                    className="onboarding-hero-video"
+                    className="cl-onb-hero-video"
                     autoPlay
                     muted
                     loop
                     playsInline
                     poster="/hero-ferment-poster.jpg"
                     onError={(e) => {
-                        // Hide broken video element; poster / fallback img takes over
                         (e.currentTarget as HTMLVideoElement).style.display = 'none';
                     }}
                 >
                     <source src="/hero-ferment.mp4" type="video/mp4" />
                 </video>
-                {/* Fallback image shown when video cannot load */}
                 <img
-                    className="onboarding-hero-fallback"
+                    className="cl-onb-hero-fallback"
                     src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=2000&auto=format&fit=crop"
                     alt="Coffee fermentation tanks at La Palma y El Tucán"
                 />
-                <div className="onboarding-hero-overlay" />
-                <div className="onboarding-hero-title">
+                <div className="cl-onb-hero-overlay" />
+                <div className="cl-onb-hero-title">
                     <h1>
-                        Welcome to Craft<span className="title-highlight">Lab</span>
+                        Welcome to Craft<span>Lab</span>
                     </h1>
-                    <p>La Palma &amp; El Tucán's fermentation science — in your hands.</p>
+                    <p>Fermentation science — in your hands</p>
                 </div>
             </div>
 
-            {/* ── CONTENT AREA ── */}
-            <div className="onboarding-content">
+            {/* ── CONTENT ── */}
+            <div className="cl-onb-content">
 
-                {/* 3 PILLARS */}
-                <div className="pillars-container">
-                    <div className="pillar-block">
-                        <div className="pillar-icon">
-                            <Dna size={28} aria-hidden="true" />
+                {/* 3 PILARES */}
+                <div className="cl-onb-pillars">
+
+                    <div className="cl-onb-pillar">
+                        <div className="cl-onb-pillar-icon blue" aria-hidden="true">
+                            <Atom size={22} />
                         </div>
-                        <div className="pillar-text">
-                            <h3>Metabolic Routes</h3>
-                            <p>How temperature and sugar drive flavor complexity.</p>
+                        <div className="cl-onb-pillar-body">
+                            <p className="cl-onb-pillar-title">Metabolic Routes</p>
+                            <p className="cl-onb-pillar-sub">How temperature and sugar drive flavor complexity.</p>
                         </div>
                     </div>
 
-                    <div className="pillar-block">
-                        <div className="pillar-icon">
-                            <Droplets size={28} aria-hidden="true" />
+                    <div className="cl-onb-pillar">
+                        <div className="cl-onb-pillar-icon green" aria-hidden="true">
+                            <Microscope size={22} />
                         </div>
-                        <div className="pillar-text">
-                            <h3>Microorganisms</h3>
-                            <p>The yeast and bacteria that sculpt your cup.</p>
+                        <div className="cl-onb-pillar-body">
+                            <p className="cl-onb-pillar-title">Microorganisms</p>
+                            <p className="cl-onb-pillar-sub">The yeast and bacteria that sculpt your cup.</p>
                         </div>
                     </div>
 
-                    <div className="pillar-block">
-                        <div className="pillar-icon">
-                            <TrendingDown size={28} aria-hidden="true" />
+                    <div className="cl-onb-pillar">
+                        <div className="cl-onb-pillar-icon accent" aria-hidden="true">
+                            <FlaskConical size={22} />
                         </div>
-                        <div className="pillar-text">
-                            <h3>Acidification</h3>
-                            <p>How pH drops from 6.0 to 4.0 to define acidity.</p>
+                        <div className="cl-onb-pillar-body">
+                            <p className="cl-onb-pillar-title">Acidification</p>
+                            <p className="cl-onb-pillar-sub">How pH drops from 6.0 to 4.0 to define acidity.</p>
                         </div>
                     </div>
+
                 </div>
 
-                {/* DIAGNOSTIC QUESTION */}
-                <div className="diagnostic-section">
-                    <h2 className="diagnostic-question">
-                        How much do you know about coffee fermentation?
-                    </h2>
+                {/* DIAGNÓSTICO */}
+                <div className="cl-onb-diagnostic">
+                    <p className="cl-onb-diag-question">
+                        How much do you know about fermentation?
+                    </p>
 
-                    <div className="diagnostic-buttons">
+                    <div className="cl-onb-diag-grid">
                         <button
-                            className="diagnostic-btn btn-novice"
+                            className="cl-onb-diag-btn novice"
                             onClick={() => handleChoice('/craftlab/education/basic')}
                             aria-label="I know nothing — go to basic education"
                         >
-                            I know nothing
-                            <span className="btn-sub">Start with the basics</span>
+                            <span className="cl-onb-diag-btn-label">I know nothing</span>
+                            <span className="cl-onb-diag-btn-sub">Start with the basics</span>
                         </button>
 
                         <button
-                            className="diagnostic-btn btn-advanced"
+                            className="cl-onb-diag-btn advanced"
                             onClick={() => handleChoice('/craftlab/education/tech')}
                             aria-label="I know the basics — go to technical education"
                         >
-                            I know the basics
-                            <span className="btn-sub">Go deeper into the science</span>
+                            <span className="cl-onb-diag-btn-label">I know the basics</span>
+                            <span className="cl-onb-diag-btn-sub">Go deeper into the science</span>
                         </button>
                     </div>
                 </div>
