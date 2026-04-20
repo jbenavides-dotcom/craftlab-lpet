@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { X, Flower2, Sun, Leaf, Moon, Zap, Check } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Modal } from '../components/ui/Modal';
+import { Stepper } from '../components/ui/Stepper';
 import { navigateNextFBStep } from '../lib/fb-utils';
 import './Selectors.css';
 
@@ -58,19 +59,14 @@ export const DateSelector: React.FC = () => {
                 <div className="ds-header-spacer" aria-hidden="true" />
             </header>
 
-            {/* ── Progress ── */}
+            {/* ── Progress (Stepper) ── */}
             <div className="ds-progress">
                 <div className="ds-progress-meta">
                     <span>Step {CURRENT_STEP} of {TOTAL_STEPS}</span>
                     <span className="ds-progress-label">Harvest date</span>
                 </div>
-                <div className="ds-progress-bar" role="progressbar" aria-valuenow={CURRENT_STEP} aria-valuemin={1} aria-valuemax={TOTAL_STEPS}>
-                    {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
-                        <div
-                            key={i}
-                            className={`ds-progress-segment${i < CURRENT_STEP ? ' active' : ''}`}
-                        />
-                    ))}
+                <div className="ds-stepper-wrap">
+                    <Stepper currentStep="date" />
                 </div>
             </div>
 

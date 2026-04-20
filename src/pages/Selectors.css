@@ -294,6 +294,17 @@
     background: #000000;
 }
 
+.ds-stepper-wrap {
+    display: flex;
+    justify-content: center;
+    padding: 4px 0 2px;
+}
+
+.ds-stepper-wrap .fb-stepper {
+    max-width: 260px;
+    width: 100%;
+}
+
 /* Main */
 .ds-main {
     flex: 1;
