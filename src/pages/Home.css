@@ -7,6 +7,7 @@
     --fb-bg: #0e1e36; --fb-ink: #F6F1E8;  /* Forward Booking — navy (brand primary) */
     --cl-bg: #C4624A; --cl-ink: #FFF4EC;  /* CraftLab — terracotta */
     --se-bg: #5E6B3A; --se-ink: #F4F1E0;  /* Single Estate — olive */
+    --color-accent: #c1004a;               /* Accent — crimson rose */
 }
 
 .home-container {
@@ -21,9 +22,8 @@
 /* ---- HEADER ---------------------------------------- */
 .home-header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.25rem var(--spacing-lg);
+    flex-direction: column;
+    padding: 1.25rem var(--spacing-lg) 0;
     background-color: var(--color-white);
     position: sticky;
     top: 0;
@@ -55,88 +55,65 @@
     object-fit: contain;
 }
 
+/* ---- HEADER ROW WRAPPER ---------------------------- */
+.home-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0.5rem;
+}
+
+/* ---- GREETING BLOCK -------------------------------- */
+.home-greeting {
+    padding: 0.6rem 0 1.25rem;
+}
+
+.home-greeting .kicker {
+    font-size: 0.65rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.home-greeting .kicker::before {
+    content: "";
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--color-accent);
+}
+
+.home-greeting h1 {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    color: var(--color-navy);
+    margin-top: 0.55rem;
+}
+
+.home-greeting h1 em {
+    font-style: italic;
+    font-weight: 400;
+}
+
+.home-greeting h1 .accent {
+    color: var(--color-accent);
+    font-style: italic;
+    font-weight: 400;
+}
+
 /* ---- MAIN ------------------------------------------ */
 .home-main {
     flex: 1;
     display: flex;
     flex-direction: column;
     padding-bottom: 80px;
-}
-
-/* ---- HERO SECTION ---------------------------------- */
-.hero-section {
-    background-color: var(--color-brand-red);
-    padding: 6rem 2rem 5rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    min-height: 420px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-}
-
-.hero-section::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
-    pointer-events: none;
-}
-
-.hero-title {
-    font-family: var(--font-serif);
-    font-size: clamp(3rem, 9vw, 6rem);
-    font-weight: 700;
-    color: var(--color-white);
-    line-height: 0.95;
-    letter-spacing: -0.03em;
-    margin-bottom: 1.25rem;
-    animation: fadeSlideUp 0.7s ease-out both;
-}
-
-.hero-title-italic {
-    font-style: italic;
-    color: rgba(255, 255, 255, 0.85);
-}
-
-.hero-subtitle {
-    font-family: var(--font-sans);
-    font-size: 1.05rem;
-    color: rgba(255, 255, 255, 0.88);
-    letter-spacing: 0.02em;
-    line-height: 1.65;
-    animation: fadeSlideUp 0.7s 0.15s ease-out both;
-    max-width: 380px;
-}
-
-@keyframes fadeSlideUp {
-    from {
-        opacity: 0;
-        transform: translateY(18px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* ---- INTRO SECTION --------------------------------- */
-.intro-section {
-    padding: 2.5rem var(--spacing-lg);
-    background-color: var(--color-white);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-.intro-section p {
-    font-size: 1.05rem;
-    line-height: 1.85;
-    color: var(--color-dark-text);
-    font-weight: 300;
-    max-width: 680px;
 }
 
 /* ---- PROGRAMS VISUAL SECTION ----------------------- */
@@ -193,6 +170,11 @@
     background-size: cover;
     background-position: center;
 }
+
+/* Per-program photo gradients (fallback — inline backgroundImage pisa al gradient si la imagen carga) */
+.program-card.fb .pc-photo { background: linear-gradient(135deg, #d7414a 0%, #8a1e2a 60%, #4a0f15 100%); }
+.program-card.cl .pc-photo { background: linear-gradient(135deg, #c9a67e 0%, #8e6b43 55%, #4d3820 100%); }
+.program-card.se .pc-photo { background: linear-gradient(135deg, #9aa678 0%, #5a6840 100%); }
 
 .pc-num {
     position: absolute;
@@ -319,54 +301,10 @@
     transform: scale(0.97);
 }
 
-/* ---- CL BANNER (hero content) ---------------------- */
-.cl-banner-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-}
-
-.cl-logo-text {
-    font-family: var(--font-sans);
-    font-size: clamp(4rem, 15vw, 8.5rem);
-    font-weight: 800;
-    color: var(--color-white);
-    line-height: 1;
-    letter-spacing: -0.04em;
-    margin: 0;
-}
-
-.cl-logo-light {
-    opacity: 0.45;
-}
-
-.cl-subtitle-text {
-    font-family: var(--font-serif);
-    font-size: 1.15rem;
-    color: var(--color-white);
-    line-height: 1.5;
-    margin: 0;
-    font-style: italic;
-    font-weight: 300;
-}
-
 /* ---- DESKTOP LAYOUT -------------------------------- */
 @media (min-width: 900px) {
     .home-header {
         padding: 1.5rem 3rem;
-    }
-
-    .intro-section {
-        padding: 3.5rem;
-        max-width: none;
-        background-color: var(--color-white);
-        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-    }
-
-    .intro-section p {
-        font-size: 1.25rem;
-        max-width: 740px;
     }
 
     .programs-visual-section {

@@ -53,31 +53,20 @@ export const Home: React.FC = () => {
             )}
 
             <header className="home-header">
-                <button className="header-icon-btn" aria-label="Open menu"><Menu size={24} /></button>
-                <div className="header-brand-container">
-                    <img src="https://res.cloudinary.com/dtkwqoadf/image/upload/v1735702592/logo_horizontal_ss9bvn.png" alt="La Palma & El Tucán" className="header-logo-img" />
+                <div className="home-header-row">
+                    <button className="header-icon-btn" aria-label="Open menu"><Menu size={24} /></button>
+                    <div className="header-brand-container">
+                        <img src="https://res.cloudinary.com/dtkwqoadf/image/upload/v1735702592/logo_horizontal_ss9bvn.png" alt="La Palma & El Tucán" className="header-logo-img" />
+                    </div>
+                    <button className="header-icon-btn" aria-label="User account"><User size={24} /></button>
                 </div>
-                <button className="header-icon-btn" aria-label="User account"><User size={24} /></button>
+                <div className="home-greeting">
+                    <div className="kicker">Harvest 2026 · Cundinamarca</div>
+                    <h1>Born at origin,<br /><em>shared with</em> <span className="accent">intention.</span></h1>
+                </div>
             </header>
 
             <main className="home-main">
-                {/* Hero banner */}
-                <section className="hero-section hero-brand-red">
-                    <div className="cl-banner-content">
-                        <h1 className="cl-logo-text">green<span className="cl-logo-light">coffee</span></h1>
-                        <p className="cl-subtitle-text">Born at Origin.<br />Shared with Intention.</p>
-                    </div>
-                </section>
-
-                {/* Intro */}
-                <section className="intro-section">
-                    <p>
-                        Discover our exclusive programs. From securing upcoming harvests to
-                        designing your own fermentation profiles, walk the land and taste the coffee
-                        exactly where it was born.
-                    </p>
-                </section>
-
                 {/* Program cards */}
                 <section className="programs-visual-section">
 
