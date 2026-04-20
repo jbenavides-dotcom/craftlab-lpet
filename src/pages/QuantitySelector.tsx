@@ -69,7 +69,7 @@ export const QuantitySelector: React.FC = () => {
 
             <div className="fb-final-footer">
                 <Button
-                    variant="secondary"
+                    variant="primary"
                     size="full"
                     onClick={() => navigate('/forward-booking/review')}
                 >

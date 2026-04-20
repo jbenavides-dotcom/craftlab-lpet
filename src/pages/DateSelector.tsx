@@ -80,7 +80,7 @@ export const DateSelector: React.FC = () => {
 
             <div className="selector-footer">
                 <Button
-                    variant="secondary"
+                    variant="primary"
                     size="full"
                     disabled={!selectedDate}
                     onClick={handleSave}

@@ -48,7 +48,7 @@ export const ReviewConfirm: React.FC = () => {
 
             <div className="fb-final-footer">
                 <Button
-                    variant="secondary"
+                    variant="primary"
                     size="full"
                     disabled={!agreed}
                     onClick={() => navigate('/forward-booking/success')}

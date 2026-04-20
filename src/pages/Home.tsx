@@ -206,7 +206,7 @@ export const Home: React.FC = () => {
                     </p>
                 </div>
                 <Button
-                    variant="secondary"
+                    variant="primary"
                     size="full"
                     onClick={startFBCustomization}
                     className="mt-md"

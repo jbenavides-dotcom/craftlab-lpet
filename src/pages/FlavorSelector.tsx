@@ -103,7 +103,7 @@ export const FlavorSelector: React.FC = () => {
 
             <div className="selector-footer">
                 <Button
-                    variant="secondary"
+                    variant="primary"
                     size="full"
                     disabled={!selectedProfile}
                     onClick={handleSave}

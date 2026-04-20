@@ -78,7 +78,7 @@ export const ProcessSelector: React.FC = () => {
 
             <div className="selector-footer">
                 <Button
-                    variant="secondary"
+                    variant="primary"
                     size="full"
                     disabled={!selectedProcess}
                     onClick={handleSave}

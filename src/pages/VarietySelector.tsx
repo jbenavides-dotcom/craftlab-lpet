@@ -78,7 +78,7 @@ export const VarietySelector: React.FC = () => {
 
             <div className="selector-footer">
                 <Button
-                    variant="secondary"
+                    variant="primary"
                     size="full"
                     disabled={!selectedVariety}
                     onClick={handleSave}
