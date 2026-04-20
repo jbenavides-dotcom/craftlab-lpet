@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X, Minus, Plus } from 'lucide-react';
 import { Button } from '../components/ui/Button';
-import './FinalSteps.css';
+import './Selectors.css';
 
-export const QuantitySelector: React.FC = () => {
+export function QuantitySelector() {
     const navigate = useNavigate();
     const [bagSize, setBagSize] = useState<35 | 70>(35);
     const [quantity, setQuantity] = useState(1);
@@ -14,60 +14,87 @@ export const QuantitySelector: React.FC = () => {
 
     const totalWeight = bagSize * quantity;
 
+    const summaryChips = [
+        localStorage.getItem('fb_date') || '—',
+        localStorage.getItem('fb_variety') || '—',
+        localStorage.getItem('fb_flavor') || '—',
+        localStorage.getItem('fb_process') || '—',
+    ];
+
     return (
-        <div className="fb-final-container">
-            <header className="fb-final-header">
-                <div style={{ width: 24 }}></div> {/* Spacer */}
-                <span className="fb-final-title">Quantity & Packaging</span>
-                <button className="close-btn" onClick={() => navigate('/forward-booking/route')}>
-                    <X size={24} />
+        <div className="selector-container">
+            <header className="ds-header">
+                <button
+                    className="ds-header-close"
+                    onClick={() => navigate('/forward-booking/route')}
+                    aria-label="Back to selector"
+                >
+                    <X size={20} />
                 </button>
+                <span className="ds-header-title">Quantity &amp; packaging</span>
+                <div className="ds-header-spacer" aria-hidden="true" />
             </header>
 
-            <main className="fb-final-main">
-                {/* Dynamic choice summary mock */}
-                <div className="summary-bar">
-                    <div className="summary-item">Jan-Mar</div>
-                    <div className="summary-item">Geisha</div>
-                    <div className="summary-item">Fruity</div>
-                    <div className="summary-item">Natural</div>
+            <main className="ds-main fs-main-compact">
+                {/* Summary chips */}
+                <div className="qs-summary">
+                    {summaryChips.map((val, i) => (
+                        <span key={i} className="qs-summary-chip">{val}</span>
+                    ))}
                 </div>
 
-                <section className="quantity-section">
-                    <h2>Select Bag Size</h2>
-                    <div className="bag-size-toggle">
+                {/* Bag size toggle */}
+                <section className="qs-section">
+                    <h2 className="qs-section-title">Bag size</h2>
+                    <div className="qs-bag-toggle">
                         <button
-                            className={`bag-btn ${bagSize === 35 ? 'active' : ''}`}
+                            className={`qs-bag-btn${bagSize === 35 ? ' active' : ''}`}
                             onClick={() => setBagSize(35)}
+                            aria-pressed={bagSize === 35}
                         >
                             35 kg
                         </button>
                         <button
-                            className={`bag-btn ${bagSize === 70 ? 'active' : ''}`}
+                            className={`qs-bag-btn${bagSize === 70 ? ' active' : ''}`}
                             onClick={() => setBagSize(70)}
+                            aria-pressed={bagSize === 70}
                         >
                             70 kg
                         </button>
                     </div>
+                </section>
 
-                    <h2>Number of Bags</h2>
-                    <div className="counter-container">
-                        <button className="counter-btn" onClick={handleDecrement}>
-                            <Minus size={24} />
+                {/* Quantity counter */}
+                <section className="qs-section">
+                    <h2 className="qs-section-title">Number of bags</h2>
+                    <div className="qs-counter">
+                        <button
+                            className="qs-counter-btn"
+                            onClick={handleDecrement}
+                            disabled={quantity === 1}
+                            aria-label="Decrease quantity"
+                        >
+                            <Minus size={22} />
                         </button>
-                        <span className="counter-value">{quantity}</span>
-                        <button className="counter-btn" onClick={handleIncrement}>
-                            <Plus size={24} />
+                        <span className="qs-counter-value">{quantity}</span>
+                        <button
+                            className="qs-counter-btn"
+                            onClick={handleIncrement}
+                            aria-label="Increase quantity"
+                        >
+                            <Plus size={22} />
                         </button>
-                    </div>
-
-                    <div className="total-weight-display">
-                        Total Weight: <strong>{totalWeight} kg</strong>
                     </div>
                 </section>
+
+                {/* Total weight card */}
+                <div className="qs-total-card">
+                    <span className="qs-total-label">Total weight</span>
+                    <span className="qs-total-value">{totalWeight} kg</span>
+                </div>
             </main>
 
-            <div className="fb-final-footer">
+            <div className="ds-footer">
                 <Button
                     variant="primary"
                     size="full"
@@ -78,4 +105,4 @@ export const QuantitySelector: React.FC = () => {
             </div>
         </div>
     );
-};
+}
