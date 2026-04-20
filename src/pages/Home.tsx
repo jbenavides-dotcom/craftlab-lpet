@@ -5,11 +5,10 @@ import { Modal } from '../components/ui/Modal';
 import { Button } from '../components/ui/Button';
 import './Home.css';
 
-// Photo assets — served from Cloudinary CDN (no local files needed)
-const coffeeCherries =
-    'https://res.cloudinary.com/dtkwqoadf/image/upload/f_auto,q_auto/v1739544760/coffee-cherries_lpet.jpg';
-const coffeeFermentation =
-    'https://res.cloudinary.com/dtkwqoadf/image/upload/f_auto,q_auto/v1739544760/coffee-fermentation_lpet.jpg';
+// Photo assets — served from /public/home/
+const coffeeCherries = '/home/fb-cherries.png';
+const coffeeFermentation = '/home/cl-fermentation.png';
+const singleEstateImage = '/home/se-selection.png';
 
 export const Home: React.FC = () => {
     const navigate = useNavigate();
@@ -153,7 +152,7 @@ export const Home: React.FC = () => {
                     >
                         <div
                             className="pc-photo"
-                            style={{ background: 'linear-gradient(135deg, #9aa678 0%, #5a6840 100%)' }}
+                            style={{ backgroundImage: `url(${singleEstateImage})` }}
                             role="img"
                             aria-label="Single Estate coffee lot placeholder"
                         >
