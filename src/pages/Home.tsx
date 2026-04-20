@@ -7,8 +7,8 @@ import './Home.css';
 
 // Photo assets — served from /public/home/
 const coffeeCherries = '/home/fb-cherries.png';
-const coffeeFermentation = '/home/cl-fermentation.png';
-const singleEstateImage = '/home/se-selection.png';
+const coffeeFermentation = '/home/cl-lab.png';
+const singleEstateImage = '/home/se-grain.png';
 
 export const Home: React.FC = () => {
     const navigate = useNavigate();
