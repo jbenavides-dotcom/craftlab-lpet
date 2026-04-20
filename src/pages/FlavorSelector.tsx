@@ -147,10 +147,10 @@ export function FlavorSelector() {
             </div>
 
             {/* Main */}
-            <main className="ds-main">
-                <h1 className="ds-title">Define your flavor profile</h1>
-                <p className="ds-subtitle">
-                    Start by choosing a macro-style, then refine to the specific notes that define your cup.
+            <main className="ds-main fs-main-compact">
+                <h1 className="ds-title fs-title-compact">Flavor profile</h1>
+                <p className="ds-subtitle fs-subtitle-compact">
+                    Choose a macro-style, then refine to specific notes.
                 </p>
 
                 {/* Macroprofile pills */}
@@ -168,14 +168,9 @@ export function FlavorSelector() {
                     ))}
                 </div>
 
-                {/* Macro description */}
-                {activeMacroData && (
-                    <p className="fs-macro-desc">{activeMacroData.description}</p>
-                )}
-
                 {/* Sub-profile grid */}
                 {activeMacroData && (
-                    <div className="vs-grid">
+                    <div className="vs-grid fs-grid-tight">
                         {activeMacroData.subs.map(({ key, label, sub, Icon, gradient, iconColor }) => {
                             const isActive = selectedProfile === key;
                             return (
@@ -190,10 +185,10 @@ export function FlavorSelector() {
                                         style={{ background: gradient }}
                                         aria-hidden="true"
                                     >
-                                        <Icon size={44} color={iconColor} strokeWidth={1.5} />
+                                        <Icon size={32} color={iconColor} strokeWidth={1.75} />
                                         {isActive && (
                                             <div className="vs-card-check" aria-hidden="true">
-                                                <Check size={14} strokeWidth={3} />
+                                                <Check size={12} strokeWidth={3} />
                                             </div>
                                         )}
                                     </div>
