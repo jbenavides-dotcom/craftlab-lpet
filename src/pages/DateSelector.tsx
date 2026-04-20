@@ -11,15 +11,15 @@ interface DateOption {
     label: string;
     sub: string;
     Icon: React.ElementType;
-    bgColor: string;
+    gradient: string;
     iconColor: string;
 }
 
 const DATE_OPTIONS: DateOption[] = [
-    { key: 'Jan-Mar', label: 'Q1 · Jan – Mar', sub: 'Spring bloom · Bright acidity',      Icon: Flower2, bgColor: '#fef3c7', iconColor: '#b45309' },
-    { key: 'Apr-Jun', label: 'Q2 · Apr – Jun', sub: 'Peak harvest · Balanced body',         Icon: Sun,     bgColor: '#fed7aa', iconColor: '#c2410c' },
-    { key: 'Jul-Sep', label: 'Q3 · Jul – Sep', sub: 'Post-harvest · Fermented notes',       Icon: Leaf,    bgColor: '#d1fae5', iconColor: '#065f46' },
-    { key: 'Oct-Dec', label: 'Q4 · Oct – Dec', sub: 'Late cycle · Complex profiles',        Icon: Moon,    bgColor: '#ddd6fe', iconColor: '#5b21b6' },
+    { key: 'Jan-Mar', label: 'Q1 · Jan – Mar', sub: 'Spring bloom · Bright acidity',  Icon: Flower2, gradient: 'linear-gradient(135deg, #fef3c7 0%, #fcd34d 100%)', iconColor: '#b45309' },
+    { key: 'Apr-Jun', label: 'Q2 · Apr – Jun', sub: 'Peak harvest · Balanced body',     Icon: Sun,     gradient: 'linear-gradient(135deg, #fed7aa 0%, #fb923c 100%)', iconColor: '#c2410c' },
+    { key: 'Jul-Sep', label: 'Q3 · Jul – Sep', sub: 'Post-harvest · Fermented notes',   Icon: Leaf,    gradient: 'linear-gradient(135deg, #d1fae5 0%, #6ee7b7 100%)', iconColor: '#065f46' },
+    { key: 'Oct-Dec', label: 'Q4 · Oct – Dec', sub: 'Late cycle · Complex profiles',    Icon: Moon,    gradient: 'linear-gradient(135deg, #ddd6fe 0%, #a78bfa 100%)', iconColor: '#5b21b6' },
 ];
 
 const TOTAL_STEPS = 4;
@@ -82,29 +82,31 @@ export const DateSelector: React.FC = () => {
                 </p>
 
                 {/* Quarter cards */}
-                <div className="ds-cards-stack">
-                    {DATE_OPTIONS.map(({ key, label, sub, Icon, bgColor, iconColor }) => {
+                <div className="vs-grid">
+                    {DATE_OPTIONS.map(({ key, label, sub, Icon, gradient, iconColor }) => {
                         const isActive = selectedDate === key;
                         return (
                             <button
                                 key={key}
-                                className={`ds-card${isActive ? ' active' : ''}`}
+                                className={`vs-card${isActive ? ' active' : ''}`}
                                 onClick={() => setSelectedDate(key)}
                                 aria-pressed={isActive}
                             >
                                 <div
-                                    className="ds-card-icon"
-                                    style={{ backgroundColor: bgColor }}
+                                    className="vs-card-image"
+                                    style={{ background: gradient }}
                                     aria-hidden="true"
                                 >
-                                    <Icon size={22} color={iconColor} />
+                                    <Icon size={44} color={iconColor} strokeWidth={1.5} />
+                                    {isActive && (
+                                        <div className="vs-card-check" aria-hidden="true">
+                                            <Check size={14} strokeWidth={3} />
+                                        </div>
+                                    )}
                                 </div>
-                                <div className="ds-card-body">
-                                    <span className="ds-card-label">{label}</span>
-                                    <span className="ds-card-sub">{sub}</span>
-                                </div>
-                                <div className="ds-card-check" aria-hidden="true">
-                                    <Check size={13} strokeWidth={3} />
+                                <div className="vs-card-content">
+                                    <span className="vs-card-label">{label}</span>
+                                    <span className="vs-card-sub">{sub}</span>
                                 </div>
                             </button>
                         );

@@ -1,18 +1,19 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, ChevronRight, Calendar, Leaf, Coffee, TestTube2, Check } from 'lucide-react';
+import { X, Calendar, Leaf, Coffee, TestTube2, Check } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Modal } from '../components/ui/Modal';
 import { startFB } from '../lib/fb-utils';
 import type { FBStep } from '../lib/fb-utils';
 import './ForwardBookingRoute.css';
+import './Selectors.css';
 
 interface StepConfig {
     key: FBStep;
     label: string;
     placeholder: string;
     Icon: React.ComponentType<{ size?: number; strokeWidth?: number }>;
-    bgColor: string;
+    gradient: string;
     iconColor: string;
 }
 
@@ -22,7 +23,7 @@ const STEPS: StepConfig[] = [
         label: 'Harvest date',
         placeholder: 'Pick a harvest window',
         Icon: Calendar,
-        bgColor: '#fef3c7',
+        gradient: 'linear-gradient(135deg, #fef3c7 0%, #fcd34d 100%)',
         iconColor: '#b45309',
     },
     {
@@ -30,7 +31,7 @@ const STEPS: StepConfig[] = [
         label: 'Coffee variety',
         placeholder: 'Choose a variety',
         Icon: Leaf,
-        bgColor: '#d1fae5',
+        gradient: 'linear-gradient(135deg, #d1fae5 0%, #6ee7b7 100%)',
         iconColor: '#065f46',
     },
     {
@@ -38,7 +39,7 @@ const STEPS: StepConfig[] = [
         label: 'Flavor profile',
         placeholder: 'Define your flavor',
         Icon: Coffee,
-        bgColor: '#fce7f3',
+        gradient: 'linear-gradient(135deg, #fce7f3 0%, #f9a8d4 100%)',
         iconColor: '#9d174d',
     },
     {
@@ -46,7 +47,7 @@ const STEPS: StepConfig[] = [
         label: 'Process method',
         placeholder: 'Select fermentation',
         Icon: TestTube2,
-        bgColor: '#dbeafe',
+        gradient: 'linear-gradient(135deg, #dbeafe 0%, #93c5fd 100%)',
         iconColor: '#1e40af',
     },
 ];
@@ -116,44 +117,36 @@ export const ForwardBookingRoute: React.FC = () => {
             </p>
 
             {/* Cards stack */}
-            <main className="fb-cards-stack">
+            <main className="vs-grid" style={{ padding: '0 20px' }}>
                 {STEPS.map((step) => {
-                    const isCompleted = Boolean(progress[step.key]);
-                    const subtitle = getSubtitle(step);
+                    const value = progress[step.key];
+                    const isComplete = Boolean(value);
+                    const Icon = step.Icon;
                     return (
                         <button
                             key={step.key}
-                            className={`fb-card${isCompleted ? ' completed' : ''}`}
+                            className={`vs-card${isComplete ? ' active' : ''}`}
                             onClick={() => startFB(step.key, navigate)}
-                            aria-label={`${step.label}: ${subtitle}`}
+                            aria-label={`${step.label}: ${value ?? 'not selected'}`}
                         >
-                            {/* Icon circle */}
                             <div
-                                className="fb-card-icon"
-                                style={{ backgroundColor: step.bgColor }}
+                                className="vs-card-image"
+                                style={{ background: step.gradient }}
                                 aria-hidden="true"
                             >
-                                <step.Icon size={22} strokeWidth={1.75} style={{ color: step.iconColor }} />
+                                <Icon size={44} color={step.iconColor} strokeWidth={1.5} />
+                                {isComplete && (
+                                    <div className="vs-card-check" aria-hidden="true">
+                                        <Check size={14} strokeWidth={3} />
+                                    </div>
+                                )}
                             </div>
-
-                            {/* Body */}
-                            <div className="fb-card-body">
-                                <span className="fb-card-label">{step.label}</span>
-                                <span className={`fb-card-sub${isCompleted ? ' has-value' : ''}`}>
-                                    {subtitle}
+                            <div className="vs-card-content">
+                                <span className="vs-card-label">{step.label}</span>
+                                <span className={`vs-card-sub${value ? ' has-value' : ''}`}>
+                                    {value ?? step.placeholder}
                                 </span>
                             </div>
-
-                            {/* Status badge */}
-                            <div
-                                className={`fb-card-status${isCompleted ? ' completed' : ' pending'}`}
-                                aria-hidden="true"
-                            >
-                                {isCompleted && <Check size={12} strokeWidth={2.5} />}
-                            </div>
-
-                            {/* Chevron */}
-                            <ChevronRight size={18} className="fb-card-chevron" aria-hidden="true" />
                         </button>
                     );
                 })}

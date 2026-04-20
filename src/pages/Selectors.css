@@ -582,3 +582,8 @@
     font-size: 0.72rem;
     line-height: 1.4;
 }
+
+.vs-card-sub.has-value {
+    color: var(--cl-navy-dark, #0A1E3F);
+    font-weight: 500;
+}
