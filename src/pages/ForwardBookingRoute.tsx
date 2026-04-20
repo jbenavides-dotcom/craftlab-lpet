@@ -162,7 +162,7 @@ export const ForwardBookingRoute: React.FC = () => {
             {/* Footer CTA */}
             <div className="fb-route-footer">
                 <Button
-                    variant={allCompleted ? 'primary' : 'secondary'}
+                    variant="primary"
                     size="full"
                     onClick={() => navigate('/forward-booking/quantity')}
                     disabled={!allCompleted}
