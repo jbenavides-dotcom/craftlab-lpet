@@ -16,10 +16,10 @@ interface DateOption {
 }
 
 const DATE_OPTIONS: DateOption[] = [
-    { key: 'Jan-Mar', label: 'Q1 · Jan – Mar', sub: 'Spring bloom · Bright acidity',      Icon: Flower2, bgColor: '#fef3c7', iconColor: '#b45309' },
-    { key: 'Apr-Jun', label: 'Q2 · Apr – Jun', sub: 'Peak harvest · Balanced body',         Icon: Sun,     bgColor: '#fed7aa', iconColor: '#c2410c' },
-    { key: 'Jul-Sep', label: 'Q3 · Jul – Sep', sub: 'Post-harvest · Fermented notes',       Icon: Leaf,    bgColor: '#d1fae5', iconColor: '#065f46' },
-    { key: 'Oct-Dec', label: 'Q4 · Oct – Dec', sub: 'Late cycle · Complex profiles',        Icon: Moon,    bgColor: '#ddd6fe', iconColor: '#5b21b6' },
+    { key: 'Jan-Mar', label: 'Q1 · Jan – Mar', sub: 'Spring bloom · Bright acidity',      Icon: Flower2, bgColor: '#FBBF24', iconColor: '#ffffff' },
+    { key: 'Apr-Jun', label: 'Q2 · Apr – Jun', sub: 'Peak harvest · Balanced body',         Icon: Sun,     bgColor: '#F97316', iconColor: '#ffffff' },
+    { key: 'Jul-Sep', label: 'Q3 · Jul – Sep', sub: 'Post-harvest · Fermented notes',       Icon: Leaf,    bgColor: '#10B981', iconColor: '#ffffff' },
+    { key: 'Oct-Dec', label: 'Q4 · Oct – Dec', sub: 'Late cycle · Complex profiles',        Icon: Moon,    bgColor: '#8B5CF6', iconColor: '#ffffff' },
 ];
 
 const TOTAL_STEPS = 4;
@@ -47,6 +47,12 @@ export const DateSelector: React.FC = () => {
 
             {/* ── Header ── */}
             <header className="ds-header">
+                <div className="ds-header-spacer" aria-hidden="true" />
+                <img
+                    src="https://res.cloudinary.com/dtkwqoadf/image/upload/v1735702592/logo_horizontal_ss9bvn.png"
+                    alt="La Palma & El Tucán"
+                    className="ds-header-logo"
+                />
                 <button
                     className="ds-header-close"
                     onClick={() => setShowExitConfirm(true)}
@@ -54,8 +60,6 @@ export const DateSelector: React.FC = () => {
                 >
                     <X size={20} />
                 </button>
-                <span className="ds-header-title">Harvest date</span>
-                <div className="ds-header-spacer" aria-hidden="true" />
             </header>
 
             {/* ── Progress ── */}
