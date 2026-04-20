@@ -15,6 +15,12 @@ export function Success() {
 
     return (
         <div className="selector-container" style={{ background: '#ffffff' }}>
+            <header className="ds-header">
+                <div className="ds-header-spacer" aria-hidden="true" />
+                <span className="ds-header-title">Forward Booking</span>
+                <div className="ds-header-spacer" aria-hidden="true" />
+            </header>
+
             <main className="ss-main">
                 <div className="ss-check-wrap">
                     <Check size={52} strokeWidth={3} color="#ffffff" />
