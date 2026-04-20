@@ -31,7 +31,7 @@
     flex-direction: column;
     height: 100vh;
     max-height: 100dvh;
-    background-color: var(--cl-bg);
+    background: linear-gradient(180deg, #f5f7f0 0%, #fafaf5 50%, #ffffff 100%);
     color: var(--cl-text);
     overflow: hidden;
     transition: opacity 0.4s ease;
@@ -51,6 +51,7 @@
     background-image: url('/craftlab/green-beans.jpg');
     background-size: cover;
     background-position: center;
+    box-shadow: 0 4px 20px rgba(45, 59, 26, 0.15);
 }
 
 .cl-onb-hero-video {
