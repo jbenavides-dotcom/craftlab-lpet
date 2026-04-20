@@ -62,23 +62,11 @@ export const ForwardBookingRoute: React.FC = () => {
         process: localStorage.getItem('fb_process'),
     });
 
-    const isStarted = localStorage.getItem('fb_started') === 'true';
     const allCompleted = Boolean(
         progress.date && progress.variety && progress.flavor && progress.process
     );
 
     const completedCount = Object.values(progress).filter(Boolean).length;
-
-    React.useEffect(() => {
-        if (isStarted && !allCompleted) {
-            const firstIncomplete = (['date', 'variety', 'flavor', 'process'] as FBStep[]).find(
-                (s) => !localStorage.getItem(`fb_${s}`)
-            );
-            if (firstIncomplete) {
-                navigate(`/forward-booking/${firstIncomplete}`);
-            }
-        }
-    }, [isStarted]);
 
     const getSubtitle = (step: StepConfig): string => {
         const value = progress[step.key];
