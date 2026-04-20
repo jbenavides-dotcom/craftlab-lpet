@@ -11,15 +11,44 @@ interface VarietyOption {
     label: string;
     sub: string;
     Icon: React.ElementType;
-    bgColor: string;
+    gradient: string;
     iconColor: string;
+    image?: string;
 }
 
 const VARIETY_OPTIONS: VarietyOption[] = [
-    { key: 'Geisha',  label: 'Geisha',  sub: 'Floral · Jasmine · Bergamot',  Icon: Crown,  bgColor: '#fce7f3', iconColor: '#9d174d' },
-    { key: 'Sidra',   label: 'Sidra',   sub: 'Tropical · Fruit-forward',     Icon: Cherry, bgColor: '#fee2e2', iconColor: '#991b1b' },
-    { key: 'Java',    label: 'Java',    sub: 'Chocolate · Full body',        Icon: Coffee, bgColor: '#d1fae5', iconColor: '#065f46' },
-    { key: 'Caturra', label: 'Caturra', sub: 'Balanced · Sweet · Mild',      Icon: Sprout, bgColor: '#fef3c7', iconColor: '#b45309' },
+    {
+        key: 'Geisha',
+        label: 'Geisha',
+        sub: 'Floral · Jasmine · Bergamot',
+        Icon: Crown,
+        gradient: 'linear-gradient(135deg, #fce7f3 0%, #f9a8d4 100%)',
+        iconColor: '#9d174d',
+    },
+    {
+        key: 'Sidra',
+        label: 'Sidra',
+        sub: 'Tropical · Fruit-forward',
+        Icon: Cherry,
+        gradient: 'linear-gradient(135deg, #fee2e2 0%, #fca5a5 100%)',
+        iconColor: '#991b1b',
+    },
+    {
+        key: 'Java',
+        label: 'Java',
+        sub: 'Chocolate · Full body',
+        Icon: Coffee,
+        gradient: 'linear-gradient(135deg, #d1fae5 0%, #6ee7b7 100%)',
+        iconColor: '#065f46',
+    },
+    {
+        key: 'Caturra',
+        label: 'Caturra',
+        sub: 'Balanced · Sweet · Mild',
+        Icon: Sprout,
+        gradient: 'linear-gradient(135deg, #fef3c7 0%, #fcd34d 100%)',
+        iconColor: '#b45309',
+    },
 ];
 
 const TOTAL_STEPS = 4;
@@ -81,30 +110,32 @@ export const VarietySelector: React.FC = () => {
                     Each variety expresses unique genetics, cup profiles and terroir characteristics from our farm.
                 </p>
 
-                {/* Variety cards */}
-                <div className="ds-cards-stack">
-                    {VARIETY_OPTIONS.map(({ key, label, sub, Icon, bgColor, iconColor }) => {
+                {/* Variety product cards */}
+                <div className="vs-grid">
+                    {VARIETY_OPTIONS.map(({ key, label, sub, Icon, gradient, iconColor, image }) => {
                         const isActive = selectedVariety === key;
                         return (
                             <button
                                 key={key}
-                                className={`ds-card${isActive ? ' active' : ''}`}
+                                className={`vs-card${isActive ? ' active' : ''}`}
                                 onClick={() => setSelectedVariety(key)}
                                 aria-pressed={isActive}
                             >
                                 <div
-                                    className="ds-card-icon"
-                                    style={{ backgroundColor: bgColor }}
+                                    className="vs-card-image"
+                                    style={image ? { backgroundImage: `url(${image})` } : { background: gradient }}
                                     aria-hidden="true"
                                 >
-                                    <Icon size={22} color={iconColor} />
+                                    {!image && <Icon size={44} color={iconColor} strokeWidth={1.5} />}
+                                    {isActive && (
+                                        <div className="vs-card-check" aria-hidden="true">
+                                            <Check size={14} strokeWidth={3} />
+                                        </div>
+                                    )}
                                 </div>
-                                <div className="ds-card-body">
-                                    <span className="ds-card-label">{label}</span>
-                                    <span className="ds-card-sub">{sub}</span>
-                                </div>
-                                <div className="ds-card-check" aria-hidden="true">
-                                    <Check size={13} strokeWidth={3} />
+                                <div className="vs-card-content">
+                                    <span className="vs-card-label">{label}</span>
+                                    <span className="vs-card-sub">{sub}</span>
                                 </div>
                             </button>
                         );

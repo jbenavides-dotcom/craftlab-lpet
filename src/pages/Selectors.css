@@ -498,3 +498,80 @@
     position: sticky;
     bottom: 0;
 }
+
+/* ===== Variety Selector — product cards grid ===== */
+.vs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    padding-top: 8px;
+}
+
+.vs-card {
+    background: #ffffff;
+    border: 1.5px solid #f3f4f6;
+    border-radius: 16px;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    font-family: inherit;
+    text-align: left;
+}
+
+.vs-card:active {
+    transform: scale(0.98);
+}
+
+.vs-card.active {
+    border: 2px solid #000000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.vs-card-image {
+    aspect-ratio: 4 / 3;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.vs-card-check {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 26px;
+    height: 26px;
+    background: #000000;
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.vs-card-content {
+    padding: 12px 14px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.vs-card-label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--cl-navy-dark, #0A1E3F);
+    line-height: 1.2;
+}
+
+.vs-card-sub {
+    color: #6b7280;
+    font-size: 0.72rem;
+    line-height: 1.4;
+}
