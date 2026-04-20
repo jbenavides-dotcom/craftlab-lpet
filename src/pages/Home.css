@@ -165,7 +165,7 @@
 }
 
 .pc-photo {
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 16 / 10;
     position: relative;
     background-size: cover;
     background-position: center;
