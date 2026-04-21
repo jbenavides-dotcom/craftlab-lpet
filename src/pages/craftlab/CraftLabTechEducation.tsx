@@ -32,8 +32,18 @@ const TANK_SVG = (
             <animate attributeName="cy" from="180" to="80" dur="3.5s" repeatCount="indefinite" />
             <animate attributeName="opacity" from="0" to="0" values="0;0.8;0" dur="3.5s" repeatCount="indefinite" />
         </circle>
-        {/* Label BIO-TANK A1 vertical */}
-        <text x="46" y="115" fontSize="10" fill="#9ca3af" transform="rotate(-90, 46, 115)" letterSpacing="2">BIO-TANK A1</text>
+        {/* Label BIO-TANK A1 dentro del tanque (top) */}
+        <text
+            x="160"
+            y="52"
+            fontSize="11"
+            fontWeight="700"
+            fill="#0A1E3F"
+            textAnchor="middle"
+            letterSpacing="3"
+        >
+            BIO-TANK A1
+        </text>
     </svg>
 );
 
