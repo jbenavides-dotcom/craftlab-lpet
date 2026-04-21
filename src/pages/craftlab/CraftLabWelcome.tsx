@@ -139,16 +139,7 @@ export const CraftLabWelcome: React.FC = () => {
                                 </div>
                                 <div className="clw-step-card-body">
                                     <h3 className="clw-step-title">{roadmapStep.title}</h3>
-                                    {!roadmapStep.pills && (
-                                        <p className="clw-step-sub">{roadmapStep.sub}</p>
-                                    )}
-                                    {roadmapStep.pills && (
-                                        <div className="clw-step-pills">
-                                            {roadmapStep.pills.map(p => (
-                                                <span key={p} className="clw-step-pill">{p}</span>
-                                            ))}
-                                        </div>
-                                    )}
+                                    <p className="clw-step-sub">{roadmapStep.sub}</p>
                                 </div>
                             </div>
                         ))}
