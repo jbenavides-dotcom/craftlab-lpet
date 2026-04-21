@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, ChevronUp, Check, Package } from 'lucide-react';
+import { X, ChevronUp, Check, Clock, FlaskConical, Droplets, Sun, Zap, Flower2, Moon, Leaf, Package } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Slider } from '../../components/ui/Slider';
 import { ExitConfirmModal } from '../../components/ExitConfirmModal';
@@ -23,25 +23,51 @@ interface ConfigState {
 }
 
 const MACRO_PROFILES = [
-    { id: 'fermented', label: 'Fermented', desc: 'Bold, fruity, and complex', color: '#9b2335' },
-    { id: 'bright', label: 'Bright', desc: 'Crisp, acidic, and floral', color: '#e6a817' },
-    { id: 'classic', label: 'Classic', desc: 'Balanced, sweet, and comforting', color: '#6b5344' },
+    {
+        id: 'fermented',
+        label: 'Fermented',
+        desc: 'Bold, fruity, and complex',
+        color: '#9b2335',
+        gradient: 'linear-gradient(135deg, #fee2e2 0%, #fca5a5 100%)',
+    },
+    {
+        id: 'bright',
+        label: 'Bright',
+        desc: 'Crisp, acidic, and floral',
+        color: '#e6a817',
+        gradient: 'linear-gradient(135deg, #fef3c7 0%, #fbbf24 100%)',
+    },
+    {
+        id: 'classic',
+        label: 'Classic',
+        desc: 'Balanced, sweet, and comforting',
+        color: '#6b5344',
+        gradient: 'linear-gradient(135deg, #fef3c7 0%, #d4a373 100%)',
+    },
 ];
 
-const FLAVOR_PROFILES: Record<string, { id: string, label: string, color: string }[]> = {
+const FLAVOR_PROFILES: Record<string, { id: string; label: string; color: string; gradient: string }[]> = {
     fermented: [
-        { id: 'f1', label: 'Tropical / Spicy / Cacao', color: '#b78a48' },
-        { id: 'f2', label: 'Red Fruits / Sweet', color: '#9b2335' }
+        { id: 'f1', label: 'Tropical / Spicy / Cacao', color: '#b78a48', gradient: 'linear-gradient(135deg, #fef3c7 0%, #f59e0b 100%)' },
+        { id: 'f2', label: 'Red Fruits / Sweet',       color: '#9b2335', gradient: 'linear-gradient(135deg, #fee2e2 0%, #f87171 100%)' },
     ],
     bright: [
-        { id: 'b1', label: 'Citrus / Floral / Tea', color: '#e6a817' },
-        { id: 'b2', label: 'Green Apple / Crisp', color: '#5c9e3a' }
+        { id: 'b1', label: 'Citrus / Floral / Tea',  color: '#e6a817', gradient: 'linear-gradient(135deg, #fef9c3 0%, #fde047 100%)' },
+        { id: 'b2', label: 'Green Apple / Crisp',    color: '#5c9e3a', gradient: 'linear-gradient(135deg, #dcfce7 0%, #86efac 100%)' },
     ],
     classic: [
-        { id: 'c1', label: 'Balanced / Aromatic', color: '#6b5344' },
-        { id: 'c2', label: 'Chocolate / Caramel', color: '#3d2b1f' }
-    ]
+        { id: 'c1', label: 'Balanced / Aromatic',    color: '#6b5344', gradient: 'linear-gradient(135deg, #fef3c7 0%, #d4a373 100%)' },
+        { id: 'c2', label: 'Chocolate / Caramel',    color: '#3d2b1f', gradient: 'linear-gradient(135deg, #fef3c7 0%, #92400e 100%)' },
+    ],
 };
+
+// Cycle of 4 gradients for varieties
+const VARIETY_GRADIENTS = [
+    'linear-gradient(135deg, #fce7f3 0%, #f9a8d4 100%)',
+    'linear-gradient(135deg, #d1fae5 0%, #6ee7b7 100%)',
+    'linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%)',
+    'linear-gradient(135deg, #fef3c7 0%, #fcd34d 100%)',
+];
 
 const VARIETIES = [
     { id: 'geisha',       label: 'Geisha',              desc: 'Delicate, tea-like, jasmine' },
@@ -56,25 +82,34 @@ const VARIETIES = [
     { id: 'tekisik',      label: 'Tekisik',             desc: 'Salvadoran selection. Bright citrus, honey sweetness, refined.' },
 ];
 
-const CATEGORIES: Record<string, { id: string, label: string }[]> = {
+const CATEGORIES: Record<string, { id: string; label: string }[]> = {
     fermented: [{ id: 'bio-innovation', label: 'Bio-Innovation' }],
     bright: [{ id: 'lactic', label: 'Lactic' }, { id: 'natural', label: 'Natural' }],
-    classic: [{ id: 'washed', label: 'Washed' }, { id: 'honey', label: 'Honey' }]
+    classic: [{ id: 'washed', label: 'Washed' }, { id: 'honey', label: 'Honey' }],
 };
 
-const METHODS: Record<string, { id: string, label: string }[]> = {
+const METHODS: Record<string, { id: string; label: string }[]> = {
     'bio-innovation': [{ id: 'mucilage-ferm', label: 'Mucilage' }, { id: 'cherry-ferm', label: 'Cherry' }],
-    'lactic': [{ id: 'lactic-std', label: 'Lactic Standard' }],
-    'natural': [{ id: 'natural-std', label: 'Natural Standard' }],
-    'washed': [{ id: 'washed-std', label: 'Washed Standard' }],
-    'honey': [{ id: 'honey-std', label: 'Honey Standard' }]
+    'lactic':         [{ id: 'lactic-std',    label: 'Lactic Standard' }],
+    'natural':        [{ id: 'natural-std',   label: 'Natural Standard' }],
+    'washed':         [{ id: 'washed-std',    label: 'Washed Standard' }],
+    'honey':          [{ id: 'honey-std',     label: 'Honey Standard' }],
 };
 
 const SHIPMENT_QUARTERS = [
-    { id: 'q1' as const, label: 'Q1', range: 'Jan – Mar', icon: '🌱' },
-    { id: 'q2' as const, label: 'Q2', range: 'Apr – Jun', icon: '☀️' },
-    { id: 'q3' as const, label: 'Q3', range: 'Jul – Sep', icon: '🍂' },
-    { id: 'q4' as const, label: 'Q4', range: 'Oct – Dec', icon: '❄️' },
+    { id: 'q1' as const, label: 'Q1', range: 'Jan – Mar', Icon: Flower2, gradient: 'linear-gradient(135deg, #fef3c7 0%, #fcd34d 100%)', iconColor: '#b45309' },
+    { id: 'q2' as const, label: 'Q2', range: 'Apr – Jun', Icon: Sun,     gradient: 'linear-gradient(135deg, #fed7aa 0%, #fb923c 100%)', iconColor: '#c2410c' },
+    { id: 'q3' as const, label: 'Q3', range: 'Jul – Sep', Icon: Leaf,    gradient: 'linear-gradient(135deg, #d1fae5 0%, #6ee7b7 100%)', iconColor: '#065f46' },
+    { id: 'q4' as const, label: 'Q4', range: 'Oct – Dec', Icon: Moon,    gradient: 'linear-gradient(135deg, #ddd6fe 0%, #a78bfa 100%)', iconColor: '#5b21b6' },
+];
+
+// Param sliders metadata
+const PARAM_META = [
+    { key: 'stabilization' as const, label: 'Stabilization Time', Icon: Clock,        min: 0, max: 200, step: 12, unit: ' hrs' },
+    { key: 'cherryFerm'    as const, label: 'Cherry Fermentation', Icon: FlaskConical, min: 0, max: 200, step: 12, unit: ' hrs' },
+    { key: 'mucilageFerm'  as const, label: 'Mucilage Fermentation', Icon: Droplets,  min: 0, max: 200, step: 12, unit: ' hrs' },
+    { key: 'solarDry'      as const, label: 'Solar Dry',            Icon: Sun,         min: 0, max: 100, step: 1,  unit: ' days' },
+    { key: 'mechDry'       as const, label: 'Mechanical Dry',       Icon: Zap,         min: 0, max: 100, step: 6,  unit: ' hrs' },
 ];
 
 // Section ID -> image mapping
@@ -86,7 +121,6 @@ const SECTION_IMAGES: Record<string, string> = {
     'sec-category': 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1200&auto=format&fit=crop',
     'sec-method':   'https://images.unsplash.com/photo-1447933601403-0c6688de566e?q=80&w=1200&auto=format&fit=crop',
     'sec-params':   'https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=1200&auto=format&fit=crop',
-    // TODO: replace with actual shipment / calendar image
     'sec-shipment': 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=1200&auto=format&fit=crop',
 };
 
@@ -131,17 +165,17 @@ function displayValue(key: keyof ConfigState, config: ConfigState): string | nul
 }
 
 const REVIEW_ROWS: { key: keyof ConfigState; label: string }[] = [
-    { key: 'macro',         label: 'Macro Profile' },
-    { key: 'flavor',        label: 'Flavor Profile' },
-    { key: 'variety',       label: 'Coffee Variety' },
-    { key: 'quantity',      label: 'Quantity' },
-    { key: 'category',      label: 'Processing Category' },
-    { key: 'process',       label: 'Processing Method' },
-    { key: 'stabilization', label: 'Stabilization Time' },
-    { key: 'cherryFerm',    label: 'Cherry Fermentation' },
-    { key: 'mucilageFerm',  label: 'Mucilage Fermentation' },
-    { key: 'solarDry',      label: 'Solar Dry' },
-    { key: 'mechDry',       label: 'Mechanical Dry' },
+    { key: 'macro',          label: 'Macro Profile' },
+    { key: 'flavor',         label: 'Flavor Profile' },
+    { key: 'variety',        label: 'Coffee Variety' },
+    { key: 'quantity',       label: 'Quantity' },
+    { key: 'category',       label: 'Processing Category' },
+    { key: 'process',        label: 'Processing Method' },
+    { key: 'stabilization',  label: 'Stabilization Time' },
+    { key: 'cherryFerm',     label: 'Cherry Fermentation' },
+    { key: 'mucilageFerm',   label: 'Mucilage Fermentation' },
+    { key: 'solarDry',       label: 'Solar Dry' },
+    { key: 'mechDry',        label: 'Mechanical Dry' },
     { key: 'shipmentWindow', label: 'Shipment Window' },
 ];
 
@@ -202,7 +236,6 @@ export const CraftLabConfigurator: React.FC = () => {
 
     useEffect(() => {
         if (!showSheet) return;
-        // Focus close button
         sheetCloseRef.current?.focus();
 
         const handleKey = (e: KeyboardEvent) => {
@@ -215,7 +248,7 @@ export const CraftLabConfigurator: React.FC = () => {
                 );
                 if (focusable.length === 0) return;
                 const first = focusable[0];
-                const last = focusable[focusable.length - 1];
+                const last  = focusable[focusable.length - 1];
                 if (e.shiftKey) {
                     if (document.activeElement === first) { e.preventDefault(); last.focus(); }
                 } else {
@@ -248,6 +281,19 @@ export const CraftLabConfigurator: React.FC = () => {
                 <button className="cl-close-btn" onClick={() => setShowExitModal(true)} aria-label="Exit configurator">
                     <X size={20} />
                 </button>
+
+                {/* Progress bar — 12 segments */}
+                <div className="cl-progress-wrap" aria-label={`${decisionCount} of 12 decisions completed`}>
+                    <div className="cl-progress-track">
+                        {Array.from({ length: 12 }, (_, i) => (
+                            <div
+                                key={i}
+                                className={`cl-progress-seg${i < decisionCount ? ' done' : ''}`}
+                            />
+                        ))}
+                    </div>
+                    <div className="cl-progress-label">{decisionCount} of 12</div>
+                </div>
             </header>
 
             <div className="cl-body">
@@ -261,7 +307,7 @@ export const CraftLabConfigurator: React.FC = () => {
                         className="cl-visual-image"
                     />
                     <div className="cl-visual-gradient" />
-                    <div className="cl-visual-tag">
+                    <div className={`cl-visual-tag${config.macro ? ' has-selection' : ''}`}>
                         {config.macro ? config.macro.toUpperCase() : 'SELECT PROFILE'}
                         {config.flavor ? ` · ${config.flavor}` : ''}
                     </div>
@@ -272,32 +318,35 @@ export const CraftLabConfigurator: React.FC = () => {
 
                     {/* SECTION 1: MACRO PROFILE */}
                     <section className="config-section" id="sec-macro">
-                        <div className="section-label">Step 01</div>
+                        <div className="section-label">STEP 01 · MACRO PROFILE</div>
                         <h2 className="section-title">
-                            Macro Profile
-                            {/* TODO cata: refine copy */}
+                            Macro <span className="cl-accent-text">Profile</span>
                             <InfoPopover title="Macro Profile">
                                 A macroprofile is the overall character of your coffee. Fermented leans into funky, complex notes. Bright leans into acidity and clarity. Classic leans into body and balance.
                             </InfoPopover>
                         </h2>
                         <p className="section-desc">Choose the flavor direction that defines your lot.</p>
-                        <div className="tesla-options-list">
+                        <div className="cl-choices-list">
                             {MACRO_PROFILES.map(m => (
                                 <div
                                     key={m.id}
-                                    className={`tesla-option ${config.macro === m.id ? 'selected' : ''}`}
+                                    className={`cl-choice${config.macro === m.id ? ' selected' : ''}`}
                                     onClick={() => updateConfig('macro', m.id)}
-                                    style={config.macro === m.id ? { borderColor: m.color } : {}}
                                     role="radio"
                                     aria-checked={config.macro === m.id}
                                     tabIndex={0}
-                                    onKeyDown={e => e.key === 'Enter' || e.key === ' ' ? updateConfig('macro', m.id) : undefined}
+                                    onKeyDown={e => (e.key === 'Enter' || e.key === ' ') ? updateConfig('macro', m.id) : undefined}
                                 >
-                                    <div>
-                                        <div className="topt-name">{m.label}</div>
-                                        <div className="topt-desc">{m.desc}</div>
+                                    <div className="cl-choice-icon" style={{ background: m.gradient }} />
+                                    <div className="cl-choice-content">
+                                        <div className="cl-choice-title">{m.label}</div>
+                                        <div className="cl-choice-desc">{m.desc}</div>
                                     </div>
-                                    {config.macro === m.id && <Check size={18} color={m.color} />}
+                                    {config.macro === m.id && (
+                                        <div className="cl-choice-check">
+                                            <Check size={14} />
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                         </div>
@@ -306,32 +355,34 @@ export const CraftLabConfigurator: React.FC = () => {
                     {/* SECTION 2: FLAVOR PROFILE */}
                     {config.macro && (
                         <section className="config-section fade-in" id="sec-flavor">
-                            <div className="section-label">Step 02</div>
+                            <div className="section-label">STEP 02 · FLAVOR PROFILE</div>
                             <h2 className="section-title">
-                                Flavor Profile
-                                {/* TODO cata: refine copy */}
+                                Flavor <span className="cl-accent-text">Profile</span>
                                 <InfoPopover title="Flavor Profile">
                                     Within each macroprofile, flavor profiles define specific note families — like tropical fruits, citrus or cocoa — that your fermentation will amplify.
                                 </InfoPopover>
                             </h2>
                             <p className="section-desc">Select the specific tasting notes for your coffee.</p>
-                            <div className="tesla-options-list">
+                            <div className="cl-choices-list">
                                 {FLAVOR_PROFILES[config.macro].map(f => (
                                     <div
                                         key={f.id}
-                                        className={`tesla-option ${config.flavor === f.label ? 'selected' : ''}`}
+                                        className={`cl-choice${config.flavor === f.label ? ' selected' : ''}`}
                                         onClick={() => updateConfig('flavor', f.label)}
-                                        style={config.flavor === f.label ? { borderColor: f.color } : {}}
                                         role="radio"
                                         aria-checked={config.flavor === f.label}
                                         tabIndex={0}
-                                        onKeyDown={e => e.key === 'Enter' || e.key === ' ' ? updateConfig('flavor', f.label) : undefined}
+                                        onKeyDown={e => (e.key === 'Enter' || e.key === ' ') ? updateConfig('flavor', f.label) : undefined}
                                     >
-                                        <div className="flavor-dot" style={{ background: f.color }} />
-                                        <div style={{ flex: 1 }}>
-                                            <div className="topt-name">{f.label}</div>
+                                        <div className="cl-choice-icon" style={{ background: f.gradient }} />
+                                        <div className="cl-choice-content">
+                                            <div className="cl-choice-title">{f.label}</div>
                                         </div>
-                                        {config.flavor === f.label && <Check size={18} color={f.color} />}
+                                        {config.flavor === f.label && (
+                                            <div className="cl-choice-check">
+                                                <Check size={14} />
+                                            </div>
+                                        )}
                                     </div>
                                 ))}
                             </div>
@@ -341,31 +392,38 @@ export const CraftLabConfigurator: React.FC = () => {
                     {/* SECTION 3: VARIETY */}
                     {config.flavor && (
                         <section className="config-section fade-in" id="sec-variety">
-                            <div className="section-label">Step 03</div>
+                            <div className="section-label">STEP 03 · COFFEE VARIETY</div>
                             <h2 className="section-title">
-                                Coffee Variety
-                                {/* TODO cata: refine copy */}
+                                Coffee <span className="cl-accent-text">Variety</span>
                                 <InfoPopover title="Coffee Variety">
                                     The genetic material of your coffee. Each variety has distinct cup potential: Geisha floral, Sidra crystalline, Pink Bourbon tea-like. The variety sets the ceiling; process reveals it.
                                 </InfoPopover>
                             </h2>
                             <p className="section-desc">Each variety brings its own genetic expression to the cup.</p>
-                            <div className="tesla-options-list">
-                                {VARIETIES.map(v => (
+                            <div className="cl-choices-list cl-choices-grid">
+                                {VARIETIES.map((v, idx) => (
                                     <div
                                         key={v.id}
-                                        className={`tesla-option ${config.variety === v.id ? 'selected' : ''}`}
+                                        className={`cl-choice${config.variety === v.id ? ' selected' : ''}`}
                                         onClick={() => updateConfig('variety', v.id)}
                                         role="radio"
                                         aria-checked={config.variety === v.id}
                                         tabIndex={0}
-                                        onKeyDown={e => e.key === 'Enter' || e.key === ' ' ? updateConfig('variety', v.id) : undefined}
+                                        onKeyDown={e => (e.key === 'Enter' || e.key === ' ') ? updateConfig('variety', v.id) : undefined}
                                     >
-                                        <div>
-                                            <div className="topt-name">{v.label}</div>
-                                            <div className="topt-desc">{v.desc}</div>
+                                        <div
+                                            className="cl-choice-icon cl-choice-icon--sm"
+                                            style={{ background: VARIETY_GRADIENTS[idx % VARIETY_GRADIENTS.length] }}
+                                        />
+                                        <div className="cl-choice-content">
+                                            <div className="cl-choice-title">{v.label}</div>
+                                            <div className="cl-choice-desc">{v.desc}</div>
                                         </div>
-                                        {config.variety === v.id && <Check size={18} />}
+                                        {config.variety === v.id && (
+                                            <div className="cl-choice-check">
+                                                <Check size={14} />
+                                            </div>
+                                        )}
                                     </div>
                                 ))}
                             </div>
@@ -375,24 +433,35 @@ export const CraftLabConfigurator: React.FC = () => {
                     {/* SECTION 4: QUANTITY */}
                     {config.variety && (
                         <section className="config-section fade-in" id="sec-quantity">
-                            <div className="section-label">Step 04</div>
+                            <div className="section-label">STEP 04 · QUANTITY</div>
                             <h2 className="section-title">
-                                Quantity
-                                {/* TODO cata: refine copy */}
+                                Select <span className="cl-accent-text">Quantity</span>
                                 <InfoPopover title="Quantity">
                                     7.3 kg of cherries = 1 kg of green coffee. We work in 12.5 kg green lots, allowing small-scale experimentation without committing to a full harvest.
                                 </InfoPopover>
                             </h2>
                             <p className="section-desc">Each box is 35 kg of green coffee. Max. 500 boxes per season.</p>
-                            <div className="quantity-chips">
+                            <div className="cl-choices-list">
                                 {['35kg', '70kg', '105kg'].map(q => (
                                     <button
                                         key={q}
-                                        className={`qty-chip ${config.quantity === q ? 'selected' : ''}`}
+                                        className={`cl-choice cl-qty-btn${config.quantity === q ? ' selected' : ''}`}
                                         onClick={() => updateConfig('quantity', q)}
                                         aria-pressed={config.quantity === q}
                                     >
-                                        {q === '35kg' ? '1 Box · 35 kg' : q === '70kg' ? '2 Boxes · 70 kg' : '3 Boxes · 105 kg'}
+                                        <div className="cl-choice-icon" style={{ background: 'linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%)' }}>
+                                            <Package size={18} color="#1D4ED8" />
+                                        </div>
+                                        <div className="cl-choice-content">
+                                            <div className="cl-choice-title">
+                                                {q === '35kg' ? '1 Box · 35 kg' : q === '70kg' ? '2 Boxes · 70 kg' : '3 Boxes · 105 kg'}
+                                            </div>
+                                        </div>
+                                        {config.quantity === q && (
+                                            <div className="cl-choice-check">
+                                                <Check size={14} />
+                                            </div>
+                                        )}
                                     </button>
                                 ))}
                             </div>
@@ -402,28 +471,34 @@ export const CraftLabConfigurator: React.FC = () => {
                     {/* SECTION 5: PROCESSING CATEGORY */}
                     {config.quantity && config.macro && (
                         <section className="config-section fade-in" id="sec-category">
-                            <div className="section-label">Step 05</div>
+                            <div className="section-label">STEP 05 · PROCESSING CATEGORY</div>
                             <h2 className="section-title">
-                                Processing Category
-                                {/* TODO cata: refine copy */}
+                                Processing <span className="cl-accent-text">Category</span>
                                 <InfoPopover title="Processing Category">
                                     Natural (dried whole), Washed (pulped and fermented with water), Honey (partial pulp removal), Bio-Innovation (our proprietary protocols). Each category unlocks different flavor architectures.
                                 </InfoPopover>
                             </h2>
                             <p className="section-desc">The processing route shapes the final character of your coffee.</p>
-                            <div className="tesla-options-list">
+                            <div className="cl-choices-list">
                                 {(CATEGORIES[config.macro] || []).map(c => (
                                     <div
                                         key={c.id}
-                                        className={`tesla-option ${config.category === c.id ? 'selected' : ''}`}
+                                        className={`cl-choice${config.category === c.id ? ' selected' : ''}`}
                                         onClick={() => updateConfig('category', c.id)}
                                         role="radio"
                                         aria-checked={config.category === c.id}
                                         tabIndex={0}
-                                        onKeyDown={e => e.key === 'Enter' || e.key === ' ' ? updateConfig('category', c.id) : undefined}
+                                        onKeyDown={e => (e.key === 'Enter' || e.key === ' ') ? updateConfig('category', c.id) : undefined}
                                     >
-                                        <div className="topt-name">{c.label}</div>
-                                        {config.category === c.id && <Check size={18} />}
+                                        <div className="cl-choice-icon" style={{ background: 'linear-gradient(135deg, #fce7f3 0%, #f9a8d4 100%)' }} />
+                                        <div className="cl-choice-content">
+                                            <div className="cl-choice-title">{c.label}</div>
+                                        </div>
+                                        {config.category === c.id && (
+                                            <div className="cl-choice-check">
+                                                <Check size={14} />
+                                            </div>
+                                        )}
                                     </div>
                                 ))}
                             </div>
@@ -433,28 +508,34 @@ export const CraftLabConfigurator: React.FC = () => {
                     {/* SECTION 6: PROCESSING METHOD */}
                     {config.category && (
                         <section className="config-section fade-in" id="sec-method">
-                            <div className="section-label">Step 06</div>
+                            <div className="section-label">STEP 06 · PROCESSING METHOD</div>
                             <h2 className="section-title">
-                                Processing Method
-                                {/* TODO cata: refine copy */}
+                                Processing <span className="cl-accent-text">Method</span>
                                 <InfoPopover title="Processing Method">
                                     Within each category, methods define microbial environment: Lactic favors lactobacilli, Bio-Washed uses controlled yeasts, pH Clarity stops fermentation at target acidity.
                                 </InfoPopover>
                             </h2>
                             <p className="section-desc">Select the specific fermentation technique for this lot.</p>
-                            <div className="tesla-options-list">
+                            <div className="cl-choices-list">
                                 {(METHODS[config.category] || []).map(m => (
                                     <div
                                         key={m.id}
-                                        className={`tesla-option ${config.process === m.id ? 'selected' : ''}`}
+                                        className={`cl-choice${config.process === m.id ? ' selected' : ''}`}
                                         onClick={() => updateConfig('process', m.id)}
                                         role="radio"
                                         aria-checked={config.process === m.id}
                                         tabIndex={0}
-                                        onKeyDown={e => e.key === 'Enter' || e.key === ' ' ? updateConfig('process', m.id) : undefined}
+                                        onKeyDown={e => (e.key === 'Enter' || e.key === ' ') ? updateConfig('process', m.id) : undefined}
                                     >
-                                        <div className="topt-name">{m.label}</div>
-                                        {config.process === m.id && <Check size={18} />}
+                                        <div className="cl-choice-icon" style={{ background: 'linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%)' }} />
+                                        <div className="cl-choice-content">
+                                            <div className="cl-choice-title">{m.label}</div>
+                                        </div>
+                                        {config.process === m.id && (
+                                            <div className="cl-choice-check">
+                                                <Check size={14} />
+                                            </div>
+                                        )}
                                     </div>
                                 ))}
                             </div>
@@ -464,59 +545,46 @@ export const CraftLabConfigurator: React.FC = () => {
                     {/* SECTION 7: PRECISION PARAMETERS */}
                     {config.process && (
                         <section className="config-section fade-in" id="sec-params">
-                            <div className="section-label">Step 07</div>
+                            <div className="section-label">STEP 07 · PRECISION PARAMETERS</div>
                             <h2 className="section-title">
-                                Precision Parameters
-                                {/* TODO cata: refine copy */}
+                                Precision <span className="cl-accent-text">Parameters</span>
                                 <InfoPopover title="Fermentation Parameters">
                                     Cherry stabilization, cherry fermentation and mucilage fermentation shape the final cup. Longer fermentations generally add body and complexity; shorter preserve clarity.
                                 </InfoPopover>
                             </h2>
                             <p className="section-desc">Fine-tune the technical parameters for your custom process.</p>
 
-                            <div className="params-container">
-                                <Slider
-                                    label="Stabilization Time"
-                                    min={0} max={200} step={12}
-                                    value={config.stabilization}
-                                    onChange={v => updateConfig('stabilization', v)}
-                                    unit=" hrs"
-                                />
-
-                                {config.process === 'cherry-ferm' && (
-                                    <Slider
-                                        label="Cherry Fermentation"
-                                        min={0} max={200} step={12}
-                                        value={config.cherryFerm}
-                                        onChange={v => updateConfig('cherryFerm', v)}
-                                        unit=" hrs"
-                                    />
-                                )}
-                                {config.process === 'mucilage-ferm' && (
-                                    <Slider
-                                        label="Mucilage Fermentation"
-                                        min={0} max={200} step={12}
-                                        value={config.mucilageFerm}
-                                        onChange={v => updateConfig('mucilageFerm', v)}
-                                        unit=" hrs"
-                                    />
-                                )}
-
-                                <Slider
-                                    label="Solar Dry"
-                                    min={0} max={100}
-                                    value={config.solarDry}
-                                    onChange={v => updateConfig('solarDry', v)}
-                                    unit=" days"
-                                />
-
-                                <Slider
-                                    label="Mechanical Dry"
-                                    min={0} max={100} step={6}
-                                    value={config.mechDry}
-                                    onChange={v => updateConfig('mechDry', v)}
-                                    unit=" hrs"
-                                />
+                            <div className="cl-params-grid">
+                                {/* Stabilization — always visible */}
+                                {PARAM_META.filter(p => {
+                                    if (p.key === 'cherryFerm')   return config.process === 'cherry-ferm';
+                                    if (p.key === 'mucilageFerm') return config.process === 'mucilage-ferm';
+                                    return true;
+                                }).map(p => {
+                                    const val = config[p.key] as number | null;
+                                    const { Icon } = p;
+                                    return (
+                                        <div key={p.key} className={`cl-param-card${val !== null ? ' has-value' : ''}`}>
+                                            <div className="cl-param-card-top">
+                                                <div className="cl-param-icon">
+                                                    <Icon size={16} />
+                                                </div>
+                                                <div className="cl-param-val">
+                                                    {val !== null ? `${val}${p.unit}` : '—'}
+                                                </div>
+                                            </div>
+                                            <Slider
+                                                label={p.label}
+                                                min={p.min}
+                                                max={p.max}
+                                                step={p.step}
+                                                value={val}
+                                                onChange={v => updateConfig(p.key, v)}
+                                                unit={p.unit}
+                                            />
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </section>
                     )}
@@ -524,42 +592,45 @@ export const CraftLabConfigurator: React.FC = () => {
                     {/* SECTION 8: SHIPMENT TIMEFRAME */}
                     {config.stabilization !== null && config.solarDry !== null && (
                         <section className="config-section fade-in" id="sec-shipment">
-                            <div className="section-label">Step 08</div>
-                            <h2 className="section-title">Shipment Timeframe</h2>
+                            <div className="section-label">STEP 08 · SHIPMENT TIMEFRAME</div>
+                            <h2 className="section-title">
+                                Shipment <span className="cl-accent-text">Window</span>
+                            </h2>
                             <p className="section-desc">Select your preferred delivery window for this lot.</p>
 
-                            <div className="shipment-quarters">
-                                {SHIPMENT_QUARTERS.map(q => (
-                                    <button
-                                        key={q.id}
-                                        className={`shipment-quarter-card ${config.shipmentWindow === q.id ? 'selected' : ''}`}
-                                        onClick={() => updateConfig('shipmentWindow', q.id)}
-                                        aria-pressed={config.shipmentWindow === q.id}
-                                        disabled={config.shipmentWindow === 'earliest'}
-                                    >
-                                        <span className="sqc-icon" aria-hidden="true">{q.icon}</span>
-                                        <span className="sqc-label">{q.label}</span>
-                                        <span className="sqc-range">{q.range}</span>
-                                        {config.shipmentWindow === q.id && (
-                                            <Check size={14} className="sqc-check" />
-                                        )}
-                                    </button>
-                                ))}
+                            <div className="cl-shipment-grid">
+                                {SHIPMENT_QUARTERS.map(q => {
+                                    const { Icon } = q;
+                                    return (
+                                        <button
+                                            key={q.id}
+                                            className={`cl-shipment-card${config.shipmentWindow === q.id ? ' selected' : ''}`}
+                                            onClick={() => updateConfig('shipmentWindow', q.id)}
+                                            aria-pressed={config.shipmentWindow === q.id}
+                                            disabled={config.shipmentWindow === 'earliest'}
+                                            style={{ background: config.shipmentWindow === q.id ? q.gradient : undefined }}
+                                        >
+                                            <Icon size={22} color={q.iconColor} aria-hidden="true" />
+                                            <span className="cl-sqc-label">{q.label}</span>
+                                            <span className="cl-sqc-range">{q.range}</span>
+                                            {config.shipmentWindow === q.id && (
+                                                <Check size={13} className="cl-sqc-check" />
+                                            )}
+                                        </button>
+                                    );
+                                })}
                             </div>
 
-                            <label className="shipment-earliest-toggle">
+                            <label className="cl-shipment-earliest">
                                 <input
                                     type="checkbox"
                                     checked={config.shipmentWindow === 'earliest'}
                                     onChange={e => {
-                                        updateConfig(
-                                            'shipmentWindow',
-                                            e.target.checked ? 'earliest' : null
-                                        );
+                                        updateConfig('shipmentWindow', e.target.checked ? 'earliest' : null);
                                     }}
                                     aria-label="Accept earliest available shipment window"
                                 />
-                                <span className="shipment-earliest-label">
+                                <span className="cl-shipment-earliest-label">
                                     Earliest availability — ship whenever my lot is ready
                                 </span>
                             </label>
@@ -580,17 +651,19 @@ export const CraftLabConfigurator: React.FC = () => {
                     {/* SECTION 9: REVIEW & CONFIRM */}
                     {showReview && (
                         <section className="config-section fade-in" id="sec-review">
-                            <div className="section-label">Review</div>
-                            <h2 className="section-title">Confirm Your Order</h2>
+                            <div className="section-label">REVIEW</div>
+                            <h2 className="section-title">
+                                Your CraftLab <span className="cl-accent-text">Build</span>
+                            </h2>
                             <p className="section-desc">Check all your selections before placing your order.</p>
 
-                            <div className="review-table">
+                            <div className="cl-review-table">
                                 {REVIEW_ROWS.map(row => {
                                     const val = displayValue(row.key, config);
                                     return (
-                                        <div key={row.key} className="review-row">
-                                            <span className="review-label">{row.label}</span>
-                                            <span className={`review-value ${val === null ? 'review-value--empty' : ''}`}>
+                                        <div key={row.key} className="cl-review-row">
+                                            <span className="cl-review-label">{row.label}</span>
+                                            <span className={`cl-review-value${val === null ? ' empty' : ''}`}>
                                                 {val ?? 'Not selected'}
                                             </span>
                                         </div>
@@ -598,7 +671,7 @@ export const CraftLabConfigurator: React.FC = () => {
                                 })}
                             </div>
 
-                            <label className="review-terms-label">
+                            <label className="cl-review-terms">
                                 <input
                                     type="checkbox"
                                     checked={agreedToTerms}
@@ -606,7 +679,7 @@ export const CraftLabConfigurator: React.FC = () => {
                                     aria-required="true"
                                 />
                                 <span>
-                                    I agree to the{' '}
+                                    I confirm the parameters for my custom lot and agree to the{' '}
                                     <a href="/terms" target="_blank" rel="noopener noreferrer">
                                         terms and conditions
                                     </a>
@@ -652,7 +725,7 @@ export const CraftLabConfigurator: React.FC = () => {
             {/* ──── BOTTOM SHEET (navy) ─────────────────────── */}
             <div
                 ref={sheetRef}
-                className={`cl-summary-sheet ${showSheet ? 'cl-summary-sheet--open' : ''}`}
+                className={`cl-summary-sheet${showSheet ? ' cl-summary-sheet--open' : ''}`}
                 role="dialog"
                 aria-modal="true"
                 aria-label="Your selections at a glance"
@@ -663,7 +736,7 @@ export const CraftLabConfigurator: React.FC = () => {
 
                 {/* Header */}
                 <div className="cl-sheet-header">
-                    <span className="cl-sheet-title">Your Selections at a Glance</span>
+                    <span className="cl-sheet-title">Your Configuration · {decisionCount} of 12</span>
                     <button
                         ref={sheetCloseRef}
                         className="cl-sheet-close"
@@ -681,8 +754,8 @@ export const CraftLabConfigurator: React.FC = () => {
                         return (
                             <div key={row.key} className="cl-sheet-row">
                                 <span className="cl-sheet-key">{row.label}</span>
-                                <span className={`cl-sheet-val ${val === null ? 'cl-sheet-val--empty' : ''}`}>
-                                    {val ?? 'Not selected'}
+                                <span className={`cl-sheet-val${val === null ? ' cl-sheet-val--empty' : ''}`}>
+                                    {val ?? '—'}
                                 </span>
                             </div>
                         );
