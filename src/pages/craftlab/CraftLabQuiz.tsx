@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CheckCircle, Star, Beaker, FlaskConical, Lock } from 'lucide-react';
+import { CheckCircle, Star, Beaker, FlaskConical, Lock, Check } from 'lucide-react';
 import './CraftLabQuiz.css';
 import confetti from 'canvas-confetti';
 import { unlockCraftLab } from '../../lib/user-progress';
@@ -217,6 +217,13 @@ interface Tank {
     accentColor: string;
 }
 
+interface McOption {
+    key: string;
+    label: string;
+    sub?: string;
+    isCorrect: boolean;
+}
+
 const TANKS: Tank[] = [
     {
         id: 'closed',
@@ -236,38 +243,71 @@ const TANKS: Tank[] = [
     },
 ];
 
+const Q2_OPTIONS: McOption[] = [
+    { key: 'ph3', label: '3.0', sub: 'Too acidic', isCorrect: false },
+    { key: 'ph4', label: '4.0', sub: 'Optimal range', isCorrect: true },
+    { key: 'ph5', label: '5.0', sub: 'Barely active', isCorrect: false },
+];
+
+const Q3_OPTIONS: McOption[] = [
+    { key: 'clean', label: 'Clean tea notes', sub: 'Too light', isCorrect: false },
+    { key: 'fruity', label: 'Fruit-forward notes', sub: 'Tropical & bold', isCorrect: true },
+    { key: 'none', label: 'No change', sub: 'Incorrect', isCorrect: false },
+];
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export const CraftLabQuiz: React.FC = () => {
     const navigate = useNavigate();
 
-    // UI state
+    // Question navigation
+    const [currentQuestion, setCurrentQuestion] = useState(0); // 0, 1, 2
+
+    // UI state general
     const [success, setSuccess] = useState(false);
+
+    // Q1 drag & drop state
     const [wrongId, setWrongId] = useState<TankId | null>(null);
     const [isDraggingId, setIsDraggingId] = useState<TankId | null>(null);
     const [isDropZoneOver, setIsDropZoneOver] = useState(false);
-
-    // Keyboard-accessible selection
     const [keyboardSelected, setKeyboardSelected] = useState<TankId | null>(null);
+
+    // Q2/Q3 multiple choice state
+    const [mcWrong, setMcWrong] = useState<string | null>(null);
 
     // Touch drag refs
     const touchDragIdRef = useRef<TankId | null>(null);
     const touchGhostRef = useRef<HTMLDivElement | null>(null);
     const dropZoneRef = useRef<HTMLDivElement | null>(null);
 
-    // ── Correct answer logic ──────────────────────────────────────────────────
+    // ── Advance or complete ───────────────────────────────────────────────────
 
-    const handleCorrectDrop = useCallback(async () => {
-        setSuccess(true);
-        confetti({
-            particleCount: 150,
-            spread: 70,
-            origin: { y: 0.6 },
-            colors: ['#c1004a', '#1D4ED8', '#10B981', '#ffffff'],
-        });
-        await unlockCraftLab();
-        setTimeout(() => navigate('/craftlab/welcome'), 2800);
-    }, [navigate]);
+    const advanceOrComplete = useCallback(async () => {
+        if (currentQuestion < 2) {
+            setTimeout(() => {
+                setCurrentQuestion((prev) => prev + 1);
+                setWrongId(null);
+                setMcWrong(null);
+                setKeyboardSelected(null);
+            }, 500);
+        } else {
+            setSuccess(true);
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#c1004a', '#1D4ED8', '#10B981', '#ffffff'],
+            });
+            await unlockCraftLab();
+            setTimeout(() => navigate('/craftlab/welcome'), 2800);
+        }
+    }, [currentQuestion, navigate]);
+
+    // ── Q1: Correct/wrong drop ────────────────────────────────────────────────
+
+    const handleCorrectDrop = useCallback(() => {
+        advanceOrComplete();
+    }, [advanceOrComplete]);
 
     const handleWrongDrop = useCallback((id: TankId) => {
         setWrongId(id);
@@ -286,6 +326,17 @@ export const CraftLabQuiz: React.FC = () => {
         },
         [handleCorrectDrop, handleWrongDrop],
     );
+
+    // ── Q2/Q3: Multiple choice handler ────────────────────────────────────────
+
+    const handleMcAnswer = (optionKey: string, isCorrect: boolean) => {
+        if (isCorrect) {
+            advanceOrComplete();
+        } else {
+            setMcWrong(optionKey);
+            setTimeout(() => setMcWrong(null), 600);
+        }
+    };
 
     // ── HTML5 Drag & Drop (mouse / pointer) ───────────────────────────────────
 
@@ -452,7 +503,7 @@ export const CraftLabQuiz: React.FC = () => {
                 </div>
             ) : (
                 <>
-                    {/* ── Progress bar compacta ─────────────────────────────── */}
+                    {/* ── Progress bar de pasos educativos (contexto global) ── */}
                     <div className="qz-progress" role="progressbar" aria-valuenow={3} aria-valuemin={1} aria-valuemax={3} aria-label="Step 3 of 3">
                         <div className="qz-progress-step qz-progress-step--done" aria-label="Basic education completed">
                             <FlaskConical size={11} aria-hidden="true" />
@@ -471,86 +522,171 @@ export const CraftLabQuiz: React.FC = () => {
                     <div className="qz-header">
                         <span className="qz-kicker">STEP 3 OF 3 · VALIDATION</span>
                         <h1 className="qz-title">The Final Check</h1>
-                        <p className="qz-subtitle">Drop the correct tank into the fermenter to unlock your lab.</p>
+                        <p className="qz-subtitle">Answer all three questions to unlock your lab.</p>
                     </div>
 
                     {/* ── Quiz card ────────────────────────────────────────── */}
                     <div className="qz-card fade-in">
 
-                        {/* Chip de pista */}
-                        <div className="qz-chip" aria-label="Topic: Anaerobic Fermentation">ANAEROBIC FERMENTATION</div>
-
-                        <p className="qz-question">
-                            Which tank produces anaerobic fermentation?
-                        </p>
-                        <p className="qz-hint">Drag the correct tank into the fermenter below</p>
-
-                        {keyboardSelected && (
-                            <p className="qz-keyboard-hint" role="status">
-                                <strong>{TANKS.find((t) => t.id === keyboardSelected)?.label}</strong> selected —
-                                press Enter on the fermenter to drop it.
-                            </p>
-                        )}
-
-                        {/* ── Draggable tanks ──────────────────────────────── */}
-                        <div className="qz-tanks-row" role="group" aria-label="Fermentation tanks to choose from">
-                            {TANKS.map((tank) => (
+                        {/* ── Dots de progreso dentro del card ────────────── */}
+                        <div className="qz-q-progress" role="group" aria-label="Question progress">
+                            {[0, 1, 2].map((i) => (
                                 <div
-                                    key={tank.id}
+                                    key={i}
                                     className={[
-                                        'qz-tank',
-                                        isDraggingId === tank.id ? 'is-dragging' : '',
-                                        wrongId === tank.id ? 'is-wrong' : '',
-                                        keyboardSelected === tank.id ? 'is-keyboard-selected' : '',
+                                        'qz-q-dot',
+                                        i < currentQuestion ? 'done' : '',
+                                        i === currentQuestion ? 'active' : '',
                                     ]
                                         .filter(Boolean)
                                         .join(' ')}
-                                    style={
-                                        keyboardSelected === tank.id
-                                            ? ({ '--tank-accent': tank.accentColor } as React.CSSProperties)
-                                            : undefined
+                                    aria-label={
+                                        i < currentQuestion
+                                            ? `Question ${i + 1} completed`
+                                            : i === currentQuestion
+                                            ? `Question ${i + 1} current`
+                                            : `Question ${i + 1} pending`
                                     }
-                                    draggable
-                                    tabIndex={0}
-                                    role="button"
-                                    aria-grabbed={isDraggingId === tank.id}
-                                    aria-label={`${tank.label}: ${tank.description}. Press Enter to select.`}
-                                    onDragStart={(e) => onDragStart(e, tank.id)}
-                                    onDragEnd={onDragEnd}
-                                    onTouchStart={(e) => onTouchStart(e, tank.id)}
-                                    onTouchMove={onTouchMove}
-                                    onTouchEnd={onTouchEnd}
-                                    onKeyDown={(e) => onTankKeyDown(e, tank.id)}
                                 >
-                                    <div className="qz-tank-illustration" aria-hidden="true">
-                                        {tank.svg}
-                                    </div>
-                                    <span className="qz-tank-label">{tank.label}</span>
-                                    <span className="qz-tank-desc">{tank.description}</span>
+                                    {i < currentQuestion ? <Check size={12} /> : i + 1}
                                 </div>
                             ))}
                         </div>
 
-                        {/* ── Drop zone ────────────────────────────────────── */}
-                        <div
-                            ref={dropZoneRef}
-                            className={['qz-dropzone', isDropZoneOver ? 'is-over' : '']
-                                .filter(Boolean)
-                                .join(' ')}
-                            role="button"
-                            tabIndex={keyboardSelected ? 0 : -1}
-                            aria-dropeffect="move"
-                            aria-label="Fermenter — drop the correct tank here"
-                            onDragOver={onDragOverZone}
-                            onDragLeave={onDragLeaveZone}
-                            onDrop={onDropZone}
-                            onKeyDown={onDropZoneKeyDown}
-                        >
-                            {FERMENTER_SVG}
-                            <span className="qz-dropzone-label">
-                                {isDropZoneOver ? 'Release to drop!' : 'Drop the correct tank here'}
-                            </span>
-                        </div>
+                        {/* ── Q1: Drag & Drop ──────────────────────────────── */}
+                        {currentQuestion === 0 && (
+                            <div className="qz-q-content" key="q0">
+                                <div className="qz-chip" aria-label="Topic: Microorganisms">QUESTION 1 · MICROORGANISMS</div>
+
+                                <p className="qz-question">
+                                    Which tank produces anaerobic fermentation?
+                                </p>
+                                <p className="qz-hint">Drag the correct tank into the fermenter below</p>
+
+                                {keyboardSelected && (
+                                    <p className="qz-keyboard-hint" role="status">
+                                        <strong>{TANKS.find((t) => t.id === keyboardSelected)?.label}</strong> selected —
+                                        press Enter on the fermenter to drop it.
+                                    </p>
+                                )}
+
+                                {/* ── Draggable tanks ──────────────────────── */}
+                                <div className="qz-tanks-row" role="group" aria-label="Fermentation tanks to choose from">
+                                    {TANKS.map((tank) => (
+                                        <div
+                                            key={tank.id}
+                                            className={[
+                                                'qz-tank',
+                                                isDraggingId === tank.id ? 'is-dragging' : '',
+                                                wrongId === tank.id ? 'is-wrong' : '',
+                                                keyboardSelected === tank.id ? 'is-keyboard-selected' : '',
+                                            ]
+                                                .filter(Boolean)
+                                                .join(' ')}
+                                            style={
+                                                keyboardSelected === tank.id
+                                                    ? ({ '--tank-accent': tank.accentColor } as React.CSSProperties)
+                                                    : undefined
+                                            }
+                                            draggable
+                                            tabIndex={0}
+                                            role="button"
+                                            aria-grabbed={isDraggingId === tank.id}
+                                            aria-label={`${tank.label}: ${tank.description}. Press Enter to select.`}
+                                            onDragStart={(e) => onDragStart(e, tank.id)}
+                                            onDragEnd={onDragEnd}
+                                            onTouchStart={(e) => onTouchStart(e, tank.id)}
+                                            onTouchMove={onTouchMove}
+                                            onTouchEnd={onTouchEnd}
+                                            onKeyDown={(e) => onTankKeyDown(e, tank.id)}
+                                        >
+                                            <div className="qz-tank-illustration" aria-hidden="true">
+                                                {tank.svg}
+                                            </div>
+                                            <span className="qz-tank-label">{tank.label}</span>
+                                            <span className="qz-tank-desc">{tank.description}</span>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                {/* ── Drop zone ────────────────────────────── */}
+                                <div
+                                    ref={dropZoneRef}
+                                    className={['qz-dropzone', isDropZoneOver ? 'is-over' : '']
+                                        .filter(Boolean)
+                                        .join(' ')}
+                                    role="button"
+                                    tabIndex={keyboardSelected ? 0 : -1}
+                                    aria-dropeffect="move"
+                                    aria-label="Fermenter — drop the correct tank here"
+                                    onDragOver={onDragOverZone}
+                                    onDragLeave={onDragLeaveZone}
+                                    onDrop={onDropZone}
+                                    onKeyDown={onDropZoneKeyDown}
+                                >
+                                    {FERMENTER_SVG}
+                                    <span className="qz-dropzone-label">
+                                        {isDropZoneOver ? 'Release to drop!' : 'Drop the correct tank here'}
+                                    </span>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* ── Q2: Multiple choice pH ───────────────────────── */}
+                        {currentQuestion === 1 && (
+                            <div className="qz-q-content" key="q1">
+                                <div className="qz-chip" aria-label="Topic: Acidification">QUESTION 2 · ACIDIFICATION</div>
+
+                                <p className="qz-question">
+                                    During fermentation, pH drops from ~6.0 to:
+                                </p>
+                                <p className="qz-hint">Select the correct final pH value.</p>
+
+                                <div className="qz-mc-grid" role="group" aria-label="pH options">
+                                    {Q2_OPTIONS.map((opt) => (
+                                        <button
+                                            key={opt.key}
+                                            className={['qz-mc-card', mcWrong === opt.key ? 'is-wrong' : '']
+                                                .filter(Boolean)
+                                                .join(' ')}
+                                            aria-label={`${opt.label}${opt.sub ? ` — ${opt.sub}` : ''}`}
+                                            onClick={() => handleMcAnswer(opt.key, opt.isCorrect)}
+                                        >
+                                            <span className="qz-mc-label">{opt.label}</span>
+                                            {opt.sub && <span className="qz-mc-sub">{opt.sub}</span>}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* ── Q3: Multiple choice temperature ─────────────── */}
+                        {currentQuestion === 2 && (
+                            <div className="qz-q-content" key="q2">
+                                <div className="qz-chip" aria-label="Topic: Metabolic Routes">QUESTION 3 · METABOLIC ROUTES</div>
+
+                                <p className="qz-question">
+                                    Warmer fermentation temperatures typically produce:
+                                </p>
+                                <p className="qz-hint">Select the correct flavor outcome.</p>
+
+                                <div className="qz-mc-grid" role="group" aria-label="Flavor outcome options">
+                                    {Q3_OPTIONS.map((opt) => (
+                                        <button
+                                            key={opt.key}
+                                            className={['qz-mc-card', mcWrong === opt.key ? 'is-wrong' : '']
+                                                .filter(Boolean)
+                                                .join(' ')}
+                                            aria-label={`${opt.label}${opt.sub ? ` — ${opt.sub}` : ''}`}
+                                            onClick={() => handleMcAnswer(opt.key, opt.isCorrect)}
+                                        >
+                                            <span className="qz-mc-label">{opt.label}</span>
+                                            {opt.sub && <span className="qz-mc-sub">{opt.sub}</span>}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </>
             )}
