@@ -1,9 +1,130 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CheckCircle, Lock, CircleDashed, FlaskConical, Star } from 'lucide-react';
+import { CheckCircle, Star, Beaker, FlaskConical, Lock } from 'lucide-react';
 import './CraftLabQuiz.css';
 import confetti from 'canvas-confetti';
 import { unlockCraftLab } from '../../lib/user-progress';
+
+// ─── SVG Illustrations ────────────────────────────────────────────────────────
+
+const CLOSED_TANK_SVG = (
+    <svg viewBox="0 0 100 140" width="80" height="110" aria-hidden="true">
+        <defs>
+            <linearGradient id="closedLiquid" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#fef3c7" />
+                <stop offset="100%" stopColor="#d97706" />
+            </linearGradient>
+            <linearGradient id="closedBody" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#f3f4f6" />
+                <stop offset="100%" stopColor="#e5e7eb" />
+            </linearGradient>
+        </defs>
+        {/* Body */}
+        <rect x="18" y="32" width="64" height="90" rx="8" ry="8" fill="url(#closedBody)" stroke="#9ca3af" strokeWidth="1.5"/>
+        {/* Liquid */}
+        <rect x="22" y="52" width="56" height="66" rx="4" fill="url(#closedLiquid)" opacity="0.72"/>
+        {/* Pressure waves inside liquid */}
+        <path d="M 26 72 Q 35 70, 44 72 Q 53 74, 62 72 Q 70 70, 74 72" stroke="rgba(193,0,74,0.28)" strokeWidth="1.2" fill="none"/>
+        <path d="M 26 88 Q 35 86, 44 88 Q 53 90, 62 88 Q 70 86, 74 88" stroke="rgba(193,0,74,0.20)" strokeWidth="1.2" fill="none"/>
+        <path d="M 26 104 Q 35 102, 44 104 Q 53 106, 62 104 Q 70 102, 74 104" stroke="rgba(193,0,74,0.14)" strokeWidth="1" fill="none"/>
+        {/* Lid sealed */}
+        <rect x="14" y="22" width="72" height="14" rx="5" fill="#c1004a"/>
+        <rect x="20" y="25" width="60" height="5" rx="2" fill="rgba(255,255,255,0.25)"/>
+        {/* Lid center bolt */}
+        <circle cx="50" cy="29" r="3.5" fill="#9d0038" stroke="rgba(255,255,255,0.3)" strokeWidth="1"/>
+        {/* Pressure gauge */}
+        <circle cx="72" cy="44" r="7" fill="#ffffff" stroke="#9ca3af" strokeWidth="1.5"/>
+        <circle cx="72" cy="44" r="5.5" fill="#f9fafb" stroke="none"/>
+        <line x1="72" y1="44" x2="75" y2="39.5" stroke="#dc2626" strokeWidth="1.5" strokeLinecap="round"/>
+        <circle cx="72" cy="44" r="1.2" fill="#374151"/>
+        {/* Lock icon centered on lid */}
+        <g transform="translate(41, 8)">
+            <rect x="0" y="4" width="14" height="9" rx="2.5" fill="#ffffff" stroke="#c1004a" strokeWidth="1.5"/>
+            <path d="M 2.5 4 Q 2.5 0, 7 0 Q 11.5 0, 11.5 4" fill="none" stroke="#c1004a" strokeWidth="1.5" strokeLinecap="round"/>
+            <circle cx="7" cy="8.5" r="1.5" fill="#c1004a"/>
+        </g>
+        {/* Sealed label */}
+        <text x="50" y="136" textAnchor="middle" fontSize="7" fill="#6b7280" fontFamily="system-ui, sans-serif" letterSpacing="0.08em">SEALED</text>
+    </svg>
+);
+
+const OPEN_TANK_SVG = (
+    <svg viewBox="0 0 100 140" width="80" height="110" aria-hidden="true">
+        <defs>
+            <linearGradient id="openLiquid" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#fef3c7" />
+                <stop offset="100%" stopColor="#d97706" />
+            </linearGradient>
+            <linearGradient id="openBody" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#f3f4f6" />
+                <stop offset="100%" stopColor="#e5e7eb" />
+            </linearGradient>
+        </defs>
+        {/* Body no lid */}
+        <rect x="18" y="42" width="64" height="80" rx="8" ry="8" fill="url(#openBody)" stroke="#9ca3af" strokeWidth="1.5"/>
+        {/* Open top rim */}
+        <rect x="14" y="38" width="72" height="8" rx="4" fill="#d1d5db" stroke="#9ca3af" strokeWidth="1"/>
+        {/* Top opening shadow (depth) */}
+        <ellipse cx="50" cy="42" rx="30" ry="4" fill="#0A1E3F" opacity="0.12"/>
+        {/* Liquid */}
+        <rect x="22" y="58" width="56" height="60" rx="4" fill="url(#openLiquid)" opacity="0.72"/>
+        {/* Escaping bubbles animated */}
+        <circle cx="38" cy="38" r="3.5" fill="rgba(29,78,216,0.38)">
+            <animate attributeName="cy" from="42" to="8" dur="2.5s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0;0.55;0" dur="2.5s" repeatCount="indefinite"/>
+            <animate attributeName="r" values="3.5;2;3.5" dur="2.5s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="55" cy="24" r="2.8" fill="rgba(29,78,216,0.38)">
+            <animate attributeName="cy" from="44" to="6" dur="3.1s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0;0.65;0" dur="3.1s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="65" cy="16" r="2.2" fill="rgba(29,78,216,0.32)">
+            <animate attributeName="cy" from="46" to="4" dur="2.2s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0;0.58;0" dur="2.2s" repeatCount="indefinite"/>
+        </circle>
+        {/* O2 label */}
+        <text x="74" y="22" fontSize="8.5" fill="#1D4ED8" fontWeight="700" fontFamily="system-ui, sans-serif">O₂</text>
+        {/* Open label */}
+        <text x="50" y="136" textAnchor="middle" fontSize="7" fill="#6b7280" fontFamily="system-ui, sans-serif" letterSpacing="0.08em">EXPOSED</text>
+    </svg>
+);
+
+// Fermenter SVG para drop zone
+const FERMENTER_SVG = (
+    <svg viewBox="0 0 120 130" width="90" height="98" aria-hidden="true" className="qz-fermenter-svg">
+        <defs>
+            <linearGradient id="fermLiquid" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#d1fae5" />
+                <stop offset="100%" stopColor="#34d399" />
+            </linearGradient>
+            <linearGradient id="fermBody" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#f0fdf4" />
+                <stop offset="100%" stopColor="#dcfce7" />
+            </linearGradient>
+        </defs>
+        {/* Base legs */}
+        <rect x="25" y="114" width="10" height="12" rx="3" fill="#9ca3af"/>
+        <rect x="85" y="114" width="10" height="12" rx="3" fill="#9ca3af"/>
+        {/* Main vessel */}
+        <rect x="15" y="28" width="90" height="90" rx="12" fill="url(#fermBody)" stroke="#6ee7b7" strokeWidth="2"/>
+        {/* Liquid inside */}
+        <rect x="21" y="68" width="78" height="46" rx="6" fill="url(#fermLiquid)" opacity="0.65"/>
+        {/* Top flange */}
+        <rect x="10" y="20" width="100" height="12" rx="6" fill="#d1fae5" stroke="#6ee7b7" strokeWidth="1.5"/>
+        {/* Lid entry port */}
+        <rect x="42" y="10" width="36" height="14" rx="5" fill="#6ee7b7" stroke="#34d399" strokeWidth="1.5"/>
+        <circle cx="60" cy="17" r="4" fill="#10B981"/>
+        {/* Question mark inside - pista visual de que es donde se arroja */}
+        <text x="60" y="80" textAnchor="middle" fontSize="28" fill="rgba(16,185,129,0.25)" fontWeight="900" fontFamily="system-ui, sans-serif">?</text>
+        {/* Valve on side */}
+        <rect x="105" y="55" width="10" height="18" rx="3" fill="#9ca3af" stroke="#6b7280" strokeWidth="1"/>
+        <circle cx="110" cy="64" r="4" fill="#d1d5db" stroke="#9ca3af" strokeWidth="1"/>
+        {/* Measurement lines */}
+        <line x1="21" y1="78" x2="26" y2="78" stroke="#10B981" strokeWidth="1" opacity="0.5"/>
+        <line x1="21" y1="90" x2="26" y2="90" stroke="#10B981" strokeWidth="1" opacity="0.5"/>
+        <line x1="21" y1="102" x2="26" y2="102" stroke="#10B981" strokeWidth="1" opacity="0.5"/>
+    </svg>
+);
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -14,29 +135,26 @@ interface Tank {
     label: string;
     description: string;
     isCorrect: boolean;
-    Icon: React.ElementType;
-    iconColor: string;
-    iconGradient: string;
+    svg: React.ReactNode;
+    accentColor: string;
 }
 
 const TANKS: Tank[] = [
     {
         id: 'closed',
         label: 'Closed Tank',
-        description: 'Sealed — no oxygen exchange',
+        description: 'Sealed · No oxygen exchange',
         isCorrect: true,
-        Icon: Lock,
-        iconColor: '#9d174d',
-        iconGradient: 'linear-gradient(135deg, #fce7f3 0%, #f9a8d4 100%)',
+        svg: CLOSED_TANK_SVG,
+        accentColor: '#c1004a',
     },
     {
         id: 'open',
         label: 'Open Tank',
-        description: 'Exposed — oxygen flows freely',
+        description: 'Exposed · Oxygen flows freely',
         isCorrect: false,
-        Icon: CircleDashed,
-        iconColor: '#1D4ED8',
-        iconGradient: 'linear-gradient(135deg, #bfdbfe 0%, #60a5fa 100%)',
+        svg: OPEN_TANK_SVG,
+        accentColor: '#1D4ED8',
     },
 ];
 
@@ -149,13 +267,12 @@ export const CraftLabQuiz: React.FC = () => {
     };
 
     const onTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-        e.preventDefault(); // prevent page scroll while dragging
+        e.preventDefault();
         const touch = e.touches[0];
         if (touchGhostRef.current) {
             touchGhostRef.current.style.left = `${touch.clientX - 60}px`;
             touchGhostRef.current.style.top = `${touch.clientY - 40}px`;
         }
-        // Highlight drop zone when finger is over it
         const dropZone = dropZoneRef.current;
         if (dropZone) {
             const rect = dropZone.getBoundingClientRect();
@@ -209,42 +326,96 @@ export const CraftLabQuiz: React.FC = () => {
 
     return (
         <div className="qz-container">
+            {/* Background pattern decorativo */}
+            <div className="qz-bg-pattern" aria-hidden="true" />
+
             {success ? (
-                <div className="qz-success-wrap">
-                    <div className="qz-success-check">
-                        <CheckCircle size={48} color="#ffffff" />
+                /* ── Success overlay ─────────────────────────────────────────── */
+                <div className="qz-success-wrap" role="alert" aria-live="assertive">
+                    {/* Sparkles decorativos */}
+                    <div className="qz-sparkles" aria-hidden="true">
+                        <span className="qz-spark qz-spark--1">✦</span>
+                        <span className="qz-spark qz-spark--2">✦</span>
+                        <span className="qz-spark qz-spark--3">✦</span>
+                        <span className="qz-spark qz-spark--4">✦</span>
+                        <span className="qz-spark qz-spark--5">✦</span>
                     </div>
+
+                    <div className="qz-success-check">
+                        <CheckCircle size={56} color="#ffffff" strokeWidth={2.2} />
+                    </div>
+
                     <h1 className="qz-success-title">Congratulations!</h1>
                     <p className="qz-success-text">You're now a certified CraftLab Creator.</p>
-                    <div className="qz-success-badge">
-                        <Star size={14} color="#c1004a" />
-                        <span>CraftLab access unlocked</span>
+
+                    {/* Triple badge row */}
+                    <div className="qz-badge-row" aria-label="Unlocked achievements">
+                        <div className="qz-badge qz-badge--lab">
+                            <Beaker size={13} aria-hidden="true" />
+                            <span>Lab Access</span>
+                        </div>
+                        <div className="qz-badge qz-badge--creator">
+                            <Star size={13} aria-hidden="true" />
+                            <span>Creator Status</span>
+                        </div>
+                        <div className="qz-badge qz-badge--unlock">
+                            <Lock size={13} aria-hidden="true" />
+                            <span>Full Unlock</span>
+                        </div>
                     </div>
+
+                    {/* Spinner dots de navegación */}
+                    <div className="qz-nav-dots" aria-label="Navigating to your lab...">
+                        <span className="qz-dot" />
+                        <span className="qz-dot" />
+                        <span className="qz-dot" />
+                    </div>
+                    <p className="qz-nav-hint">Opening your Lab...</p>
                 </div>
             ) : (
                 <>
-                    {/* Header compacto */}
-                    <div className="qz-header">
-                        <h1 className="qz-title">Final Check</h1>
-                        <p className="qz-subtitle">One last question before unlock</p>
+                    {/* ── Progress bar compacta ─────────────────────────────── */}
+                    <div className="qz-progress" role="progressbar" aria-valuenow={3} aria-valuemin={1} aria-valuemax={3} aria-label="Step 3 of 3">
+                        <div className="qz-progress-step qz-progress-step--done" aria-label="Basic education completed">
+                            <FlaskConical size={11} aria-hidden="true" />
+                        </div>
+                        <div className="qz-progress-connector qz-progress-connector--done" />
+                        <div className="qz-progress-step qz-progress-step--done" aria-label="Technical education completed">
+                            <Beaker size={11} aria-hidden="true" />
+                        </div>
+                        <div className="qz-progress-connector qz-progress-connector--done" />
+                        <div className="qz-progress-step qz-progress-step--active" aria-label="Quiz — current step">
+                            <Star size={11} aria-hidden="true" />
+                        </div>
                     </div>
 
-                    {/* Quiz card */}
+                    {/* ── Header con drama editorial ────────────────────────── */}
+                    <div className="qz-header">
+                        <span className="qz-kicker">STEP 3 OF 3 · VALIDATION</span>
+                        <h1 className="qz-title">The Final Check</h1>
+                        <p className="qz-subtitle">Drop the correct tank into the fermenter to unlock your lab.</p>
+                    </div>
+
+                    {/* ── Quiz card ────────────────────────────────────────── */}
                     <div className="qz-card fade-in">
+
+                        {/* Chip de pista */}
+                        <div className="qz-chip" aria-label="Topic: Anaerobic Fermentation">ANAEROBIC FERMENTATION</div>
+
                         <p className="qz-question">
                             Which tank produces anaerobic fermentation?
                         </p>
-                        <p className="qz-hint">Drag the correct tank into the cup</p>
+                        <p className="qz-hint">Drag the correct tank into the fermenter below</p>
 
                         {keyboardSelected && (
                             <p className="qz-keyboard-hint" role="status">
-                                <strong>{TANKS.find((t) => t.id === keyboardSelected)?.label}</strong> selected.
-                                Press Enter on the cup to drop it.
+                                <strong>{TANKS.find((t) => t.id === keyboardSelected)?.label}</strong> selected —
+                                press Enter on the fermenter to drop it.
                             </p>
                         )}
 
-                        {/* Draggable tanks */}
-                        <div className="qz-tanks-row" role="group" aria-label="Fermentation tanks">
+                        {/* ── Draggable tanks ──────────────────────────────── */}
+                        <div className="qz-tanks-row" role="group" aria-label="Fermentation tanks to choose from">
                             {TANKS.map((tank) => (
                                 <div
                                     key={tank.id}
@@ -256,6 +427,11 @@ export const CraftLabQuiz: React.FC = () => {
                                     ]
                                         .filter(Boolean)
                                         .join(' ')}
+                                    style={
+                                        keyboardSelected === tank.id
+                                            ? ({ '--tank-accent': tank.accentColor } as React.CSSProperties)
+                                            : undefined
+                                    }
                                     draggable
                                     tabIndex={0}
                                     role="button"
@@ -268,12 +444,8 @@ export const CraftLabQuiz: React.FC = () => {
                                     onTouchEnd={onTouchEnd}
                                     onKeyDown={(e) => onTankKeyDown(e, tank.id)}
                                 >
-                                    <div
-                                        className="qz-tank-icon"
-                                        style={{ background: tank.iconGradient }}
-                                        aria-hidden="true"
-                                    >
-                                        <tank.Icon size={28} color={tank.iconColor} />
+                                    <div className="qz-tank-illustration" aria-hidden="true">
+                                        {tank.svg}
                                     </div>
                                     <span className="qz-tank-label">{tank.label}</span>
                                     <span className="qz-tank-desc">{tank.description}</span>
@@ -281,7 +453,7 @@ export const CraftLabQuiz: React.FC = () => {
                             ))}
                         </div>
 
-                        {/* Drop zone */}
+                        {/* ── Drop zone ────────────────────────────────────── */}
                         <div
                             ref={dropZoneRef}
                             className={['qz-dropzone', isDropZoneOver ? 'is-over' : '']
@@ -290,17 +462,15 @@ export const CraftLabQuiz: React.FC = () => {
                             role="button"
                             tabIndex={keyboardSelected ? 0 : -1}
                             aria-dropeffect="move"
-                            aria-label="Drop the correct tank here"
+                            aria-label="Fermenter — drop the correct tank here"
                             onDragOver={onDragOverZone}
                             onDragLeave={onDragLeaveZone}
                             onDrop={onDropZone}
                             onKeyDown={onDropZoneKeyDown}
                         >
-                            <div className="qz-dropzone-icon" aria-hidden="true">
-                                <FlaskConical size={28} color="#047857" />
-                            </div>
+                            {FERMENTER_SVG}
                             <span className="qz-dropzone-label">
-                                {isDropZoneOver ? 'Release to drop!' : 'Drop here'}
+                                {isDropZoneOver ? 'Release to drop!' : 'Drop the correct tank here'}
                             </span>
                         </div>
                     </div>
