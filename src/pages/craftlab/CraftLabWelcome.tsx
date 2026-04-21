@@ -125,24 +125,19 @@ export const CraftLabWelcome: React.FC = () => {
                         </button>
                     </header>
 
-                    <main className="clw-timeline">
-                        {ROADMAP_STEPS.map((roadmapStep, i) => (
+                    <main className="clw-steps-grid">
+                        {ROADMAP_STEPS.map((roadmapStep) => (
                             <div
                                 key={roadmapStep.n}
-                                className={`clw-step${i === ROADMAP_STEPS.length - 1 ? ' is-last' : ''}`}
+                                className={`clw-step-card${roadmapStep.pills ? ' is-wide' : ''}`}
                             >
-                                <div className="clw-step-col-left">
-                                    <div
-                                        className="clw-step-num"
-                                        style={{ background: roadmapStep.color }}
-                                    >
-                                        {roadmapStep.n}
-                                    </div>
-                                    {i < ROADMAP_STEPS.length - 1 && (
-                                        <div className="clw-step-connector" />
-                                    )}
+                                <div
+                                    className="clw-step-badge"
+                                    style={{ background: roadmapStep.color }}
+                                >
+                                    {roadmapStep.n}
                                 </div>
-                                <div className="clw-step-body">
+                                <div className="clw-step-card-body">
                                     <h3 className="clw-step-title">{roadmapStep.title}</h3>
                                     <p className="clw-step-sub">{roadmapStep.sub}</p>
                                     {roadmapStep.pills && (
