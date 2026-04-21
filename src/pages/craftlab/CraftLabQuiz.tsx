@@ -21,12 +21,40 @@ const CLOSED_TANK_SVG = (
         </defs>
         {/* Body */}
         <rect x="18" y="32" width="64" height="90" rx="8" ry="8" fill="url(#closedBody)" stroke="#9ca3af" strokeWidth="1.5"/>
-        {/* Liquid */}
+        <clipPath id="closedClip">
+            <rect x="22" y="52" width="56" height="66" rx="4"/>
+        </clipPath>
+        {/* Liquid body */}
         <rect x="22" y="52" width="56" height="66" rx="4" fill="url(#closedLiquid)" opacity="0.72"/>
-        {/* Pressure waves inside liquid */}
-        <path d="M 26 72 Q 35 70, 44 72 Q 53 74, 62 72 Q 70 70, 74 72" stroke="rgba(193,0,74,0.28)" strokeWidth="1.2" fill="none"/>
-        <path d="M 26 88 Q 35 86, 44 88 Q 53 90, 62 88 Q 70 86, 74 88" stroke="rgba(193,0,74,0.20)" strokeWidth="1.2" fill="none"/>
-        <path d="M 26 104 Q 35 102, 44 104 Q 53 106, 62 104 Q 70 102, 74 104" stroke="rgba(193,0,74,0.14)" strokeWidth="1" fill="none"/>
+        {/* Animated wavy liquid surface */}
+        <g clipPath="url(#closedClip)">
+            <path fill="url(#closedLiquid)" opacity="0.55">
+                <animate attributeName="d"
+                    values="
+                        M 22 55 Q 36 51, 50 55 Q 64 59, 78 55 L 78 118 L 22 118 Z;
+                        M 22 55 Q 36 59, 50 55 Q 64 51, 78 55 L 78 118 L 22 118 Z;
+                        M 22 55 Q 36 51, 50 55 Q 64 59, 78 55 L 78 118 L 22 118 Z"
+                    dur="3.5s" repeatCount="indefinite"/>
+            </path>
+        </g>
+        {/* Bubbles rising inside liquid (clipped) */}
+        <g clipPath="url(#closedClip)">
+            <circle cx="34" r="1.8" fill="rgba(255,255,255,0.7)">
+                <animate attributeName="cy" values="115;55" dur="2.8s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0;0.8;0" dur="2.8s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="50" r="1.4" fill="rgba(255,255,255,0.65)">
+                <animate attributeName="cy" values="118;56" dur="3.4s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0;0.7;0" dur="3.4s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="66" r="2.2" fill="rgba(255,255,255,0.7)">
+                <animate attributeName="cy" values="116;54" dur="2.4s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0;0.85;0" dur="2.4s" repeatCount="indefinite"/>
+            </circle>
+        </g>
+        {/* Pressure waves (stylized shock lines) */}
+        <path d="M 26 88 Q 35 86, 44 88 Q 53 90, 62 88 Q 70 86, 74 88" stroke="rgba(193,0,74,0.22)" strokeWidth="1.2" fill="none"/>
+        <path d="M 26 104 Q 35 102, 44 104 Q 53 106, 62 104 Q 70 102, 74 104" stroke="rgba(193,0,74,0.16)" strokeWidth="1" fill="none"/>
         {/* Lid sealed */}
         <rect x="14" y="22" width="72" height="14" rx="5" fill="#c1004a"/>
         <rect x="20" y="25" width="60" height="5" rx="2" fill="rgba(255,255,255,0.25)"/>
@@ -66,8 +94,31 @@ const OPEN_TANK_SVG = (
         <rect x="14" y="38" width="72" height="8" rx="4" fill="#d1d5db" stroke="#9ca3af" strokeWidth="1"/>
         {/* Top opening shadow (depth) */}
         <ellipse cx="50" cy="42" rx="30" ry="4" fill="#0A1E3F" opacity="0.12"/>
-        {/* Liquid */}
+        <clipPath id="openClip">
+            <rect x="22" y="58" width="56" height="60" rx="4"/>
+        </clipPath>
+        {/* Liquid body */}
         <rect x="22" y="58" width="56" height="60" rx="4" fill="url(#openLiquid)" opacity="0.72"/>
+        {/* Animated wavy liquid surface */}
+        <g clipPath="url(#openClip)">
+            <path fill="url(#openLiquid)" opacity="0.55">
+                <animate attributeName="d"
+                    values="
+                        M 22 61 Q 36 57, 50 61 Q 64 65, 78 61 L 78 118 L 22 118 Z;
+                        M 22 61 Q 36 65, 50 61 Q 64 57, 78 61 L 78 118 L 22 118 Z;
+                        M 22 61 Q 36 57, 50 61 Q 64 65, 78 61 L 78 118 L 22 118 Z"
+                    dur="3.2s" repeatCount="indefinite"/>
+            </path>
+            {/* Bubbles inside rising */}
+            <circle cx="34" r="1.6" fill="rgba(255,255,255,0.7)">
+                <animate attributeName="cy" values="115;60" dur="2.6s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0;0.8;0" dur="2.6s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="60" r="2" fill="rgba(255,255,255,0.7)">
+                <animate attributeName="cy" values="117;58" dur="3s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0;0.85;0" dur="3s" repeatCount="indefinite"/>
+            </circle>
+        </g>
         {/* Escaping bubbles animated */}
         <circle cx="38" cy="38" r="3.5" fill="rgba(29,78,216,0.38)">
             <animate attributeName="cy" from="42" to="8" dur="2.5s" repeatCount="indefinite"/>
@@ -107,8 +158,35 @@ const FERMENTER_SVG = (
         <rect x="85" y="114" width="10" height="12" rx="3" fill="#9ca3af"/>
         {/* Main vessel */}
         <rect x="15" y="28" width="90" height="90" rx="12" fill="url(#fermBody)" stroke="#6ee7b7" strokeWidth="2"/>
-        {/* Liquid inside */}
+        <clipPath id="fermClip">
+            <rect x="21" y="68" width="78" height="46" rx="6"/>
+        </clipPath>
+        {/* Liquid body */}
         <rect x="21" y="68" width="78" height="46" rx="6" fill="url(#fermLiquid)" opacity="0.65"/>
+        {/* Animated wavy liquid surface */}
+        <g clipPath="url(#fermClip)">
+            <path fill="url(#fermLiquid)" opacity="0.5">
+                <animate attributeName="d"
+                    values="
+                        M 21 72 Q 40 67, 60 72 Q 80 77, 99 72 L 99 114 L 21 114 Z;
+                        M 21 72 Q 40 77, 60 72 Q 80 67, 99 72 L 99 114 L 21 114 Z;
+                        M 21 72 Q 40 67, 60 72 Q 80 77, 99 72 L 99 114 L 21 114 Z"
+                    dur="4s" repeatCount="indefinite"/>
+            </path>
+            {/* Bubbles rising inside fermenter */}
+            <circle cx="38" r="2" fill="rgba(255,255,255,0.75)">
+                <animate attributeName="cy" values="112;70" dur="3s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0;0.85;0" dur="3s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="60" r="2.4" fill="rgba(255,255,255,0.7)">
+                <animate attributeName="cy" values="114;68" dur="2.5s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0;0.9;0" dur="2.5s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="80" r="1.8" fill="rgba(255,255,255,0.7)">
+                <animate attributeName="cy" values="113;70" dur="3.5s" repeatCount="indefinite"/>
+                <animate attributeName="opacity" values="0;0.8;0" dur="3.5s" repeatCount="indefinite"/>
+            </circle>
+        </g>
         {/* Top flange */}
         <rect x="10" y="20" width="100" height="12" rx="6" fill="#d1fae5" stroke="#6ee7b7" strokeWidth="1.5"/>
         {/* Lid entry port */}
