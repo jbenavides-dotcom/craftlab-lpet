@@ -7,8 +7,8 @@
 :root {
     --cl-accent: #c1004a;
     --cl-accent-soft: #fce7f3;
-    --cl-blue: #3B82F6;
-    --cl-blue-soft: #dbeafe;
+    --cl-blue: #1D4ED8;
+    --cl-blue-soft: #bfdbfe;
     --cl-green: #10B981;
     --cl-green-soft: #d1fae5;
     --cl-pink: #EC4899;
@@ -105,7 +105,7 @@
     padding: 0 20px;
     /* aspect-ratio 4/3 via padding-bottom hack para soporte amplio */
     aspect-ratio: 4 / 3;
-    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #f0fdf4 100%);
+    background: linear-gradient(135deg, #bfdbfe 0%, #60a5fa 50%, #3b82f6 100%);
     border-radius: 20px;
     overflow: visible;
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255,255,255,0.8);
