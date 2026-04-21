@@ -129,7 +129,7 @@ export const CraftLabWelcome: React.FC = () => {
                         {ROADMAP_STEPS.map((roadmapStep) => (
                             <div
                                 key={roadmapStep.n}
-                                className={`clw-step-card${roadmapStep.pills ? ' is-wide' : ''}`}
+                                className="clw-step-card"
                             >
                                 <div
                                     className="clw-step-badge"
