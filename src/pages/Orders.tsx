@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     FlaskConical,
@@ -9,7 +9,30 @@ import {
     Home as HomeIcon,
     Info,
 } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 import './Orders.css';
+
+const VARIETY_GRADIENTS: Record<string, string> = {
+    Geisha:         'linear-gradient(135deg, #fce7f3 0%, #f9a8d4 100%)',
+    Sidra:          'linear-gradient(135deg, #fee2e2 0%, #fca5a5 100%)',
+    Java:           'linear-gradient(135deg, #d1fae5 0%, #6ee7b7 100%)',
+    Caturra:        'linear-gradient(135deg, #fef3c7 0%, #fcd34d 100%)',
+    'Pink Bourbon': 'linear-gradient(135deg, #dbeafe 0%, #93c5fd 100%)',
+    default:        'linear-gradient(135deg, #ede9fe 0%, #c4b5fd 100%)',
+};
+
+const statusFromDbStatus = (dbStatus: string): 'active' | 'ready' | 'delivered' => {
+    if (dbStatus === 'delivered') return 'delivered';
+    if (dbStatus === 'ready' || dbStatus === 'shipped') return 'ready';
+    return 'active';
+};
+
+const stageFromDbStatus = (dbStatus: string): 'order' | 'fermentation' | 'drying' | 'ready' => {
+    if (dbStatus === 'fermentation' || dbStatus === 'in_lab') return 'fermentation';
+    if (dbStatus === 'drying') return 'drying';
+    if (dbStatus === 'ready' || dbStatus === 'shipped' || dbStatus === 'delivered') return 'ready';
+    return 'order';
+};
 
 /* ─── Types ─────────────────────────────────────────── */
 type Stage = 'order' | 'fermentation' | 'drying' | 'ready';
@@ -181,16 +204,69 @@ function EmptyState() {
 export function Orders() {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState<FilterTab>('all');
+    const [orders, setOrders] = useState<Order[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    const filtered = MOCK_ORDERS.filter((o) => {
+    useEffect(() => {
+        let mounted = true;
+        const load = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) { setLoading(false); return; }
+
+            const [fbRes, clRes] = await Promise.all([
+                supabase.from('fb_orders')
+                    .select('id, variety, harvest_date, process, bag_size, quantity, status, created_at')
+                    .eq('user_id', user.id)
+                    .order('created_at', { ascending: false }),
+                supabase.from('cl_orders')
+                    .select('id, variety, process, quantity_kg, shipment_window, status, created_at')
+                    .eq('user_id', user.id)
+                    .order('created_at', { ascending: false }),
+            ]);
+
+            if (!mounted) return;
+
+            const fb: Order[] = (fbRes.data ?? []).map((o): Order => ({
+                id: `FB-${o.id.slice(0, 8).toUpperCase()}`,
+                variety: o.variety || 'Coffee',
+                harvest: o.harvest_date || '—',
+                process: o.process || '—',
+                weight_kg: (o.bag_size || 0) * (o.quantity || 0),
+                stage: stageFromDbStatus(o.status),
+                status: statusFromDbStatus(o.status),
+                created: o.created_at,
+                gradient: VARIETY_GRADIENTS[o.variety || ''] ?? VARIETY_GRADIENTS.default,
+            }));
+
+            const cl: Order[] = (clRes.data ?? []).map((o): Order => ({
+                id: `CL-${o.id.slice(0, 8).toUpperCase()}`,
+                variety: o.variety || 'Custom',
+                harvest: o.shipment_window || '—',
+                process: o.process || '—',
+                weight_kg: Number(o.quantity_kg) || 0,
+                stage: stageFromDbStatus(o.status),
+                status: statusFromDbStatus(o.status),
+                created: o.created_at,
+                gradient: VARIETY_GRADIENTS[o.variety || ''] ?? VARIETY_GRADIENTS.default,
+            }));
+
+            const all = [...fb, ...cl].sort((a, b) => (a.created < b.created ? 1 : -1));
+            setOrders(all);
+            setLoading(false);
+        };
+        load();
+        return () => { mounted = false; };
+    }, []);
+
+    const filtered = orders.filter((o) => {
         if (activeTab === 'active') return o.status === 'active';
         if (activeTab === 'completed') return o.status === 'delivered';
         return true;
     });
 
-    const activeCount = MOCK_ORDERS.filter((o) => o.status === 'active').length;
-    const completedCount = MOCK_ORDERS.filter((o) => o.status === 'delivered').length;
-    const totalKg = MOCK_ORDERS.reduce((sum, o) => sum + o.weight_kg, 0);
+    const activeCount = orders.filter((o) => o.status === 'active').length;
+    const completedCount = orders.filter((o) => o.status === 'delivered').length;
+    const totalKg = orders.reduce((sum, o) => sum + o.weight_kg, 0);
 
     return (
         <div className="ord-container">
