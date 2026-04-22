@@ -44,13 +44,15 @@ const STEPS = [
 
 // ─── Static data ──────────────────────────────────────────────────────────────
 
-const MACRO_PROFILES = [
+const MACRO_PROFILES: { id: string; label: string; desc: string; color: string; gradient: string; Icon: React.ElementType; iconColor: string }[] = [
     {
         id: 'fermented',
         label: 'Fermented',
         desc: 'Bold, fruity, and complex',
         color: '#9b2335',
         gradient: 'linear-gradient(135deg, #fee2e2 0%, #fca5a5 100%)',
+        Icon: FlaskConical,
+        iconColor: '#9b2335',
     },
     {
         id: 'bright',
@@ -58,6 +60,8 @@ const MACRO_PROFILES = [
         desc: 'Crisp, acidic, and floral',
         color: '#e6a817',
         gradient: 'linear-gradient(135deg, #fef3c7 0%, #fbbf24 100%)',
+        Icon: Sun,
+        iconColor: '#b45309',
     },
     {
         id: 'classic',
@@ -65,6 +69,8 @@ const MACRO_PROFILES = [
         desc: 'Balanced, sweet, and comforting',
         color: '#6b5344',
         gradient: 'linear-gradient(135deg, #fef3c7 0%, #d4a373 100%)',
+        Icon: Coffee,
+        iconColor: '#6b5344',
     },
 ];
 
@@ -438,7 +444,9 @@ export const CraftLabConfigurator: React.FC = () => {
                                                 tabIndex={0}
                                                 onKeyDown={e => (e.key === 'Enter' || e.key === ' ') ? updateConfig('macro', m.id) : undefined}
                                             >
-                                                <div className="cl-choice-icon" style={{ background: m.gradient }} />
+                                                <div className="cl-choice-icon" style={{ background: m.gradient }}>
+                                                    <m.Icon size={22} strokeWidth={1.75} color={m.iconColor} />
+                                                </div>
                                                 <div className="cl-choice-content">
                                                     <div className="cl-choice-title">{m.label}</div>
                                                     <div className="cl-choice-desc">{m.desc}</div>
