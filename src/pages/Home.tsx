@@ -146,34 +146,22 @@ export const Home: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* 03 — Single Estate (olive) */}
+                    {/* 03 — Community (olive, narrativo no-interactivo) */}
                     <div
-                        className="program-card se"
-                        onClick={() => navigate('/single-estate')}
-                        role="button"
-                        tabIndex={0}
-                        aria-label="Single Estate program"
-                        onKeyDown={(e) => e.key === 'Enter' && navigate('/single-estate')}
+                        className="program-card se is-narrative"
+                        aria-label="Our community — narrative block"
                     >
                         <div
                             className="pc-photo"
                             style={{ backgroundImage: `url(${singleEstateImage})` }}
                             role="img"
-                            aria-label="Single Estate coffee lot placeholder"
+                            aria-label="La Palma y El Tucán community"
                         />
 
                         <div className="pc-block">
-                            <div className="pc-kicker">From our own cup</div>
-                            <h2 className="pc-title">The farm's <em>current selection.</em></h2>
-                            <p className="pc-sub">Curated lots from our estate, available today. Traceable, small-batch, roast-to-order.</p>
-                            <div className="pc-meta">
-                                <span>In stock</span>
-                                <span>Small batch</span>
-                                <span>Traceable</span>
-                            </div>
-                            <div className="pc-cta">
-                                Browse lots <ArrowRight size={14} strokeWidth={2.25} />
-                            </div>
+                            <div className="pc-kicker">Our community</div>
+                            <h2 className="pc-title">Every coffee, <em>an evolution.</em></h2>
+                            <p className="pc-sub">Every coffee in this collection represents an evolution of how we study our coffee and understand our processes.</p>
                         </div>
                     </div>
 

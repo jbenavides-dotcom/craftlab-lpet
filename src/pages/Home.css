@@ -199,6 +199,15 @@
     transform: scale(0.985);
 }
 
+/* Variant narrativa: no interactiva (sin cursor, sin active scale) */
+.program-card.is-narrative {
+    cursor: default;
+}
+
+.program-card.is-narrative:active {
+    transform: none;
+}
+
 .pc-photo {
     aspect-ratio: 16 / 10;
     position: relative;
