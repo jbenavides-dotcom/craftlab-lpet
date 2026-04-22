@@ -811,44 +811,49 @@
         font-size: 0.85rem;
     }
 
-    /* Q1 tanks */
+    /* Q1 tanks — compactos en desktop */
     .qz-tanks-row {
-        gap: 24px;
-        margin-top: 20px;
-        margin-bottom: 24px;
+        gap: 14px;
+        margin-top: 18px;
+        margin-bottom: 20px;
     }
 
     .qz-tank {
-        padding: 16px;
+        padding: 12px 14px;
+        gap: 6px;
+        max-width: 170px;
     }
 
     .qz-tank-illustration svg {
-        width: 90px;
-        height: 115px;
+        width: 64px;
+        height: 88px;
     }
 
     .qz-tank-label {
-        font-size: 0.95rem;
+        font-size: 0.85rem;
     }
 
     .qz-tank-desc {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
     }
 
-    /* Drop zone */
+    /* Drop zone — más compacto */
     .qz-dropzone {
-        min-height: 180px;
-        max-width: 420px;
-        padding: 20px;
+        min-height: 130px;
+        max-width: 360px;
+        margin: 0 auto;
+        padding: 16px 18px;
+        gap: 6px;
     }
 
     .qz-fermenter-svg {
-        width: 100px;
-        height: 110px;
+        width: 68px;
+        height: 74px;
     }
 
     .qz-dropzone-label {
-        font-size: 0.9rem;
+        font-size: 0.82rem;
+        margin-top: 0;
     }
 
     /* Multiple choice */
