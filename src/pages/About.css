@@ -84,11 +84,13 @@
     height: 220px;
     background: linear-gradient(
         135deg,
-        #c1004a 0%,
-        #EC4899 25%,
-        #ffffff 50%,
-        #EC4899 75%,
-        #c1004a 100%
+        #9d0038 0%,
+        #c1004a 20%,
+        #EC4899 40%,
+        #fce7f3 50%,
+        #EC4899 60%,
+        #c1004a 80%,
+        #9d0038 100%
     );
     background-size: 300% 300%;
     animation: ab-hero-flow 12s ease-in-out infinite;
