@@ -162,18 +162,56 @@ const SHIPMENT_QUARTERS = [
     { id: 'q4' as const, label: 'Q4', range: 'Oct – Dec', Icon: Moon,    gradient: 'linear-gradient(135deg, #ddd6fe 0%, #a78bfa 100%)', iconColor: '#5b21b6' },
 ];
 
+interface ParamHint {
+    min: number;
+    label: string;
+    text: string;
+}
+
 const PARAM_META = [
     { key: 'stabilization' as const, label: 'Stabilization Time',   Icon: Hourglass,     min: 0, max: 200, step: 12, unit: ' hrs',
-      iconColor: '#9d174d', gradient: 'linear-gradient(135deg, #fce7f3 0%, #f9a8d4 100%)' },
+      iconColor: '#9d174d', gradient: 'linear-gradient(135deg, #fce7f3 0%, #f9a8d4 100%)',
+      hints: [
+          { min: 1,   label: 'Short',    text: 'Quick stabilization — preserves clarity and bright acidity.' },
+          { min: 48,  label: 'Moderate', text: 'Balanced structure — develops sweetness without losing cup clarity.' },
+          { min: 120, label: 'Extended', text: 'Deep complexity — boozy, layered notes from long cherry rest.' },
+      ] as ParamHint[] },
     { key: 'cherryFerm'    as const, label: 'Cherry Fermentation',  Icon: Cherry,         min: 0, max: 200, step: 12, unit: ' hrs',
-      iconColor: '#991b1b', gradient: 'linear-gradient(135deg, #fee2e2 0%, #fca5a5 100%)' },
+      iconColor: '#991b1b', gradient: 'linear-gradient(135deg, #fee2e2 0%, #fca5a5 100%)',
+      hints: [
+          { min: 1,   label: 'Subtle',   text: 'Fruity hints, clean finish — for bright, tea-like profiles.' },
+          { min: 48,  label: 'Defined',  text: 'Tropical fruit-forward with structured body.' },
+          { min: 120, label: 'Intense',  text: 'Wine-like, funky, red berry intensity — Katherine\'s signature territory.' },
+      ] as ParamHint[] },
     { key: 'mucilageFerm'  as const, label: 'Mucilage Fermentation', Icon: Droplets,      min: 0, max: 200, step: 12, unit: ' hrs',
-      iconColor: '#6b21a8', gradient: 'linear-gradient(135deg, #ede9fe 0%, #c4b5fd 100%)' },
+      iconColor: '#6b21a8', gradient: 'linear-gradient(135deg, #ede9fe 0%, #c4b5fd 100%)',
+      hints: [
+          { min: 1,   label: 'Short',    text: 'Clean cup, natural sweetness — closer to washed character.' },
+          { min: 48,  label: 'Balanced', text: 'Stone fruit + caramel — mucilage sugars fully expressed.' },
+          { min: 120, label: 'Deep',     text: 'Bio-innovation territory — citric acidity, tropical complexity.' },
+      ] as ParamHint[] },
     { key: 'solarDry'      as const, label: 'Solar Dry',             Icon: Sun,           min: 0, max: 100, step: 1,  unit: ' days',
-      iconColor: '#b45309', gradient: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)' },
+      iconColor: '#b45309', gradient: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
+      hints: [
+          { min: 1,   label: 'Fast',     text: 'Quick dry — risk of uneven drying, use only with mech backup.' },
+          { min: 15,  label: 'Standard', text: 'Ideal range at 1,800m — controlled sun drying on raised beds.' },
+          { min: 40,  label: 'Slow',     text: 'Extended sun cure — deeper body, complex dried-fruit sweetness.' },
+      ] as ParamHint[] },
     { key: 'mechDry'       as const, label: 'Mechanical Dry',        Icon: Thermometer,   min: 0, max: 100, step: 6,  unit: ' hrs',
-      iconColor: '#1D4ED8', gradient: 'linear-gradient(135deg, #dbeafe 0%, #93c5fd 100%)' },
+      iconColor: '#1D4ED8', gradient: 'linear-gradient(135deg, #dbeafe 0%, #93c5fd 100%)',
+      hints: [
+          { min: 1,   label: 'Light',    text: 'Final moisture balance — protects delicate aromatics.' },
+          { min: 30,  label: 'Medium',   text: 'Standard finish — stabilizes moisture to 11% safely.' },
+          { min: 60,  label: 'Heavy',    text: 'Use sparingly — can mute volatile notes. Katherine recommends <72h.' },
+      ] as ParamHint[] },
 ];
+
+// Helper: retorna el hint activo según el valor actual
+const getActiveHint = (hints: ParamHint[] | undefined, value: number | null): ParamHint | null => {
+    if (!hints || value === null || value <= 0) return null;
+    const matches = hints.filter(h => value >= h.min);
+    return matches.length > 0 ? matches[matches.length - 1] : null;
+};
 
 const SECTION_IMAGES: Record<string, string> = {
     'sec-macro':    'https://images.unsplash.com/photo-1498804103079-a6351b050096?q=80&w=1200&auto=format&fit=crop',
@@ -703,6 +741,7 @@ export const CraftLabConfigurator: React.FC = () => {
                                         {visibleParams.map(p => {
                                             const val = config[p.key] as number | null;
                                             const { Icon } = p;
+                                            const hint = getActiveHint(p.hints, val);
                                             return (
                                                 <div key={p.key} className={`cl-param-card${val !== null ? ' has-value' : ''}`}>
                                                     <div className="cl-param-card-top">
@@ -722,6 +761,14 @@ export const CraftLabConfigurator: React.FC = () => {
                                                         onChange={v => updateConfig(p.key, v)}
                                                         unit={p.unit}
                                                     />
+                                                    {hint && (
+                                                        <div className="cl-param-hint" style={{ borderColor: p.iconColor + '33' }}>
+                                                            <span className="cl-param-hint-label" style={{ background: p.gradient, color: p.iconColor }}>
+                                                                {hint.label}
+                                                            </span>
+                                                            <span className="cl-param-hint-text">{hint.text}</span>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             );
                                         })}
