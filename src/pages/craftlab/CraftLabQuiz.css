@@ -780,153 +780,110 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   DESKTOP ≥900px — Editorial final-check layout
-   Card más grande, typography escalada, multi-col en tanks y MC
+   DESKTOP ≥900px — Compact editorial layout
    ═══════════════════════════════════════════════════════════════ */
 @media (min-width: 900px) {
     .qz-container {
-        padding: 48px 40px 60px;
+        padding: 28px 24px 40px;
         justify-content: flex-start;
     }
 
-    .qz-kicker {
-        font-size: 0.75rem;
-        letter-spacing: 0.22em;
-        margin-bottom: 12px;
-    }
-
     .qz-title {
-        font-size: 3rem;
+        font-size: 2rem;
     }
 
     .qz-subtitle {
-        font-size: 1.1rem;
-        max-width: 540px;
-        margin-top: 10px;
+        font-size: 0.95rem;
+        max-width: 460px;
     }
 
     .qz-card {
-        max-width: 820px;
-        padding: 48px 56px;
-        gap: 4px;
-    }
-
-    .qz-chip {
-        font-size: 0.72rem;
-        padding: 7px 18px;
+        max-width: 620px;
+        padding: 32px 36px;
     }
 
     .qz-question {
-        font-size: 1.35rem;
-        max-width: 600px;
+        font-size: 1.1rem;
+        max-width: 480px;
     }
 
     .qz-hint {
-        font-size: 0.95rem;
+        font-size: 0.85rem;
     }
 
-    /* Tanks (Q1 drag & drop): grandes lado a lado */
+    /* Q1 tanks */
     .qz-tanks-row {
-        gap: 40px;
-        margin-top: 28px;
-        margin-bottom: 36px;
+        gap: 24px;
+        margin-top: 20px;
+        margin-bottom: 24px;
     }
 
     .qz-tank {
-        padding: 22px;
-        min-width: 200px;
+        padding: 16px;
     }
 
     .qz-tank-illustration svg {
-        width: 120px;
-        height: 150px;
+        width: 90px;
+        height: 115px;
     }
 
     .qz-tank-label {
-        font-size: 1.1rem;
-        margin-top: 10px;
+        font-size: 0.95rem;
     }
 
     .qz-tank-desc {
-        font-size: 0.85rem;
+        font-size: 0.75rem;
     }
 
-    /* Drop zone (Q1): área generosa */
+    /* Drop zone */
     .qz-dropzone {
-        min-height: 240px;
-        max-width: 520px;
-        padding: 28px;
+        min-height: 180px;
+        max-width: 420px;
+        padding: 20px;
     }
 
     .qz-fermenter-svg {
-        width: 140px;
-        height: 150px;
+        width: 100px;
+        height: 110px;
     }
 
     .qz-dropzone-label {
-        font-size: 1rem;
-        margin-top: 14px;
-    }
-
-    /* Multiple choice (Q2, Q3): grid 3 cols más grande */
-    .qz-mc-grid {
-        gap: 18px;
-        margin-top: 28px;
-    }
-
-    .qz-mc-card {
-        padding: 28px 22px;
-        min-height: 120px;
-        gap: 8px;
-    }
-
-    .qz-mc-label {
-        font-size: 1.75rem;
-    }
-
-    .qz-mc-sub {
-        font-size: 0.82rem;
-    }
-
-    /* Progress dots más grandes */
-    .qz-progress-step {
-        width: 36px;
-        height: 36px;
         font-size: 0.9rem;
     }
 
-    /* Success overlay editorial */
-    .qz-success-title {
-        font-size: 3.5rem;
+    /* Multiple choice */
+    .qz-mc-grid {
+        gap: 12px;
+        margin-top: 20px;
     }
 
-    .qz-success-text {
-        font-size: 1.2rem;
-        max-width: 520px;
-    }
-
-    .qz-success-badges {
-        gap: 14px;
-    }
-
-    .qz-success-badge {
-        padding: 10px 18px;
-        font-size: 0.85rem;
-    }
-}
-
-/* ≥1200px — aún más generoso */
-@media (min-width: 1200px) {
-    .qz-card {
-        max-width: 900px;
-        padding: 56px 64px;
-    }
-
-    .qz-title {
-        font-size: 3.5rem;
+    .qz-mc-card {
+        padding: 18px 14px;
+        min-height: 90px;
     }
 
     .qz-mc-label {
-        font-size: 2rem;
+        font-size: 1.25rem;
+    }
+
+    .qz-mc-sub {
+        font-size: 0.72rem;
+    }
+
+    /* Progress dots */
+    .qz-progress-step {
+        width: 30px;
+        height: 30px;
+        font-size: 0.78rem;
+    }
+
+    /* Success overlay */
+    .qz-success-title {
+        font-size: 2.4rem;
+    }
+
+    .qz-success-text {
+        font-size: 1rem;
+        max-width: 440px;
     }
 }
