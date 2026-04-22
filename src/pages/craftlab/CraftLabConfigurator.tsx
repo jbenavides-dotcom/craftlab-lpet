@@ -454,7 +454,7 @@ export const CraftLabConfigurator: React.FC = () => {
             }
 
             localStorage.removeItem('craftlab_config');
-            navigate('/forward-booking/success');
+            navigate('/forward-booking/success', { state: { type: 'cl' } });
         } catch (e) {
             console.error('CL order submit exception:', e);
             alert('Something went wrong. Please try again.');
@@ -578,9 +578,10 @@ export const CraftLabConfigurator: React.FC = () => {
                                     variant="primary"
                                     size="full"
                                     disabled={!agreedToTerms || submitting}
+                                    isLoading={submitting}
                                     onClick={handleConfirmOrder}
                                 >
-                                    {submitting ? 'Submitting…' : 'Confirm and Place Order'}
+                                    Confirm and Place Order
                                 </Button>
                             </div>
                         </div>

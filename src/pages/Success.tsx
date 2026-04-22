@@ -1,23 +1,42 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Check, Star } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import './Selectors.css';
 
+type FlowType = 'fb' | 'cl';
+
+const FLOW_COPY: Record<FlowType, { header: string; subtitle: string; points: string }> = {
+    fb: {
+        header: 'Forward Booking',
+        subtitle: "Your Forward Booking reservation is being prepared.\nWe'll keep you posted on every stage.",
+        points: '+5,000 points earned',
+    },
+    cl: {
+        header: 'CraftLab',
+        subtitle: "Your custom build is entering the lab.\nWe'll keep you posted on every stage.",
+        points: '+10,000 points earned',
+    },
+};
+
 export function Success() {
     const navigate = useNavigate();
+    const location = useLocation();
+    const type: FlowType = (location.state as { type?: FlowType } | null)?.type === 'cl' ? 'cl' : 'fb';
+    const copy = FLOW_COPY[type];
 
     useEffect(() => {
+        const prefix = type === 'cl' ? 'craftlab_' : 'fb_';
         Object.keys(localStorage)
-            .filter(k => k.startsWith('fb_'))
+            .filter(k => k.startsWith(prefix))
             .forEach(k => localStorage.removeItem(k));
-    }, []);
+    }, [type]);
 
     return (
         <div className="selector-container" style={{ background: '#ffffff' }}>
             <header className="ds-header">
                 <div className="ds-header-spacer" aria-hidden="true" />
-                <span className="ds-header-title">Forward Booking</span>
+                <span className="ds-header-title">{copy.header}</span>
                 <div className="ds-header-spacer" aria-hidden="true" />
             </header>
 
@@ -28,14 +47,13 @@ export function Success() {
 
                 <h1 className="ss-title">Order confirmed</h1>
 
-                <p className="ss-subtitle">
-                    Your Forward Booking reservation is being prepared.<br />
-                    We'll keep you posted on every stage.
+                <p className="ss-subtitle" style={{ whiteSpace: 'pre-line' }}>
+                    {copy.subtitle}
                 </p>
 
                 <div className="ss-points-badge">
                     <Star size={16} strokeWidth={2} fill="#854d0e" color="#854d0e" />
-                    <span>+5,000 points earned</span>
+                    <span>{copy.points}</span>
                 </div>
             </main>
 
