@@ -4,7 +4,7 @@ import {
     X, Check, Clock, FlaskConical, Droplets, Sun, Zap,
     Flower2, Moon, Leaf, Package,
     Banana, Cherry, Citrus, Apple, Sparkles, Coffee,
-    Crown, Sprout, Grape, Gem, Beaker, Hexagon,
+    Crown, Sprout, Grape, Gem, Beaker, Hexagon, Waves,
 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Slider } from '../../components/ui/Slider';
@@ -135,12 +135,23 @@ const CATEGORIES: Record<string, CategoryDef[]> = {
     ],
 };
 
-const METHODS: Record<string, { id: string; label: string }[]> = {
-    'bio-innovation': [{ id: 'mucilage-ferm', label: 'Mucilage' }, { id: 'cherry-ferm', label: 'Cherry' }],
-    'lactic':         [{ id: 'lactic-std',    label: 'Lactic Standard' }],
-    'natural':        [{ id: 'natural-std',   label: 'Natural Standard' }],
-    'washed':         [{ id: 'washed-std',    label: 'Washed Standard' }],
-    'honey':          [{ id: 'honey-std',     label: 'Honey Standard' }],
+interface MethodDef {
+    id: string;
+    label: string;
+    Icon: React.ElementType;
+    gradient: string;
+    iconColor: string;
+}
+
+const METHODS: Record<string, MethodDef[]> = {
+    'bio-innovation': [
+        { id: 'mucilage-ferm', label: 'Mucilage', Icon: Droplets, gradient: 'linear-gradient(135deg, #ede9fe 0%, #c4b5fd 100%)', iconColor: '#6b21a8' },
+        { id: 'cherry-ferm',   label: 'Cherry',   Icon: Cherry,   gradient: 'linear-gradient(135deg, #fee2e2 0%, #fca5a5 100%)', iconColor: '#991b1b' },
+    ],
+    'lactic':  [{ id: 'lactic-std',  label: 'Lactic Standard',  Icon: Beaker,   gradient: 'linear-gradient(135deg, #fce7f3 0%, #f9a8d4 100%)', iconColor: '#9d174d' }],
+    'natural': [{ id: 'natural-std', label: 'Natural Standard', Icon: Sun,      gradient: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', iconColor: '#b45309' }],
+    'washed':  [{ id: 'washed-std',  label: 'Washed Standard',  Icon: Waves,    gradient: 'linear-gradient(135deg, #dbeafe 0%, #93c5fd 100%)', iconColor: '#1D4ED8' }],
+    'honey':   [{ id: 'honey-std',   label: 'Honey Standard',   Icon: Hexagon,  gradient: 'linear-gradient(135deg, #fef9c3 0%, #fde047 100%)', iconColor: '#854d0e' }],
 };
 
 const SHIPMENT_QUARTERS = [
@@ -656,7 +667,9 @@ export const CraftLabConfigurator: React.FC = () => {
                                                 tabIndex={0}
                                                 onKeyDown={e => (e.key === 'Enter' || e.key === ' ') ? updateConfig('process', m.id) : undefined}
                                             >
-                                                <div className="cl-choice-icon" style={{ background: 'linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%)' }} />
+                                                <div className="cl-choice-icon" style={{ background: m.gradient }}>
+                                                    <m.Icon size={22} strokeWidth={1.75} color={m.iconColor} />
+                                                </div>
                                                 <div className="cl-choice-content">
                                                     <div className="cl-choice-title">{m.label}</div>
                                                 </div>
