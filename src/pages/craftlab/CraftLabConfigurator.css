@@ -517,12 +517,22 @@
     flex-shrink: 0;
 }
 
+.cl-param-title {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--cl-text);
+    line-height: 1.25;
+}
+
 .cl-param-val {
-    font-size: 1.4rem;
+    font-size: 1.25rem;
     font-weight: 700;
     color: var(--cl-accent);
     font-variant-numeric: tabular-nums;
     transition: color 0.2s ease;
+    flex-shrink: 0;
 }
 
 /* Recomendación dinámica según el valor del slider */

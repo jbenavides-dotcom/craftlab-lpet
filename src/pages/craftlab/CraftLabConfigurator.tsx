@@ -748,6 +748,7 @@ export const CraftLabConfigurator: React.FC = () => {
                                                         <div className="cl-param-icon" style={{ background: p.gradient }}>
                                                             <Icon size={18} strokeWidth={1.75} color={p.iconColor} />
                                                         </div>
+                                                        <div className="cl-param-title">{p.label}</div>
                                                         <div className="cl-param-val" style={val !== null ? { color: p.iconColor } : undefined}>
                                                             {val !== null ? `${val}${p.unit}` : '—'}
                                                         </div>
@@ -760,6 +761,7 @@ export const CraftLabConfigurator: React.FC = () => {
                                                         value={val}
                                                         onChange={v => updateConfig(p.key, v)}
                                                         unit={p.unit}
+                                                        hideHeader
                                                     />
                                                     {hint && (
                                                         <div className="cl-param-hint" style={{ borderColor: p.iconColor + '33' }}>
