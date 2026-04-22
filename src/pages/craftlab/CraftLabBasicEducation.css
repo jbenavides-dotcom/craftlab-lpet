@@ -167,3 +167,88 @@
         transform: translateY(0);
     }
 }
+
+/* ============================================================
+   DESKTOP ≥900px — Editorial 2-col layout
+   Icon grande a la izquierda, título + texto a la derecha
+   ============================================================ */
+@media (min-width: 900px) {
+    .education-stories-container {
+        background: linear-gradient(180deg, #fafaf5 0%, #fff 100%);
+        min-height: 100vh;
+        padding: 0 40px;
+    }
+
+    .stories-progress-container {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 24px 0 12px;
+        gap: 6px;
+    }
+
+    .story-progress-segment {
+        height: 4px;
+    }
+
+    .story-close {
+        top: 24px;
+        right: 40px;
+        width: 44px;
+        height: 44px;
+    }
+
+    .be-content {
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 64px;
+        padding: 40px 40px 80px;
+        max-width: 960px;
+        margin: 0 auto;
+        width: 100%;
+        text-align: left;
+    }
+
+    .be-icon-circle {
+        width: 280px;
+        height: 280px;
+        flex-shrink: 0;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+    }
+
+    .be-icon-circle svg {
+        width: 112px;
+        height: 112px;
+    }
+
+    .be-text-wrap {
+        max-width: 440px;
+    }
+
+    .be-title {
+        font-size: 3rem;
+        line-height: 1.1;
+        margin-bottom: 1rem;
+    }
+
+    .be-text {
+        font-size: 1.15rem;
+        line-height: 1.6;
+        max-width: 440px;
+    }
+}
+
+/* ≥1200px — Aún más generoso */
+@media (min-width: 1200px) {
+    .be-icon-circle {
+        width: 320px;
+        height: 320px;
+    }
+    .be-icon-circle svg {
+        width: 128px;
+        height: 128px;
+    }
+    .be-title {
+        font-size: 3.5rem;
+    }
+}

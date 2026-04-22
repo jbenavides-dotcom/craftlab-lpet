@@ -222,18 +222,20 @@ export const CraftLabBasicEducation: React.FC = () => {
                 >
                     {currentSlide.icon}
                 </div>
-                <h2 className="be-title">
-                    {currentSlide.highlight ? (
-                        <>
-                            {currentSlide.title.split(currentSlide.highlight)[0]}
-                            <span className="be-title-accent">{currentSlide.highlight}</span>
-                            {currentSlide.title.split(currentSlide.highlight)[1]}
-                        </>
-                    ) : (
-                        currentSlide.title
-                    )}
-                </h2>
-                <p className="be-text">{currentSlide.text}</p>
+                <div className="be-text-wrap">
+                    <h2 className="be-title">
+                        {currentSlide.highlight ? (
+                            <>
+                                {currentSlide.title.split(currentSlide.highlight)[0]}
+                                <span className="be-title-accent">{currentSlide.highlight}</span>
+                                {currentSlide.title.split(currentSlide.highlight)[1]}
+                            </>
+                        ) : (
+                            currentSlide.title
+                        )}
+                    </h2>
+                    <p className="be-text">{currentSlide.text}</p>
+                </div>
             </div>
 
             <ExitConfirmModal
