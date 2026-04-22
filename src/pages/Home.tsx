@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Menu, User, Home as HomeIcon, ShoppingBag, Info, ArrowRight, GraduationCap, FlaskConical, Lock, Check, Star } from 'lucide-react';
 import { Modal } from '../components/ui/Modal';
@@ -15,18 +15,16 @@ export const Home: React.FC = () => {
     const [showFBWelcome, setShowFBWelcome] = useState(false);
     const [showCLOnboarding, setShowCLOnboarding] = useState(false);
     const [isNavigatingToFB, setIsNavigatingToFB] = useState(false);
-    // TEMP DEV: forzar unlock para visualizar el estado desbloqueado del modal CL
-    // Revertir al acabar: volver a useState(false) y descomentar el useEffect
-    const [educationCompleted, setEducationCompleted] = useState(true);
+    const [educationCompleted, setEducationCompleted] = useState(false);
 
-    // useEffect(() => {
-    //     const checkStatus = async () => {
-    //         const { checkCraftLabUnlocked } = await import('../lib/user-progress');
-    //         const completed = await checkCraftLabUnlocked();
-    //         setEducationCompleted(completed);
-    //     };
-    //     checkStatus();
-    // }, []);
+    useEffect(() => {
+        const checkStatus = async () => {
+            const { checkCraftLabUnlocked } = await import('../lib/user-progress');
+            const completed = await checkCraftLabUnlocked();
+            setEducationCompleted(completed);
+        };
+        checkStatus();
+    }, []);
 
     const handleFBClick = () => {
         setShowFBWelcome(true);

@@ -1,11 +1,11 @@
 import { supabase } from './supabase';
 
-// Legacy localStorage key used before this rename — kept for migration fallback
+// Legacy localStorage key (pre-rename)
 const LEGACY_LS_KEY = 'education_completed';
 const LS_KEY = 'craftlab_unlocked';
 
 export const checkCraftLabUnlocked = async (): Promise<boolean> => {
-    // 1. Fast localStorage check (covers offline + already-migrated users)
+    // 1. Fast localStorage check (covers offline + already-cached)
     if (localStorage.getItem(LS_KEY) === 'true') return true;
 
     // 2. Retrocompat: migrate legacy key on first check
@@ -15,51 +15,66 @@ export const checkCraftLabUnlocked = async (): Promise<boolean> => {
         return true;
     }
 
-    // 3. Source of truth: Supabase
+    // 3. Source of truth: Supabase user_progress table
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return false;
 
-    // TODO: rename column in Supabase to craftlab_unlocked
     const { data, error } = await supabase
         .from('user_progress')
-        .select('education_completed')
+        .select('craftlab_unlocked')
         .eq('user_id', user.id)
         .single();
 
     if (error || !data) return false;
 
-    const unlocked: boolean = data.education_completed ?? false;
+    const unlocked: boolean = data.craftlab_unlocked ?? false;
 
-    // Warm localStorage so next call is instant
+    // Warm localStorage for instant subsequent reads
     if (unlocked) localStorage.setItem(LS_KEY, 'true');
 
     return unlocked;
 };
 
-// Keep old name as alias so any future callers don't silently break
+// Alias retrocompat
 export const checkEducationCompletion = checkCraftLabUnlocked;
 
 export const unlockCraftLab = async () => {
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
+    if (!user) {
+        // No auth session → al menos cachear local
+        localStorage.setItem(LS_KEY, 'true');
+        return;
+    }
 
-    // TODO: rename column in Supabase to craftlab_unlocked
     const { error } = await supabase
         .from('user_progress')
-        .upsert({
-            user_id: user.id,
-            education_completed: true, // column name in DB — rename when migration runs
-            updated_at: new Date().toISOString()
-        });
+        .update({
+            craftlab_unlocked: true,
+            quiz_completed_at: new Date().toISOString(),
+        })
+        .eq('user_id', user.id);
 
     if (error) {
-        console.error('Error unlocking CraftLab:', error);
-    } else {
-        localStorage.setItem(LS_KEY, 'true');
-        // Clean up legacy key if present
-        localStorage.removeItem(LEGACY_LS_KEY);
+        console.error('Error unlocking CraftLab in DB:', error);
     }
+
+    localStorage.setItem(LS_KEY, 'true');
+    localStorage.removeItem(LEGACY_LS_KEY);
 };
 
-// Keep old name as alias
+// Alias retrocompat
 export const markEducationAsCompleted = unlockCraftLab;
+
+// Helper: lee los puntos del usuario actual
+export const getUserPoints = async (): Promise<number> => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return 0;
+
+    const { data } = await supabase
+        .from('user_progress')
+        .select('points')
+        .eq('user_id', user.id)
+        .single();
+
+    return data?.points ?? 0;
+};
