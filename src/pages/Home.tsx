@@ -37,6 +37,10 @@ export const Home: React.FC = () => {
     };
 
     const startFBCustomization = () => {
+        // Limpiar selecciones anteriores del flow FB antes de iniciar uno nuevo
+        ['fb_date', 'fb_variety', 'fb_flavor', 'fb_process', 'fb_started', 'fb_start_step']
+            .forEach(k => localStorage.removeItem(k));
+
         setShowFBWelcome(false);
         setIsNavigatingToFB(true);
         setTimeout(() => {
