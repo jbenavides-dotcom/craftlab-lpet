@@ -39,33 +39,38 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 1rem;
+        gap: clamp(1rem, 3vh, 2rem);
         color: #ffffff;
         font-family: Georgia, 'Times New Roman', serif;
         animation: appSplashFadeIn 0.25s ease;
         transition: opacity 0.3s ease 0.1s, visibility 0s linear 0.4s;
+        padding: 2rem;
+        box-sizing: border-box;
       }
       #app-splash.hide {
         opacity: 0;
         visibility: hidden;
       }
       #app-splash-logo {
-        font-size: 3rem;
+        font-size: clamp(3.5rem, 14vw, 8rem);
         font-weight: 700;
-        letter-spacing: -0.02em;
+        letter-spacing: -0.03em;
         line-height: 1;
+        text-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
       }
       #app-splash-logo span { color: rgba(255,255,255,0.8); }
       #app-splash-sub {
         font-family: system-ui, -apple-system, sans-serif;
-        font-size: 0.7rem;
-        letter-spacing: 0.22em;
+        font-size: clamp(0.75rem, 1.5vw, 1rem);
+        letter-spacing: 0.28em;
         text-transform: uppercase;
-        opacity: 0.8;
+        opacity: 0.85;
         font-weight: 600;
       }
       #app-splash-dot {
-        width: 6px; height: 6px; border-radius: 50%;
+        width: clamp(6px, 1vw, 10px);
+        height: clamp(6px, 1vw, 10px);
+        border-radius: 50%;
         background: rgba(255,255,255,0.9);
         animation: appSplashPulse 1.2s ease infinite;
       }
