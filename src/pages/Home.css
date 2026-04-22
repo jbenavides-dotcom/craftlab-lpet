@@ -176,16 +176,6 @@
     overflow: hidden;
 }
 
-/* Overlay que funde el borde inferior de la foto con el color del bloque */
-.pc-photo::after {
-    content: '';
-    position: absolute;
-    inset: auto 0 -1px 0;
-    height: 20%;
-    pointer-events: none;
-    background: linear-gradient(to bottom, transparent 0%, var(--_bg, transparent) 100%);
-}
-
 /* Per-program photo gradients + fallback color */
 .program-card.fb .pc-photo { background-color: #4a0f15; background-image: linear-gradient(135deg, #d7414a 0%, #8a1e2a 60%, #4a0f15 100%); }
 .program-card.cl .pc-photo { background-color: #4d3820; background-image: linear-gradient(135deg, #c9a67e 0%, #8e6b43 55%, #4d3820 100%); }
