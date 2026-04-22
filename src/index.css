@@ -136,3 +136,44 @@ h6 {
   position: relative;
   background-color: var(--color-gray-light);
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   iOS Safe Areas (notch, Dynamic Island, home indicator)
+   + evitar bounce scroll no deseado en PWA standalone
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Permite usar env(safe-area-inset-*) en todos los children */
+html, body {
+  overscroll-behavior-y: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Headers sticky: respetan el notch arriba */
+.home-header,
+.ds-header,
+.cl-config-header,
+.fb-header,
+.ab-header,
+.pf-header,
+.nt-header,
+.clw-roadmap-header {
+  padding-top: calc(env(safe-area-inset-top, 0px) + 0.75rem);
+  padding-left: calc(env(safe-area-inset-left, 0px) + 1rem);
+  padding-right: calc(env(safe-area-inset-right, 0px) + 1rem);
+}
+
+/* Bottom nav: respeta el home indicator */
+.bottom-nav {
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.75rem);
+}
+
+/* Footers sticky de wizards: home indicator + padding normal */
+.ds-footer,
+.cl-step-footer,
+.clw-roadmap-footer,
+.fb-route-footer,
+.ab-cta-wrap,
+.ss-footer,
+.rc-checkbox-container + .ds-footer {
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem);
+}
