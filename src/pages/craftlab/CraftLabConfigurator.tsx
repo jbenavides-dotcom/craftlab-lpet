@@ -4,6 +4,7 @@ import {
     X, ChevronUp, Check, Clock, FlaskConical, Droplets, Sun, Zap,
     Flower2, Moon, Leaf, Package,
     Banana, Cherry, Citrus, Apple, Sparkles, Coffee,
+    Crown, Sprout, Grape, Gem, Wheat,
 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Slider } from '../../components/ui/Slider';
@@ -93,17 +94,17 @@ const VARIETY_GRADIENTS = [
     'linear-gradient(135deg, #fef3c7 0%, #fcd34d 100%)',
 ];
 
-const VARIETIES = [
-    { id: 'geisha',       label: 'Geisha',              desc: 'Delicate, tea-like, jasmine' },
-    { id: 'sidra',        label: 'Sidra',               desc: 'Complex, tropical, wine-like' },
-    { id: 'gesha-sidra',  label: 'Gesha / Sidra Blend', desc: 'Best of both worlds' },
-    { id: 'pink-bourbon', label: 'Pink Bourbon',         desc: 'Rare mutation of Bourbon. Floral, tea-like, delicate acidity.' },
-    { id: 'java',         label: 'Java',                desc: 'Indonesian origin, high altitude. Spicy, earthy, with herbal notes.' },
-    { id: 'pacamara',     label: 'Pacamara',            desc: 'Cross of Pacas and Maragogype. Large beans, creamy body, citric.' },
-    { id: 'tabi',         label: 'Tabi',                desc: 'Colombian hybrid. Sweet, balanced, notes of stone fruit.' },
-    { id: 'mokka',        label: 'Mokka',               desc: 'Miniature beans from Ethiopian heritage. Chocolate, wine-like.' },
-    { id: 'caturra',      label: 'Caturra',             desc: 'Brazilian Bourbon mutation. Clean acidity, medium body, classic.' },
-    { id: 'tekisik',      label: 'Tekisik',             desc: 'Salvadoran selection. Bright citrus, honey sweetness, refined.' },
+const VARIETIES: { id: string; label: string; desc: string; Icon: React.ElementType }[] = [
+    { id: 'geisha',       label: 'Geisha',              desc: 'Delicate, tea-like, jasmine',                                              Icon: Crown },
+    { id: 'sidra',        label: 'Sidra',               desc: 'Complex, tropical, wine-like',                                             Icon: Cherry },
+    { id: 'gesha-sidra',  label: 'Gesha / Sidra Blend', desc: 'Best of both worlds',                                                      Icon: Sparkles },
+    { id: 'pink-bourbon', label: 'Pink Bourbon',        desc: 'Rare mutation of Bourbon. Floral, tea-like, delicate acidity.',            Icon: Flower2 },
+    { id: 'java',         label: 'Java',                desc: 'Indonesian origin, high altitude. Spicy, earthy, with herbal notes.',      Icon: Leaf },
+    { id: 'pacamara',     label: 'Pacamara',            desc: 'Cross of Pacas and Maragogype. Large beans, creamy body, citric.',         Icon: Gem },
+    { id: 'tabi',         label: 'Tabi',                desc: 'Colombian hybrid. Sweet, balanced, notes of stone fruit.',                 Icon: Apple },
+    { id: 'mokka',        label: 'Mokka',               desc: 'Miniature beans from Ethiopian heritage. Chocolate, wine-like.',           Icon: Grape },
+    { id: 'caturra',      label: 'Caturra',             desc: 'Brazilian Bourbon mutation. Clean acidity, medium body, classic.',         Icon: Sprout },
+    { id: 'tekisik',      label: 'Tekisik',             desc: 'Salvadoran selection. Bright citrus, honey sweetness, refined.',           Icon: Citrus },
 ];
 
 const CATEGORIES: Record<string, { id: string; label: string }[]> = {
@@ -555,7 +556,9 @@ export const CraftLabConfigurator: React.FC = () => {
                                                 <div
                                                     className="cl-choice-icon cl-choice-icon--sm"
                                                     style={{ background: VARIETY_GRADIENTS[idx % VARIETY_GRADIENTS.length] }}
-                                                />
+                                                >
+                                                    <v.Icon size={20} strokeWidth={1.75} color="#0A1E3F" />
+                                                </div>
                                                 <div className="cl-choice-content">
                                                     <div className="cl-choice-title">{v.label}</div>
                                                     <div className="cl-choice-desc">{v.desc}</div>
