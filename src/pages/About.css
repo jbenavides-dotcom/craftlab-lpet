@@ -85,9 +85,7 @@
     background: linear-gradient(
         135deg,
         #9d0038 0%,
-        #c1004a 30%,
-        #EC4899 55%,
-        #fce7f3 75%,
+        #c1004a 40%,
         #EC4899 100%
     );
     overflow: hidden;
