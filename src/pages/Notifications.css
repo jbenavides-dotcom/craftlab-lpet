@@ -1,0 +1,285 @@
+/* ===================================================
+   NOTIFICATIONS — Página /notifications
+   Prefijo: .nt-*
+   =================================================== */
+
+/* ---- LAYOUT ---------------------------------------- */
+.nt-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f9fafb;
+    position: relative;
+}
+
+/* ---- HEADER ---------------------------------------- */
+.nt-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.nt-close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #0A1E3F;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    border-radius: 8px;
+    transition: background-color 0.15s ease;
+}
+
+.nt-close-btn:hover {
+    background-color: #f3f4f6;
+}
+
+.nt-close-btn:focus-visible {
+    outline: 2px solid #c1004a;
+    outline-offset: 2px;
+}
+
+.nt-header-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0A1E3F;
+    letter-spacing: -0.01em;
+}
+
+.nt-header-spacer {
+    width: 30px;
+}
+
+/* ---- SEGMENTED CONTROL (tabs) ---------------------- */
+.nt-tabs {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.875rem 1.25rem;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e5e7eb;
+    position: sticky;
+    top: 57px;
+    z-index: 40;
+}
+
+.nt-tab {
+    flex: 1;
+    padding: 0.5rem 0.75rem;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 999px;
+    background: none;
+    font-family: inherit;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: center;
+}
+
+.nt-tab:hover:not(.active) {
+    border-color: #c1004a;
+    color: #c1004a;
+}
+
+.nt-tab:focus-visible {
+    outline: 2px solid #c1004a;
+    outline-offset: 2px;
+}
+
+.nt-tab.active {
+    background-color: #c1004a;
+    border-color: #c1004a;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+/* ---- MAIN ------------------------------------------ */
+.nt-main {
+    flex: 1;
+    padding: 0.75rem 1.25rem 6rem;
+}
+
+/* ---- EMPTY STATE ------------------------------------ */
+.nt-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 4rem 1rem;
+    text-align: center;
+}
+
+.nt-empty-icon {
+    color: #d1d5db;
+}
+
+.nt-empty-text {
+    font-size: 0.9rem;
+    color: #9ca3af;
+    margin: 0;
+    font-weight: 500;
+}
+
+/* ---- NOTIFICATION LIST ----------------------------- */
+.nt-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+}
+
+.nt-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.875rem;
+    padding: 1rem 1rem;
+    background-color: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    position: relative;
+    cursor: default;
+    transition: background-color 0.15s ease;
+}
+
+.nt-item.unread {
+    border-color: #fce7f3;
+    background-color: #fff8fb;
+}
+
+/* ---- ITEM ICON ------------------------------------- */
+.nt-item-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.nt-item-icon--order {
+    background-color: #dbeafe;
+    color: #1D4ED8;
+}
+
+.nt-item-icon--promo {
+    background-color: #fce7f3;
+    color: #c1004a;
+}
+
+/* ---- ITEM BODY ------------------------------------- */
+.nt-item-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.nt-item-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #0A1E3F;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.nt-item-desc {
+    font-size: 0.82rem;
+    color: #6b7280;
+    margin: 0;
+    line-height: 1.45;
+}
+
+.nt-item-time {
+    font-size: 0.72rem;
+    color: #9ca3af;
+    font-weight: 500;
+    margin-top: 0.15rem;
+}
+
+/* ---- UNREAD DOT ------------------------------------ */
+.nt-unread-dot {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #c1004a;
+    flex-shrink: 0;
+}
+
+/* ---- BOTTOM NAV ------------------------------------ */
+.nt-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 0.5rem 0;
+    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.06), 0 -4px 16px rgba(0, 0, 0, 0.04);
+    z-index: 40;
+}
+
+.nt-bottom-nav .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #9ca3af;
+    transition: color 0.2s;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 4px 16px;
+    font-family: inherit;
+}
+
+.nt-bottom-nav .nav-item:hover {
+    color: #0A1E3F;
+}
+
+/* ---- DESKTOP --------------------------------------- */
+@media (min-width: 640px) {
+    .nt-main {
+        max-width: 480px;
+        margin: 0 auto;
+        width: 100%;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .nt-tabs {
+        max-width: 480px;
+        margin: 0 auto;
+        border-bottom: 1px solid #e5e7eb;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .nt-header {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+}

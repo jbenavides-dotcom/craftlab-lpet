@@ -17,6 +17,8 @@ import { CraftLabQuiz } from './pages/craftlab/CraftLabQuiz';
 import { CraftLabWelcome } from './pages/craftlab/CraftLabWelcome';
 import { CraftLabConfigurator } from './pages/craftlab/CraftLabConfigurator';
 import { About } from './pages/About';
+import { Profile } from './pages/Profile';
+import { Notifications } from './pages/Notifications';
 
 function App() {
   return (
@@ -40,6 +42,8 @@ function App() {
         <Route path="/forward-booking/success" element={<Success />} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/about" element={<About />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/notifications" element={<Notifications />} />
         <Route path="/" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>

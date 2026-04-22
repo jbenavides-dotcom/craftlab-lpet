@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Menu, User, Home as HomeIcon, ShoppingBag, Info, ArrowRight, GraduationCap, FlaskConical, Lock, Check } from 'lucide-react';
+import { Menu, User, Home as HomeIcon, ShoppingBag, Info, ArrowRight, GraduationCap, FlaskConical, Lock, Check, Star } from 'lucide-react';
 import { Modal } from '../components/ui/Modal';
 import { Button } from '../components/ui/Button';
 import './Home.css';
@@ -55,14 +55,21 @@ export const Home: React.FC = () => {
 
             <header className="home-header">
                 <div className="home-header-row">
-                    <button className="header-icon-btn" aria-label="Open menu"><Menu size={24} /></button>
+                    <button className="header-icon-btn" aria-label="Open menu" onClick={() => navigate('/profile')}><Menu size={24} /></button>
                     <div className="header-brand-container">
                         <img src="https://res.cloudinary.com/dtkwqoadf/image/upload/v1735702592/logo_horizontal_ss9bvn.png" alt="La Palma & El Tucán" className="header-logo-img" />
                     </div>
-                    <button className="header-icon-btn" aria-label="User account"><User size={24} /></button>
+                    <button className="header-icon-btn" aria-label="User account" onClick={() => navigate('/notifications')}><User size={24} /></button>
                 </div>
                 <div className="home-greeting">
-                    <div className="kicker">Harvest 2026 · Cundinamarca</div>
+                    <div className="home-greeting-top">
+                        <div className="kicker">Harvest 2026 · Cundinamarca</div>
+                        <div className="home-points-badge" aria-label="15,000 points">
+                            <Star size={14} strokeWidth={2} fill="#c1004a" color="#c1004a" />
+                            <span className="home-points-value">15,000</span>
+                            <span className="home-points-label">pts</span>
+                        </div>
+                    </div>
                     <h1>Born at origin,<br /><em>shared with</em> <span className="accent">intention.</span></h1>
                 </div>
             </header>
