@@ -10,6 +10,10 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      workbox: {
+        skipWaiting: true,
+        clientsClaim: true,
+      },
       includeAssets: ['icons/icon.svg', 'icons/maskable-icon.svg'],
       manifest: {
         name: 'CraftLab · La Palma & El Tucán',
