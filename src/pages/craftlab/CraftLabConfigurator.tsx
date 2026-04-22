@@ -11,6 +11,7 @@ import { Button } from '../../components/ui/Button';
 import { Slider } from '../../components/ui/Slider';
 import { ExitConfirmModal } from '../../components/ExitConfirmModal';
 import { InfoPopover } from '../../components/InfoPopover';
+import { supabase } from '../../lib/supabase';
 import './CraftLabConfigurator.css';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -385,8 +386,80 @@ export const CraftLabConfigurator: React.FC = () => {
         navigate('/home');
     };
 
-    const handleConfirmOrder = () => {
-        navigate('/forward-booking/success');
+    const [submitting, setSubmitting] = useState(false);
+    const handleConfirmOrder = async () => {
+        if (submitting) return;
+        setSubmitting(true);
+
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) {
+                alert('Session expired. Please sign in again.');
+                navigate('/login');
+                return;
+            }
+
+            // Translate IDs → human labels (same logic que displayValue, sin unidades)
+            const varietyLabel = config.variety
+                ? VARIETIES.find(x => x.id === config.variety)?.label ?? config.variety
+                : null;
+            let categoryLabel: string | null = null;
+            if (config.category) {
+                for (const cats of Object.values(CATEGORIES)) {
+                    const f = cats.find(c => c.id === config.category);
+                    if (f) { categoryLabel = f.label; break; }
+                }
+                categoryLabel = categoryLabel ?? config.category;
+            }
+            let processLabel: string | null = null;
+            if (config.process) {
+                for (const methods of Object.values(METHODS)) {
+                    const f = methods.find(m => m.id === config.process);
+                    if (f) { processLabel = f.label; break; }
+                }
+                processLabel = processLabel ?? config.process;
+            }
+            const shipmentLabel = config.shipmentWindow === 'earliest'
+                ? 'Earliest availability'
+                : config.shipmentWindow
+                    ? (SHIPMENT_QUARTERS.find(x => x.id === config.shipmentWindow)?.label ?? config.shipmentWindow)
+                    : null;
+
+            const quantityKg = config.quantity
+                ? parseInt(String(config.quantity).replace(/\D/g, ''), 10) || null
+                : null;
+
+            const { error } = await supabase.from('cl_orders').insert({
+                user_id:            user.id,
+                macro:              config.macro,
+                flavor:             config.flavor,
+                variety:            varietyLabel,
+                quantity_kg:        quantityKg,
+                category:           categoryLabel,
+                process:            processLabel,
+                stabilization_hrs:  config.stabilization,
+                cherry_ferm_hrs:    config.cherryFerm,
+                mucilage_ferm_hrs:  config.mucilageFerm,
+                solar_dry_days:     config.solarDry,
+                mech_dry_hrs:       config.mechDry,
+                shipment_window:    shipmentLabel,
+                agreed_to_terms:    true,
+            });
+
+            if (error) {
+                console.error('CL order insert error:', error);
+                alert('Could not submit your build. Please try again.');
+                setSubmitting(false);
+                return;
+            }
+
+            localStorage.removeItem('craftlab_config');
+            navigate('/forward-booking/success');
+        } catch (e) {
+            console.error('CL order submit exception:', e);
+            alert('Something went wrong. Please try again.');
+            setSubmitting(false);
+        }
     };
 
     // ── Params visibles según proceso seleccionado
@@ -504,10 +577,10 @@ export const CraftLabConfigurator: React.FC = () => {
                                 <Button
                                     variant="primary"
                                     size="full"
-                                    disabled={!agreedToTerms}
+                                    disabled={!agreedToTerms || submitting}
                                     onClick={handleConfirmOrder}
                                 >
-                                    Confirm and Place Order
+                                    {submitting ? 'Submitting…' : 'Confirm and Place Order'}
                                 </Button>
                             </div>
                         </div>
