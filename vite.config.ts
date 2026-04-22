@@ -4,6 +4,8 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
+  // Subruta del repo en GitHub Pages: jbenavides-dotcom.github.io/craftlab-lpet/
+  base: '/craftlab-lpet/',
   plugins: [
     react(),
     VitePWA({
@@ -17,17 +19,17 @@ export default defineConfig({
         background_color: '#c1004a',
         display: 'standalone',
         orientation: 'portrait',
-        scope: '/',
-        start_url: '/',
+        scope: '/craftlab-lpet/',
+        start_url: '/craftlab-lpet/',
         icons: [
           {
-            src: '/icons/icon.svg',
+            src: 'icons/icon.svg',
             sizes: 'any',
             type: 'image/svg+xml',
             purpose: 'any'
           },
           {
-            src: '/icons/maskable-icon.svg',
+            src: 'icons/maskable-icon.svg',
             sizes: 'any',
             type: 'image/svg+xml',
             purpose: 'maskable'
