@@ -530,6 +530,11 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
+.vs-card.pending {
+    border: 2px solid #c1004a;
+    box-shadow: 0 0 0 4px rgba(193, 0, 74, 0.15), 0 4px 14px rgba(193, 0, 74, 0.2);
+}
+
 .vs-card-image {
     aspect-ratio: 4 / 3;
     position: relative;

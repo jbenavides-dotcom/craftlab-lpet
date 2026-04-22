@@ -55,6 +55,7 @@ const STEPS: StepConfig[] = [
 export const ForwardBookingRoute: React.FC = () => {
     const navigate = useNavigate();
     const [showExitConfirm, setShowExitConfirm] = React.useState(false);
+    const [pendingStep, setPendingStep] = React.useState<FBStep | null>(null);
 
     const [progress] = React.useState({
         date: localStorage.getItem('fb_date'),
@@ -121,12 +122,14 @@ export const ForwardBookingRoute: React.FC = () => {
                 {STEPS.map((step) => {
                     const value = progress[step.key];
                     const isComplete = Boolean(value);
+                    const isPending = pendingStep === step.key;
                     const Icon = step.Icon;
                     return (
                         <button
                             key={step.key}
-                            className={`vs-card${isComplete ? ' active' : ''}`}
-                            onClick={() => startFB(step.key, navigate)}
+                            className={`vs-card${isComplete ? ' active' : ''}${isPending ? ' pending' : ''}`}
+                            onClick={() => setPendingStep(step.key)}
+                            aria-pressed={isPending}
                             aria-label={`${step.label}: ${value ?? 'not selected'}`}
                         >
                             <div
@@ -157,12 +160,20 @@ export const ForwardBookingRoute: React.FC = () => {
                 <Button
                     variant="primary"
                     size="full"
-                    onClick={() => navigate('/forward-booking/quantity')}
-                    disabled={!allCompleted}
+                    onClick={() => {
+                        if (pendingStep) {
+                            startFB(pendingStep, navigate);
+                        } else if (allCompleted) {
+                            navigate('/forward-booking/quantity');
+                        }
+                    }}
+                    disabled={!pendingStep && !allCompleted}
                 >
-                    {allCompleted
-                        ? 'Continue to quantity →'
-                        : `Complete ${4 - completedCount} more step${4 - completedCount !== 1 ? 's' : ''}`}
+                    {pendingStep
+                        ? `Continue to ${STEPS.find(s => s.key === pendingStep)?.label.toLowerCase()} →`
+                        : allCompleted
+                            ? 'Continue to quantity →'
+                            : 'Select a step'}
                 </Button>
             </div>
 
