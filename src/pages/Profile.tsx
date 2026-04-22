@@ -17,6 +17,8 @@ import {
     ShoppingBag,
     Info,
 } from 'lucide-react';
+import { supabase } from '../lib/supabase';
+import { useProfile } from '../lib/useProfile';
 import './Profile.css';
 
 interface MenuItem {
@@ -34,6 +36,19 @@ const MENU_ITEMS: MenuItem[] = [
 
 export function Profile() {
     const navigate = useNavigate();
+    const { profile, loading } = useProfile();
+
+    const handleSignOut = async () => {
+        await supabase.auth.signOut();
+        navigate('/login', { replace: true });
+    };
+
+    const displayName = profile?.fullName ?? 'Partner';
+    const displayEmail = profile?.email ?? '';
+    const displayInitials = profile?.initials ?? 'P';
+    const displayPoints = profile?.points ?? 0;
+    const displayYear = profile?.joinedYear ?? new Date().getFullYear();
+    const roleLabel = profile?.role === 'admin' ? 'Admin' : profile?.role === 'operator' ? 'Operator' : 'Premium Partner';
 
     return (
         <div className="pf-container">
@@ -53,12 +68,12 @@ export function Profile() {
             <main className="pf-main">
                 {/* Avatar + Identity */}
                 <section className="pf-identity">
-                    <div className="pf-avatar" aria-label="User avatar — Elisa">
-                        <span className="pf-avatar-initials">E</span>
+                    <div className="pf-avatar" aria-label={`User avatar — ${displayName}`}>
+                        <span className="pf-avatar-initials">{loading ? '…' : displayInitials}</span>
                     </div>
-                    <h1 className="pf-name">Elisa Madriñán</h1>
-                    <p className="pf-email">elisa@lapalma.co</p>
-                    <span className="pf-badge">Premium Partner · 2024</span>
+                    <h1 className="pf-name">{loading ? '…' : displayName}</h1>
+                    <p className="pf-email">{displayEmail}</p>
+                    <span className="pf-badge">{roleLabel} · {displayYear}</span>
                 </section>
 
                 {/* Stats grid 2×2 */}
@@ -74,21 +89,21 @@ export function Profile() {
                         <div className="pf-stat-icon-wrap">
                             <Star size={18} strokeWidth={1.75} />
                         </div>
-                        <span className="pf-stat-value">15,000</span>
+                        <span className="pf-stat-value">{displayPoints.toLocaleString()}</span>
                         <span className="pf-stat-label">Points</span>
                     </div>
                     <div className="pf-stat pf-stat--kg">
                         <div className="pf-stat-icon-wrap">
                             <Coffee size={18} strokeWidth={1.75} />
                         </div>
-                        <span className="pf-stat-value">105 kg</span>
+                        <span className="pf-stat-value">0 kg</span>
                         <span className="pf-stat-label">Received</span>
                     </div>
                     <div className="pf-stat pf-stat--member">
                         <div className="pf-stat-icon-wrap">
                             <Calendar size={18} strokeWidth={1.75} />
                         </div>
-                        <span className="pf-stat-value">2024</span>
+                        <span className="pf-stat-value">{displayYear}</span>
                         <span className="pf-stat-label">Member since</span>
                     </div>
                 </section>
@@ -115,7 +130,7 @@ export function Profile() {
                 </nav>
 
                 {/* Sign out */}
-                <button className="pf-signout" aria-label="Sign out">
+                <button className="pf-signout" aria-label="Sign out" onClick={handleSignOut}>
                     <LogOut size={16} strokeWidth={2} />
                     Sign out
                 </button>

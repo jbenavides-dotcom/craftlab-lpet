@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Menu, User, Home as HomeIcon, ShoppingBag, Info, ArrowRight, GraduationCap, FlaskConical, Lock, Check, Star } from 'lucide-react';
 import { Modal } from '../components/ui/Modal';
 import { Button } from '../components/ui/Button';
+import { useProfile } from '../lib/useProfile';
 import './Home.css';
 
 // Photo assets — served from /public/home/
@@ -16,6 +17,7 @@ export const Home: React.FC = () => {
     const [showCLOnboarding, setShowCLOnboarding] = useState(false);
     const [isNavigatingToFB, setIsNavigatingToFB] = useState(false);
     const [educationCompleted, setEducationCompleted] = useState(false);
+    const { profile } = useProfile();
 
     useEffect(() => {
         const checkStatus = async () => {
@@ -62,9 +64,9 @@ export const Home: React.FC = () => {
                 <div className="home-greeting">
                     <div className="home-greeting-top">
                         <div className="kicker">Harvest 2026 · Cundinamarca</div>
-                        <div className="home-points-badge" aria-label="15,000 points">
+                        <div className="home-points-badge" aria-label={`${profile?.points ?? 0} points`}>
                             <Star size={14} strokeWidth={2} fill="#c1004a" color="#c1004a" />
-                            <span className="home-points-value">15,000</span>
+                            <span className="home-points-value">{(profile?.points ?? 0).toLocaleString()}</span>
                             <span className="home-points-label">pts</span>
                         </div>
                     </div>
