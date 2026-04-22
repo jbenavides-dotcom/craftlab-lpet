@@ -167,18 +167,29 @@
 .pc-photo {
     aspect-ratio: 16 / 10;
     position: relative;
-    background-size: cover;
-    background-position: center;
+    background-size: 115%;
+    background-position: center 45%;
     background-repeat: no-repeat;
     display: block;
     line-height: 0;
     font-size: 0;
+    overflow: hidden;
 }
 
-/* Per-program photo gradients + fallback color (inline backgroundImage pisa al gradient si la imagen carga) */
+/* Overlay que funde el borde inferior de la foto con el color del bloque */
+.pc-photo::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 -1px 0;
+    height: 20%;
+    pointer-events: none;
+    background: linear-gradient(to bottom, transparent 0%, var(--_bg, transparent) 100%);
+}
+
+/* Per-program photo gradients + fallback color */
 .program-card.fb .pc-photo { background-color: #4a0f15; background-image: linear-gradient(135deg, #d7414a 0%, #8a1e2a 60%, #4a0f15 100%); }
 .program-card.cl .pc-photo { background-color: #4d3820; background-image: linear-gradient(135deg, #c9a67e 0%, #8e6b43 55%, #4d3820 100%); }
-.program-card.se .pc-photo { background-color: #5E6B3A; background-image: linear-gradient(135deg, #9aa678 0%, #5a6840 100%); background-position: center 40%; }
+.program-card.se .pc-photo { background-color: #5E6B3A; background-image: linear-gradient(135deg, #9aa678 0%, #5a6840 100%); background-size: 120%; background-position: center 38%; }
 
 .pc-block {
     padding: 1.35rem 1.4rem 1.5rem;
