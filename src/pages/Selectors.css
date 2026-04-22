@@ -973,3 +973,37 @@
     background: #ffffff;
     border-top: 1px solid #f3f4f6;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   DESKTOP ≥900px — Constreñir wizards a card centrada (phone-mock)
+   Forward Booking (selector-container) + Success (fb-final-container)
+   No son rutas con AppShell, entonces aquí se centra.
+   ═══════════════════════════════════════════════════════════════ */
+@media (min-width: 900px) {
+    body {
+        background: #fafaf5;
+    }
+
+    .selector-container,
+    .fb-final-container {
+        max-width: 480px;
+        margin: 40px auto;
+        min-height: auto;
+        height: auto;
+        border-radius: 24px;
+        background: #ffffff;
+        box-shadow: 0 8px 32px rgba(10, 30, 63, 0.1);
+        overflow: hidden;
+    }
+
+    /* El header sticky respeta el border-radius arriba */
+    .ds-header {
+        border-radius: 24px 24px 0 0;
+    }
+
+    /* Footers sticky no deben quedar fuera del shell */
+    .ds-footer,
+    .ss-footer {
+        border-radius: 0 0 24px 24px;
+    }
+}

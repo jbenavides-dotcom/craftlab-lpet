@@ -9,6 +9,27 @@
     background-color: #f9fafb;
 }
 
+/* Desktop: centrar como phone-mock */
+@media (min-width: 900px) {
+    body {
+        background: #fafaf5;
+    }
+    .fb-route-container {
+        max-width: 480px;
+        margin: 40px auto;
+        min-height: auto;
+        border-radius: 24px;
+        box-shadow: 0 8px 32px rgba(10, 30, 63, 0.1);
+        overflow: hidden;
+    }
+    .fb-header {
+        border-radius: 24px 24px 0 0;
+    }
+    .fb-route-footer {
+        border-radius: 0 0 24px 24px;
+    }
+}
+
 /* ---- Header ---- */
 .fb-header {
     display: flex;
