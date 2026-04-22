@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    X, ChevronUp, Check, Clock, FlaskConical, Droplets, Sun, Zap,
+    X, Check, Clock, FlaskConical, Droplets, Sun, Zap,
     Flower2, Moon, Leaf, Package,
     Banana, Cherry, Citrus, Apple, Sparkles, Coffee,
-    Crown, Sprout, Grape, Gem, Wheat,
+    Crown, Sprout, Grape, Gem,
 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Slider } from '../../components/ui/Slider';
@@ -212,12 +212,8 @@ export const CraftLabConfigurator: React.FC = () => {
 
     // UI state
     const [showExitModal, setShowExitModal] = useState(false);
-    const [showSheet, setShowSheet]         = useState(false);
     const [agreedToTerms, setAgreedToTerms] = useState(false);
     const [showReview, setShowReview]       = useState(false);
-
-    const sheetCloseRef = useRef<HTMLButtonElement>(null);
-    const sheetRef      = useRef<HTMLDivElement>(null);
 
     const [config, setConfig] = useState<ConfigState>({
         macro: null, flavor: null, variety: null, quantity: null,
@@ -289,37 +285,6 @@ export const CraftLabConfigurator: React.FC = () => {
         localStorage.removeItem('craftlab_config');
         navigate('/home');
     };
-
-    // ── Bottom sheet keyboard trap ────────────────────────────────────────────
-    const closeSheet = useCallback(() => setShowSheet(false), []);
-
-    useEffect(() => {
-        if (!showSheet) return;
-        sheetCloseRef.current?.focus();
-
-        const handleKey = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') { e.preventDefault(); closeSheet(); return; }
-            if (e.key === 'Tab' && sheetRef.current) {
-                const focusable = Array.from(
-                    sheetRef.current.querySelectorAll<HTMLElement>(
-                        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-                    )
-                );
-                if (focusable.length === 0) return;
-                const first = focusable[0];
-                const last  = focusable[focusable.length - 1];
-                if (e.shiftKey) {
-                    if (document.activeElement === first) { e.preventDefault(); last.focus(); }
-                } else {
-                    if (document.activeElement === last) { e.preventDefault(); first.focus(); }
-                }
-            }
-        };
-        document.addEventListener('keydown', handleKey);
-        return () => document.removeEventListener('keydown', handleKey);
-    }, [showSheet, closeSheet]);
-
-    const decisionCount = countDecisions(config);
 
     const handleConfirmOrder = () => {
         navigate('/forward-booking/success');
@@ -810,62 +775,6 @@ export const CraftLabConfigurator: React.FC = () => {
 
                 </div>{/* END controls panel */}
             </div>{/* END cl-body */}
-
-            {/* ──── FLOATING FAB (resumen) ─────────────────────── */}
-            <button
-                className="cl-sheet-fab"
-                onClick={() => setShowSheet(true)}
-                aria-label="View your configuration summary"
-                aria-haspopup="dialog"
-            >
-                <ChevronUp size={18} />
-                <span className="cl-sheet-fab-counter">Summary</span>
-            </button>
-
-            {/* ──── BOTTOM SHEET BACKDROP ─────────────────────── */}
-            {showSheet && (
-                <div
-                    className="cl-sheet-backdrop"
-                    onClick={closeSheet}
-                    aria-hidden="true"
-                />
-            )}
-
-            {/* ──── BOTTOM SHEET (navy) ───────────────────────── */}
-            <div
-                ref={sheetRef}
-                className={`cl-summary-sheet${showSheet ? ' cl-summary-sheet--open' : ''}`}
-                role="dialog"
-                aria-modal="true"
-                aria-label="Your selections at a glance"
-                aria-hidden={!showSheet}
-            >
-                <div className="cl-sheet-handle" aria-hidden="true" />
-                <div className="cl-sheet-header">
-                    <span className="cl-sheet-title">Your Configuration</span>
-                    <button
-                        ref={sheetCloseRef}
-                        className="cl-sheet-close"
-                        onClick={closeSheet}
-                        aria-label="Close summary"
-                    >
-                        <X size={16} />
-                    </button>
-                </div>
-                <div className="cl-sheet-body">
-                    {REVIEW_ROWS.map(row => {
-                        const val = displayValue(row.key, config);
-                        return (
-                            <div key={row.key} className="cl-sheet-row">
-                                <span className="cl-sheet-key">{row.label}</span>
-                                <span className={`cl-sheet-val${val === null ? ' cl-sheet-val--empty' : ''}`}>
-                                    {val ?? '—'}
-                                </span>
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
 
             {/* ──── EXIT MODAL ────────────────────────────────── */}
             <ExitConfirmModal
