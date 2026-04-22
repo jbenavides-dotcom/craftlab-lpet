@@ -128,7 +128,7 @@ export const ForwardBookingRoute: React.FC = () => {
                         <button
                             key={step.key}
                             className={`vs-card${isComplete ? ' active' : ''}${isPending ? ' pending' : ''}`}
-                            onClick={() => setPendingStep(step.key)}
+                            onClick={() => setPendingStep(prev => prev === step.key ? null : step.key)}
                             aria-pressed={isPending}
                             aria-label={`${step.label}: ${value ?? 'not selected'}`}
                         >
