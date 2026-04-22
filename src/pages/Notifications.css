@@ -1,121 +1,386 @@
-/* ===================================================
-   NOTIFICATIONS — Página /notifications
-   Prefijo: .nt-*
-   =================================================== */
+/* =====================================================
+   Notifications — página editorial / inbox premium
+   Tokens CraftLab: --cl-accent, --cl-text, etc.
+   Prefijo exclusivo: .nt-
+   ===================================================== */
 
-/* ---- LAYOUT ---------------------------------------- */
+:root {
+    --cl-accent: #c1004a;
+    --cl-accent-soft: #fce7f3;
+    --cl-blue: #1D4ED8;
+    --cl-blue-soft: #dbeafe;
+    --cl-green: #10B981;
+    --cl-green-soft: #d1fae5;
+    --cl-amber: #d97706;
+    --cl-amber-soft: #fef3c7;
+    --cl-pink: #EC4899;
+    --cl-text: #0A1E3F;
+    --cl-text-muted: #6b7280;
+    --cl-border: #e5e7eb;
+}
+
+/* ── Container ─────────────────────────────────────── */
 .nt-container {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
-    background-color: #f9fafb;
+    min-height: 100%;
+    background: #ffffff;
+    padding-bottom: 80px; /* espacio bottom-nav móvil */
     position: relative;
 }
 
-/* ---- HEADER ---------------------------------------- */
-.nt-header {
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 1.25rem;
-    background-color: #ffffff;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-.nt-close-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #0A1E3F;
+/* ── Mobile close button ─────────────────────────────── */
+.nt-mobile-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--cl-border);
+    background: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 4px;
-    border-radius: 8px;
-    transition: background-color 0.15s ease;
+    cursor: pointer;
+    color: var(--cl-text);
+    z-index: 10;
+    transition: background 0.15s, border-color 0.15s;
+    flex-shrink: 0;
 }
 
-.nt-close-btn:hover {
-    background-color: #f3f4f6;
+.nt-mobile-close:hover {
+    background: #f3f4f6;
+    border-color: var(--cl-text-muted);
 }
 
-.nt-close-btn:focus-visible {
-    outline: 2px solid #c1004a;
+.nt-mobile-close:focus-visible {
+    outline: 2px solid var(--cl-accent);
     outline-offset: 2px;
 }
 
-.nt-header-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #0A1E3F;
-    letter-spacing: -0.01em;
+/* ── Header editorial ────────────────────────────────── */
+.nt-header-intro {
+    padding: 28px 24px 20px;
+    /* Deja espacio derecho para el botón X absoluto */
+    padding-right: 64px;
 }
 
-.nt-header-spacer {
-    width: 30px;
-}
-
-/* ---- SEGMENTED CONTROL (tabs) ---------------------- */
-.nt-tabs {
-    display: flex;
+.nt-kicker {
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--cl-accent);
+    font-weight: 700;
+    margin: 0 0 10px;
+    display: inline-flex;
+    align-items: center;
     gap: 0.5rem;
-    padding: 0.875rem 1.25rem;
-    background-color: #ffffff;
-    border-bottom: 1px solid #e5e7eb;
-    position: sticky;
-    top: 57px;
-    z-index: 40;
 }
 
-.nt-tab {
-    flex: 1;
-    padding: 0.5rem 0.75rem;
-    border: 1.5px solid #e5e7eb;
-    border-radius: 999px;
-    background: none;
-    font-family: inherit;
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: #6b7280;
-    cursor: pointer;
-    transition: all 0.15s ease;
+.nt-kicker::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--cl-accent);
+    flex-shrink: 0;
+}
+
+.nt-title {
+    font-family: var(--font-serif, Georgia, serif);
+    font-size: 2rem;
+    font-weight: 300;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
+    color: var(--cl-text);
+    margin: 0 0 8px;
+}
+
+.nt-title-accent {
+    color: var(--cl-accent);
+    font-style: italic;
+    font-weight: 400;
+}
+
+.nt-subtitle {
+    font-size: 0.93rem;
+    color: var(--cl-text-muted);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ── Stats row ──────────────────────────────────────── */
+.nt-stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    padding: 0 24px 20px;
+}
+
+.nt-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 14px 8px;
+    border-radius: 16px;
+    background: #f9fafb;
+    border: 1px solid var(--cl-border);
     text-align: center;
 }
 
-.nt-tab:hover:not(.active) {
-    border-color: #c1004a;
-    color: #c1004a;
+.nt-stat-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+    flex-shrink: 0;
+}
+
+/* Icon color variants */
+.nt-stat--pink .nt-stat-icon {
+    background: linear-gradient(135deg, var(--cl-accent-soft) 0%, #f9a8d4 100%);
+    color: var(--cl-accent);
+}
+
+.nt-stat--blue .nt-stat-icon {
+    background: linear-gradient(135deg, var(--cl-blue-soft) 0%, #93c5fd 100%);
+    color: var(--cl-blue);
+}
+
+.nt-stat--green .nt-stat-icon {
+    background: linear-gradient(135deg, var(--cl-green-soft) 0%, #6ee7b7 100%);
+    color: #065f46;
+}
+
+.nt-stat-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--cl-text);
+    line-height: 1;
+    letter-spacing: -0.02em;
+}
+
+.nt-stat-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--cl-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+/* ── Toolbar: tabs + mark all ────────────────────────── */
+.nt-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px 20px;
+    gap: 12px;
+}
+
+/* ── Filter tabs iOS ─────────────────────────────────── */
+.nt-tabs {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    flex-shrink: 0;
+}
+
+.nt-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.nt-tab {
+    padding: 8px 18px;
+    border-radius: 999px;
+    border: none;
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.18s, color 0.18s;
+    background: #f3f4f6;
+    color: var(--cl-text-muted);
+    flex-shrink: 0;
+}
+
+.nt-tab--active {
+    background: #0A1E3F;
+    color: #ffffff;
 }
 
 .nt-tab:focus-visible {
-    outline: 2px solid #c1004a;
+    outline: 2px solid var(--cl-accent);
     outline-offset: 2px;
 }
 
-.nt-tab.active {
-    background-color: #c1004a;
-    border-color: #c1004a;
-    color: #ffffff;
+/* Mark all as read link */
+.nt-mark-all {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.78rem;
     font-weight: 600;
+    color: var(--cl-accent);
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 4px 0;
+    transition: opacity 0.15s;
 }
 
-/* ---- MAIN ------------------------------------------ */
-.nt-main {
+.nt-mark-all:hover {
+    opacity: 0.75;
+}
+
+.nt-mark-all:focus-visible {
+    outline: 2px solid var(--cl-accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* ── Grid wrapper + grid ─────────────────────────────── */
+.nt-grid-wrapper {
+    padding: 0 24px;
     flex: 1;
-    padding: 0.75rem 1.25rem 6rem;
 }
 
-/* ---- EMPTY STATE ------------------------------------ */
+.nt-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+}
+
+/* ── Notification card ───────────────────────────────── */
+.nt-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 18px;
+    background: #ffffff;
+    border: 1px solid var(--cl-border);
+    border-radius: 16px;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    overflow: hidden;
+}
+
+.nt-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(193, 0, 74, 0.09);
+}
+
+.nt-card:active {
+    transform: scale(0.985);
+}
+
+.nt-card:focus-visible {
+    outline: 2px solid var(--cl-accent);
+    outline-offset: 2px;
+}
+
+.nt-card.unread {
+    background: #fefaf9;
+    border-color: var(--cl-accent-soft);
+}
+
+/* ── Card icon circle ────────────────────────────────── */
+.nt-card-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+/* Order (Package, Check) → azul */
+.nt-card-icon--order {
+    background: var(--cl-blue-soft);
+    color: var(--cl-blue);
+}
+
+/* FlaskConical → fucsia */
+.nt-card-icon--promo {
+    background: var(--cl-accent-soft);
+    color: var(--cl-accent);
+}
+
+/* Sparkles, Gift → verde */
+.nt-card-icon--milestone {
+    background: var(--cl-green-soft);
+    color: #065f46;
+}
+
+/* Genérico → amber */
+.nt-card-icon--amber {
+    background: var(--cl-amber-soft);
+    color: var(--cl-amber);
+}
+
+/* ── Card body ───────────────────────────────────────── */
+.nt-card-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.nt-card-time {
+    font-size: 0.6rem;
+    font-weight: 700;
+    color: var(--cl-text-muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    line-height: 1;
+}
+
+.nt-card-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--cl-text);
+    margin: 0;
+    line-height: 1.3;
+}
+
+.nt-card-desc {
+    font-size: 0.82rem;
+    color: var(--cl-text-muted);
+    margin: 0;
+    line-height: 1.45;
+}
+
+/* ── Unread badge (dot + ring) ───────────────────────── */
+.nt-unread-badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--cl-accent);
+    box-shadow: 0 0 0 3px rgba(193, 0, 74, 0.15);
+    flex-shrink: 0;
+}
+
+/* ── Empty state ─────────────────────────────────────── */
 .nt-empty {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
-    padding: 4rem 1rem;
+    gap: 10px;
+    padding: 64px 24px;
     text-align: center;
 }
 
@@ -123,107 +388,21 @@
     color: #d1d5db;
 }
 
-.nt-empty-text {
-    font-size: 0.9rem;
-    color: #9ca3af;
-    margin: 0;
-    font-weight: 500;
-}
-
-/* ---- NOTIFICATION LIST ----------------------------- */
-.nt-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.625rem;
-}
-
-.nt-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.875rem;
-    padding: 1rem 1rem;
-    background-color: #ffffff;
-    border-radius: 16px;
-    border: 1px solid #e5e7eb;
-    position: relative;
-    cursor: default;
-    transition: background-color 0.15s ease;
-}
-
-.nt-item.unread {
-    border-color: #fce7f3;
-    background-color: #fff8fb;
-}
-
-/* ---- ITEM ICON ------------------------------------- */
-.nt-item-icon {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    margin-top: 1px;
-}
-
-.nt-item-icon--order {
-    background-color: #dbeafe;
-    color: #1D4ED8;
-}
-
-.nt-item-icon--promo {
-    background-color: #fce7f3;
-    color: #c1004a;
-}
-
-/* ---- ITEM BODY ------------------------------------- */
-.nt-item-body {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-}
-
-.nt-item-title {
-    font-size: 0.9rem;
+.nt-empty-title {
+    font-size: 1rem;
     font-weight: 600;
-    color: #0A1E3F;
+    color: var(--cl-text);
     margin: 0;
-    line-height: 1.3;
 }
 
-.nt-item-desc {
-    font-size: 0.82rem;
-    color: #6b7280;
+.nt-empty-sub {
+    font-size: 0.85rem;
+    color: var(--cl-text-muted);
     margin: 0;
-    line-height: 1.45;
+    line-height: 1.5;
 }
 
-.nt-item-time {
-    font-size: 0.72rem;
-    color: #9ca3af;
-    font-weight: 500;
-    margin-top: 0.15rem;
-}
-
-/* ---- UNREAD DOT ------------------------------------ */
-.nt-unread-dot {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: #c1004a;
-    flex-shrink: 0;
-}
-
-/* ---- BOTTOM NAV ------------------------------------ */
+/* ── Bottom nav (mobile only) ────────────────────────── */
 .nt-bottom-nav {
     position: fixed;
     bottom: 0;
@@ -260,26 +439,70 @@
     color: #0A1E3F;
 }
 
-/* ---- DESKTOP --------------------------------------- */
-@media (min-width: 640px) {
-    .nt-main {
-        max-width: 480px;
-        margin: 0 auto;
-        width: 100%;
-        padding-left: 0;
-        padding-right: 0;
+/* ── Responsive: tablet — 2 cols ────────────────────── */
+@media (min-width: 768px) {
+    .nt-container {
+        padding-bottom: 24px;
     }
 
-    .nt-tabs {
-        max-width: 480px;
-        margin: 0 auto;
-        border-bottom: 1px solid #e5e7eb;
-        padding-left: 0;
-        padding-right: 0;
+    /* Botón X solo tiene sentido en mobile (sidebar en desktop) */
+    .nt-mobile-close {
+        display: none;
     }
 
-    .nt-header {
-        padding-left: 2rem;
-        padding-right: 2rem;
+    .nt-header-intro {
+        padding: 36px 40px 24px;
+        padding-right: 40px; /* sin el botón X, vuelve al padding normal */
+    }
+
+    .nt-stats-row {
+        padding: 0 40px 24px;
+    }
+
+    .nt-toolbar {
+        padding: 0 40px 24px;
+    }
+
+    .nt-grid-wrapper {
+        padding: 0 40px;
+    }
+
+    .nt-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    /* Bottom nav oculto — AppShell sidebar toma el rol */
+    .nt-bottom-nav {
+        display: none;
+    }
+}
+
+/* ── Responsive: desktop — mantiene 2 cols ──────────── */
+@media (min-width: 1200px) {
+    .nt-header-intro {
+        padding: 40px 48px 28px;
+    }
+
+    .nt-title {
+        font-size: 2.4rem;
+    }
+
+    .nt-stats-row {
+        padding: 0 48px 28px;
+    }
+
+    .nt-toolbar {
+        padding: 0 48px 28px;
+    }
+
+    .nt-grid-wrapper {
+        padding: 0 48px;
+    }
+
+    /* 2 cols en desktop (cards compactas, no necesitan 3) */
+    .nt-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
     }
 }

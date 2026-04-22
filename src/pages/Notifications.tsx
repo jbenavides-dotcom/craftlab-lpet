@@ -8,12 +8,14 @@ import {
     Check,
     Gift,
     Bell,
+    Star,
     Home as HomeIcon,
     ShoppingBag,
     Info,
 } from 'lucide-react';
 import './Notifications.css';
 
+/* ─── Types ─────────────────────────────────────────── */
 type NotificationType = 'order' | 'promo';
 type FilterTab = 'all' | 'orders' | 'offers';
 
@@ -27,6 +29,7 @@ interface Notification {
     time: string;
 }
 
+/* ─── Mock data ─────────────────────────────────────── */
 const NOTIFICATIONS: Notification[] = [
     {
         id: 1,
@@ -73,126 +76,230 @@ const NOTIFICATIONS: Notification[] = [
         body: 'Welcome gift for completing education.',
         time: '2w ago',
     },
+    {
+        id: 6,
+        type: 'order',
+        unread: false,
+        icon: Star,
+        title: 'New stage: Drying',
+        body: 'Your Pink Bourbon enters controlled solar drying.',
+        time: '3w ago',
+    },
 ];
 
+/* ─── Constants ─────────────────────────────────────── */
 const TABS: { key: FilterTab; label: string }[] = [
     { key: 'all', label: 'All' },
     { key: 'orders', label: 'Orders' },
     { key: 'offers', label: 'Offers' },
 ];
 
-function getIconColor(type: NotificationType): string {
-    if (type === 'order') return 'nt-item-icon--order';
-    return 'nt-item-icon--promo';
+/* ─── Icon color mapping ─────────────────────────────── */
+function getIconClass(notif: Notification): string {
+    const { icon } = notif;
+    if (icon === Package || icon === Check) return 'nt-card-icon--order';
+    if (icon === FlaskConical) return 'nt-card-icon--promo';
+    if (icon === Sparkles || icon === Gift) return 'nt-card-icon--milestone';
+    return 'nt-card-icon--amber';
 }
 
+/* ─── Sub-components ─────────────────────────────────── */
+function NotifCard({
+    notif,
+    onMarkRead,
+}: {
+    notif: Notification;
+    onMarkRead: (id: number) => void;
+}) {
+    const Icon = notif.icon;
+    const iconClass = getIconClass(notif);
+
+    return (
+        <article
+            className={`nt-card${notif.unread ? ' unread' : ''}`}
+            onClick={() => onMarkRead(notif.id)}
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && onMarkRead(notif.id)}
+            aria-label={notif.title}
+        >
+            {/* Unread badge */}
+            {notif.unread && (
+                <span
+                    className="nt-unread-badge"
+                    role="status"
+                    aria-label="Unread notification"
+                />
+            )}
+
+            {/* Icon */}
+            <div className={`nt-card-icon ${iconClass}`} aria-hidden="true">
+                <Icon size={18} strokeWidth={1.75} />
+            </div>
+
+            {/* Body */}
+            <div className="nt-card-body">
+                <span className="nt-card-time">{notif.time.toUpperCase()}</span>
+                <p className="nt-card-title">{notif.title}</p>
+                <p className="nt-card-desc">{notif.body}</p>
+            </div>
+        </article>
+    );
+}
+
+function EmptyState() {
+    return (
+        <div className="nt-empty" role="status" aria-live="polite">
+            <Bell size={64} strokeWidth={1.25} className="nt-empty-icon" aria-hidden="true" />
+            <p className="nt-empty-title">You're all caught up</p>
+            <p className="nt-empty-sub">No notifications in this category</p>
+        </div>
+    );
+}
+
+/* ─── Page ───────────────────────────────────────────── */
 export function Notifications() {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState<FilterTab>('all');
+    const [notifications, setNotifications] = useState<Notification[]>(NOTIFICATIONS);
 
-    const filtered = NOTIFICATIONS.filter((n) => {
+    const filtered = notifications.filter((n) => {
         if (activeTab === 'orders') return n.type === 'order';
         if (activeTab === 'offers') return n.type === 'promo';
         return true;
     });
 
+    const unreadCount = notifications.filter((n) => n.unread).length;
+    const orderCount = notifications.filter((n) => n.type === 'order').length;
+    const offerCount = notifications.filter((n) => n.type === 'promo').length;
+
+    function markRead(id: number) {
+        setNotifications((prev) =>
+            prev.map((n) => (n.id === id ? { ...n, unread: false } : n))
+        );
+    }
+
+    function markAllRead() {
+        setNotifications((prev) => prev.map((n) => ({ ...n, unread: false })));
+    }
+
     return (
         <div className="nt-container">
-            {/* Header */}
-            <header className="nt-header">
-                <button
-                    className="nt-close-btn"
-                    onClick={() => navigate('/home')}
-                    aria-label="Close notifications"
-                >
-                    <X size={22} strokeWidth={2} />
-                </button>
-                <span className="nt-header-title">Notifications</span>
-                <div className="nt-header-spacer" aria-hidden="true" />
+            {/* Mobile close button — desktop sidebar ya da el contexto */}
+            <button
+                className="nt-mobile-close"
+                onClick={() => navigate('/home')}
+                aria-label="Close notifications"
+            >
+                <X size={20} strokeWidth={2} />
+            </button>
+
+            {/* ── Header editorial ── */}
+            <header className="nt-header-intro">
+                <p className="nt-kicker">INBOX</p>
+                <h1 className="nt-title">
+                    Stay in the{' '}
+                    <em className="nt-title-accent">loop.</em>
+                </h1>
+                <p className="nt-subtitle">
+                    Updates on your lots, offers, and new harvests.
+                </p>
             </header>
 
-            {/* Segmented control */}
-            <div className="nt-tabs" role="tablist" aria-label="Notification filters">
-                {TABS.map(({ key, label }) => (
-                    <button
-                        key={key}
-                        className={`nt-tab${activeTab === key ? ' active' : ''}`}
-                        onClick={() => setActiveTab(key)}
-                        role="tab"
-                        aria-selected={activeTab === key}
-                        aria-controls="nt-list"
-                    >
-                        {label}
-                    </button>
-                ))}
+            {/* ── Stats row ── */}
+            <div className="nt-stats-row" role="list" aria-label="Notification statistics">
+                <div className="nt-stat nt-stat--pink" role="listitem">
+                    <div className="nt-stat-icon" aria-hidden="true">
+                        <Bell size={17} strokeWidth={1.75} />
+                    </div>
+                    <span className="nt-stat-value">{unreadCount}</span>
+                    <span className="nt-stat-label">Unread</span>
+                </div>
+
+                <div className="nt-stat nt-stat--blue" role="listitem">
+                    <div className="nt-stat-icon" aria-hidden="true">
+                        <Package size={17} strokeWidth={1.75} />
+                    </div>
+                    <span className="nt-stat-value">{orderCount}</span>
+                    <span className="nt-stat-label">Orders</span>
+                </div>
+
+                <div className="nt-stat nt-stat--green" role="listitem">
+                    <div className="nt-stat-icon" aria-hidden="true">
+                        <Gift size={17} strokeWidth={1.75} />
+                    </div>
+                    <span className="nt-stat-value">{offerCount}</span>
+                    <span className="nt-stat-label">Offers</span>
+                </div>
             </div>
 
-            {/* Notification list */}
-            <main className="nt-main">
-                {filtered.length === 0 ? (
-                    <div className="nt-empty" aria-live="polite">
-                        <Bell size={36} strokeWidth={1.5} className="nt-empty-icon" aria-hidden="true" />
-                        <p className="nt-empty-text">No notifications</p>
-                    </div>
-                ) : (
-                    <ul className="nt-list" id="nt-list" role="list">
-                        {filtered.map((notif) => {
-                            const Icon = notif.icon;
-                            return (
-                                <li
-                                    key={notif.id}
-                                    className={`nt-item${notif.unread ? ' unread' : ''}`}
-                                    role="listitem"
-                                >
-                                    <div
-                                        className={`nt-item-icon ${getIconColor(notif.type)}`}
-                                        aria-hidden="true"
-                                    >
-                                        <Icon size={18} strokeWidth={1.75} />
-                                    </div>
-                                    <div className="nt-item-body">
-                                        <p className="nt-item-title">{notif.title}</p>
-                                        <p className="nt-item-desc">{notif.body}</p>
-                                        <span className="nt-item-time">{notif.time}</span>
-                                    </div>
-                                    {notif.unread && (
-                                        <span
-                                            className="nt-unread-dot"
-                                            aria-label="Unread"
-                                            role="status"
-                                        />
-                                    )}
-                                </li>
-                            );
-                        })}
-                    </ul>
-                )}
-            </main>
+            {/* ── Toolbar: tabs + mark all read ── */}
+            <div className="nt-toolbar">
+                <div className="nt-tabs" role="tablist" aria-label="Notification filters">
+                    {TABS.map(({ key, label }) => (
+                        <button
+                            key={key}
+                            role="tab"
+                            aria-selected={activeTab === key}
+                            className={`nt-tab${activeTab === key ? ' nt-tab--active' : ''}`}
+                            onClick={() => setActiveTab(key)}
+                        >
+                            {label}
+                        </button>
+                    ))}
+                </div>
 
-            {/* Bottom Navigation */}
+                {unreadCount > 0 && (
+                    <button
+                        className="nt-mark-all"
+                        onClick={markAllRead}
+                        aria-label="Mark all notifications as read"
+                    >
+                        Mark all as read
+                    </button>
+                )}
+            </div>
+
+            {/* ── Grid de notificaciones ── */}
+            <section className="nt-grid-wrapper" aria-label="Notifications list">
+                {filtered.length === 0 ? (
+                    <EmptyState />
+                ) : (
+                    <div className="nt-grid" id="nt-list">
+                        {filtered.map((notif) => (
+                            <NotifCard
+                                key={notif.id}
+                                notif={notif}
+                                onMarkRead={markRead}
+                            />
+                        ))}
+                    </div>
+                )}
+            </section>
+
+            {/* ── Bottom nav (mobile only — AppShell oculta en desktop) ── */}
             <nav className="nt-bottom-nav" aria-label="Main navigation">
                 <button
                     className="nav-item"
                     onClick={() => navigate('/home')}
-                    aria-label="Home"
+                    aria-label="Go to Home"
                 >
-                    <HomeIcon size={24} />
+                    <HomeIcon size={24} aria-hidden="true" />
                     <span>Home</span>
                 </button>
                 <button
                     className="nav-item"
                     onClick={() => navigate('/orders')}
-                    aria-label="Orders"
+                    aria-label="Go to Orders"
                 >
-                    <ShoppingBag size={24} />
+                    <ShoppingBag size={24} aria-hidden="true" />
                     <span>Orders</span>
                 </button>
                 <button
                     className="nav-item"
                     onClick={() => navigate('/about')}
-                    aria-label="About us"
+                    aria-label="Go to About us"
                 >
-                    <Info size={24} />
+                    <Info size={24} aria-hidden="true" />
                     <span>Us</span>
                 </button>
             </nav>
