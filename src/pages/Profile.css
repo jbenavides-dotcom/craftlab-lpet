@@ -341,84 +341,83 @@
 /* ---- DESKTOP ---------------------------------------- */
 @media (min-width: 900px) {
     .pf-container {
-        padding: 32px 32px 32px;
+        padding: 20px 24px;
     }
 
-    /* Ocultar header sticky en desktop (AppShell ya da el contexto) */
     .pf-header {
         display: none;
     }
 
     .pf-main {
-        max-width: 1100px;
+        max-width: 980px;
         margin: 0 auto;
         padding: 0;
         display: grid;
-        grid-template-columns: 340px 1fr;
+        grid-template-columns: 280px 1fr;
         grid-template-areas:
             "identity stats"
             "identity menu"
             "identity signout";
-        gap: 24px;
+        gap: 16px;
         align-items: start;
     }
 
-    /* Identity: card grande a la izquierda (sticky-like) */
+    /* Identity compacta */
     .pf-identity {
         grid-area: identity;
-        padding: 40px 32px;
-        gap: 0.75rem;
-        position: sticky;
-        top: 40px;
+        padding: 24px 20px;
+        gap: 0.35rem;
     }
 
     .pf-avatar {
-        width: 140px;
-        height: 140px;
-        margin-bottom: 1rem;
+        width: 88px;
+        height: 88px;
+        margin-bottom: 0.5rem;
     }
 
     .pf-avatar-initials {
-        font-size: 3.2rem;
+        font-size: 2rem;
     }
 
     .pf-name {
-        font-size: 1.6rem;
+        font-size: 1.2rem;
     }
 
     .pf-email {
-        font-size: 0.95rem;
+        font-size: 0.82rem;
     }
 
-    /* Stats 2x2 o 4 columnas en desktop */
+    /* Stats 4 cols compactas */
     .pf-stats {
         grid-area: stats;
         grid-template-columns: repeat(4, 1fr);
-        gap: 14px;
+        gap: 10px;
         margin-top: 0;
     }
 
-    /* Menu ancho con padding mayor */
+    /* Menu compacto */
     .pf-menu {
         grid-area: menu;
         margin-top: 0;
     }
 
     .pf-menu-item {
-        padding: 18px 20px;
-        font-size: 0.95rem;
+        padding: 12px 16px;
+        font-size: 0.88rem;
     }
 
     .pf-menu-icon-wrap {
-        margin-right: 14px;
+        margin-right: 12px;
     }
 
-    /* Sign out card separada */
+    /* Sign out */
     .pf-signout {
         grid-area: signout;
         margin-top: 0;
-        max-width: 280px;
+        max-width: 240px;
         align-self: start;
+        padding: 10px 16px;
+        font-size: 0.85rem;
     }
 }
 
