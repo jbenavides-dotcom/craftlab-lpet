@@ -4,7 +4,7 @@ import {
     X, Check, Clock, FlaskConical, Droplets, Sun, Zap,
     Flower2, Moon, Leaf, Package,
     Banana, Cherry, Citrus, Apple, Sparkles, Coffee,
-    Crown, Sprout, Grape, Gem,
+    Crown, Sprout, Grape, Gem, Beaker, Hexagon,
 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Slider } from '../../components/ui/Slider';
@@ -113,10 +113,26 @@ const VARIETIES: { id: string; label: string; desc: string; Icon: React.ElementT
     { id: 'tekisik',      label: 'Tekisik',             desc: 'Salvadoran selection. Bright citrus, honey sweetness, refined.',           Icon: Citrus },
 ];
 
-const CATEGORIES: Record<string, { id: string; label: string }[]> = {
-    fermented: [{ id: 'bio-innovation', label: 'Bio-Innovation' }],
-    bright: [{ id: 'lactic', label: 'Lactic' }, { id: 'natural', label: 'Natural' }],
-    classic: [{ id: 'washed', label: 'Washed' }, { id: 'honey', label: 'Honey' }],
+interface CategoryDef {
+    id: string;
+    label: string;
+    Icon: React.ElementType;
+    gradient: string;
+    iconColor: string;
+}
+
+const CATEGORIES: Record<string, CategoryDef[]> = {
+    fermented: [
+        { id: 'bio-innovation', label: 'Bio-Innovation', Icon: FlaskConical, gradient: 'linear-gradient(135deg, #ede9fe 0%, #c4b5fd 100%)', iconColor: '#6b21a8' },
+    ],
+    bright: [
+        { id: 'lactic',  label: 'Lactic',  Icon: Beaker, gradient: 'linear-gradient(135deg, #fce7f3 0%, #f9a8d4 100%)', iconColor: '#9d174d' },
+        { id: 'natural', label: 'Natural', Icon: Sun,    gradient: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)', iconColor: '#b45309' },
+    ],
+    classic: [
+        { id: 'washed', label: 'Washed', Icon: Droplets, gradient: 'linear-gradient(135deg, #dbeafe 0%, #93c5fd 100%)', iconColor: '#1D4ED8' },
+        { id: 'honey',  label: 'Honey',  Icon: Hexagon,  gradient: 'linear-gradient(135deg, #fef9c3 0%, #fde047 100%)', iconColor: '#854d0e' },
+    ],
 };
 
 const METHODS: Record<string, { id: string; label: string }[]> = {
@@ -603,7 +619,9 @@ export const CraftLabConfigurator: React.FC = () => {
                                                 tabIndex={0}
                                                 onKeyDown={e => (e.key === 'Enter' || e.key === ' ') ? updateConfig('category', c.id) : undefined}
                                             >
-                                                <div className="cl-choice-icon" style={{ background: 'linear-gradient(135deg, #fce7f3 0%, #f9a8d4 100%)' }} />
+                                                <div className="cl-choice-icon" style={{ background: c.gradient }}>
+                                                    <c.Icon size={22} strokeWidth={1.75} color={c.iconColor} />
+                                                </div>
                                                 <div className="cl-choice-content">
                                                     <div className="cl-choice-title">{c.label}</div>
                                                 </div>
