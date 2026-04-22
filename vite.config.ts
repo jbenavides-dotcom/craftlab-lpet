@@ -4,26 +4,35 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 // https://vite.dev/config/
 export default defineConfig({
+  // Subruta del repo en GitHub Pages: jbenavides-dotcom.github.io/craftlab-lpet/
+  base: '/craftlab-lpet/',
   plugins: [
     react(),
-    VitePWA({ 
+    VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
+      includeAssets: ['icons/icon.svg', 'icons/maskable-icon.svg'],
       manifest: {
-        name: 'La Palma & El Tucan',
-        short_name: 'La Palma & El Tucan',
-        description: 'La Palma & El Tucan Coffee Experience',
-        theme_color: '#ffffff',
+        name: 'CraftLab · La Palma & El Tucán',
+        short_name: 'CraftLab',
+        description: 'Your coffee playground — La Palma & El Tucán',
+        theme_color: '#c1004a',
+        background_color: '#c1004a',
+        display: 'standalone',
+        orientation: 'portrait',
+        scope: '/craftlab-lpet/',
+        start_url: '/craftlab-lpet/',
         icons: [
           {
-            src: 'pwa-192x192.png',
-            sizes: '192x192',
-            type: 'image/png'
+            src: 'icons/icon.svg',
+            sizes: 'any',
+            type: 'image/svg+xml',
+            purpose: 'any'
           },
           {
-            src: 'pwa-512x512.png',
-            sizes: '512x512',
-            type: 'image/png'
+            src: 'icons/maskable-icon.svg',
+            sizes: 'any',
+            type: 'image/svg+xml',
+            purpose: 'maskable'
           }
         ]
       }

@@ -1,189 +1,469 @@
-.cl-welcome-container {
-    display: flex;
-    flex-direction: column;
+/* ============================================================
+   CraftLabWelcome — sistema visual CraftLab (blanco + fucsia + azul)
+   ============================================================ */
+
+/* Tokens locales — aislados de los globals para evitar colisiones */
+:root {
+    --cl-accent:       #c1004a;
+    --cl-accent-soft:  #fce7f3;
+    --cl-blue:         #1D4ED8;
+    --cl-blue-soft:    #bfdbfe;
+    --cl-green:        #10B981;
+    --cl-green-soft:   #d1fae5;
+    --cl-pink:         #EC4899;
+    --cl-pink-soft:    #fce7f3;
+    --cl-text:         #0A1E3F;
+    --cl-text-muted:   #6b7280;
+    --cl-border:       #e5e7eb;
+}
+
+/* ============================================================
+   STEP WELCOME — pantalla de celebración post-unlock
+   ============================================================ */
+
+.clw-hero {
+    position: relative;
     min-height: 100vh;
-    background-color: var(--color-gray-light);
+    display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-md);
-    position: relative;
-}
-
-/* Modal specific for Welcome */
-.cl-welcome-card {
-    background-color: var(--color-white);
-    border-radius: var(--radius-xl);
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
-    width: 100%;
-    max-width: 500px;
+    background: linear-gradient(160deg, #fafaf5 0%, #ffffff 60%, #fdf2f8 100%);
+    padding: 24px 20px;
     overflow: hidden;
-    position: relative;
 }
 
-/* Header with Navy */
-.cl-welcome-header {
-    background-color: var(--color-navy);
-    color: var(--color-white);
-    padding: var(--spacing-xl) var(--spacing-lg);
-    text-align: center;
-    position: relative;
-}
-
-.cl-welcome-logo {
-    height: 48px;
-    margin-bottom: var(--spacing-md);
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.cl-welcome-title {
-    font-family: var(--font-serif);
-    font-size: 2rem;
-    font-weight: 700;
-}
-
-.cl-welcome-title .highlight {
-    color: var(--color-pink-hot);
-}
-
-.cl-welcome-close {
+/* Pattern radial decorativo */
+.clw-bg-pattern {
     position: absolute;
-    top: var(--spacing-md);
-    right: var(--spacing-md);
-    color: var(--color-white);
-    background: transparent;
-    border: none;
-    cursor: pointer;
+    inset: 0;
+    background:
+        radial-gradient(circle at 20% 20%, rgba(193, 0, 74, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(29, 78, 216, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 60% 10%, rgba(16, 185, 129, 0.04) 0%, transparent 40%);
+    pointer-events: none;
 }
 
-/* Content */
-.cl-welcome-content {
-    padding: var(--spacing-xxl) var(--spacing-xl);
-    text-align: center;
-}
-
-.cl-welcome-content p {
-    font-family: var(--font-sans);
-    font-size: 1.1rem;
-    line-height: 1.6;
-    color: var(--color-gray-dark);
-    margin-bottom: var(--spacing-xxl);
-}
-
-/* -----------------------------
-   Roadmap Layout (9.1)
------------------------------ */
-.cl-roadmap-container {
+/* Botón close — esquina superior derecha */
+.clw-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 1.5px solid var(--cl-border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background-color: var(--color-gray-light);
-    width: 100%;
-}
-
-.roadmap-header {
-    background-color: var(--color-navy);
-    color: var(--color-white);
-    padding: var(--spacing-md) var(--spacing-xl);
-    display: flex;
-    justify-content: space-between;
     align-items: center;
-    position: sticky;
-    top: 0;
+    justify-content: center;
+    color: var(--cl-text);
+    cursor: pointer;
+    transition: box-shadow 0.2s, transform 0.15s;
     z-index: 10;
 }
 
-.roadmap-logo-text {
-    font-family: var(--font-serif);
-    font-size: 1.5rem;
-    font-weight: 700;
+.clw-close:hover {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.13);
+    transform: scale(1.06);
 }
 
-.roadmap-logo-text .highlight {
-    color: var(--color-pink-hot);
+.clw-close:focus-visible {
+    outline: 2px solid var(--cl-accent);
+    outline-offset: 2px;
 }
 
-.roadmap-body {
-    padding: var(--spacing-xl) var(--spacing-md);
-    max-width: 800px;
-    margin: 0 auto;
-    flex: 1;
-}
-
-.roadmap-greeting {
-    font-family: var(--font-serif);
-    font-size: 2rem;
-    color: var(--color-navy);
-    margin-bottom: var(--spacing-md);
-}
-
-.roadmap-intro {
-    font-family: var(--font-sans);
-    font-size: 1.05rem;
-    line-height: 1.6;
-    color: var(--color-gray-dark);
-    margin-bottom: var(--spacing-xl);
-}
-
-/* List */
-.roadmap-list {
-    background-color: var(--color-white);
-    border-radius: var(--radius-lg);
-    padding: var(--spacing-xl);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
-}
-
-.roadmap-item {
+/* Contenedor interno centrado */
+.clw-hero-inner {
+    position: relative;
+    z-index: 1;
     display: flex;
-    align-items: flex-start;
-    margin-bottom: var(--spacing-md);
-    padding-bottom: var(--spacing-md);
-    border-bottom: 1px solid var(--color-gray-light);
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 480px;
+    width: 100%;
+    gap: 0;
+    animation: clw-fade-up 0.5s ease both;
 }
 
-.roadmap-item:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
+/* Sparkles */
+.clw-sparks {
+    position: absolute;
+    top: -64px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 240px;
+    height: 80px;
+    pointer-events: none;
 }
 
-.roadmap-number {
-    background-color: rgba(26, 43, 76, 0.1);
-    color: var(--color-navy);
-    width: 32px;
-    height: 32px;
+.clw-spark {
+    position: absolute;
+    font-size: 1rem;
+    color: var(--cl-accent);
+    opacity: 0;
+    animation: clw-spark-pop 1.4s ease forwards;
+}
+
+.clw-spark.s1 { top: 10px;  left: 30px;   animation-delay: 0.2s; color: var(--cl-accent); }
+.clw-spark.s2 { top: 30px;  left: 80px;   animation-delay: 0.5s; color: var(--cl-blue);   font-size: 0.8rem; }
+.clw-spark.s3 { top: 8px;   right: 30px;  animation-delay: 0.35s; color: var(--cl-green); }
+.clw-spark.s4 { top: 28px;  right: 80px;  animation-delay: 0.6s;  color: var(--cl-pink);  font-size: 0.8rem; }
+
+/* Badge UNLOCKED */
+.clw-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--cl-accent);
+    color: #ffffff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 999px;
+    margin-bottom: 22px;
+    animation: clw-badge-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+}
+
+/* Título principal */
+.clw-title {
+    font-family: var(--font-serif, Georgia, serif);
+    font-size: clamp(2.2rem, 6vw, 2.8rem);
+    font-weight: 700;
+    color: var(--cl-text);
+    line-height: 1.15;
+    margin: 0 0 14px;
+    letter-spacing: -0.02em;
+}
+
+.clw-title-accent {
+    color: var(--cl-accent);
+}
+
+/* Subtítulo */
+.clw-subtitle {
+    font-size: 1.05rem;
+    color: var(--cl-text-muted);
+    line-height: 1.6;
+    margin: 0 0 32px;
+    max-width: 340px;
+}
+
+/* Perks — 3 mini-cards horizontales */
+.clw-perks {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 32px;
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.clw-perk {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background: #ffffff;
+    border: 1.5px solid var(--cl-border);
+    border-radius: 14px;
+    padding: 16px 14px 14px;
+    min-width: 100px;
+    flex: 1;
+    max-width: 140px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.clw-perk:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.09);
+}
+
+.clw-perk span {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--cl-text);
+    text-align: center;
+    line-height: 1.3;
+}
+
+/* Iconos de perks — círculos de color */
+.clw-perk-icon {
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
-    margin-right: var(--spacing-md);
     flex-shrink: 0;
 }
 
-.roadmap-text h3 {
-    font-family: var(--font-sans);
-    font-size: 1.1rem;
-    color: var(--color-navy);
-    margin-bottom: 4px;
+.clw-perk-icon--green {
+    background: var(--cl-green-soft);
+    color: var(--cl-green);
 }
 
-.roadmap-sublist {
-    margin-top: 8px;
-    padding-left: 20px;
-    list-style-type: lower-alpha;
-    color: var(--color-gray-dark);
-    font-size: 0.95rem;
+.clw-perk-icon--accent {
+    background: var(--cl-accent-soft);
+    color: var(--cl-accent);
+}
+
+.clw-perk-icon--blue {
+    background: var(--cl-blue-soft);
+    color: var(--cl-blue);
+}
+
+/* CTA — ancho completo */
+.clw-hero-inner .btn-full {
+    max-width: 100%;
+}
+
+/* ============================================================
+   STEP ROADMAP — timeline de 8 pasos
+   ============================================================ */
+
+.clw-roadmap {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: #ffffff;
+}
+
+/* Header */
+.clw-roadmap-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: #ffffff;
+    border-bottom: 1.5px solid var(--cl-border);
+    padding: 16px 20px;
+    display: grid;
+    grid-template-columns: 40px 1fr 40px;
+    align-items: center;
+    gap: 8px;
+}
+
+.clw-header-spacer {
+    /* ocupa la misma anchura que el botón X para centrar el título */
+}
+
+.clw-header-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.clw-roadmap-kicker {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cl-accent);
+}
+
+.clw-roadmap-title {
+    font-family: var(--font-serif, Georgia, serif);
+    font-size: clamp(1rem, 3.5vw, 1.2rem);
+    font-weight: 700;
+    color: var(--cl-text);
+    margin: 0;
+    text-align: center;
+    line-height: 1.25;
+}
+
+/* Close inline (dentro del header) */
+.clw-close--inline {
+    position: static;
+    box-shadow: none;
+    background: transparent;
+    border-color: transparent;
+}
+
+.clw-close--inline:hover {
+    background: #f3f4f6;
+    box-shadow: none;
+    transform: none;
+}
+
+/* Timeline */
+/* Grid de cards de pasos (2 columnas) */
+.clw-steps-grid {
+    flex: 1;
+    padding: 20px 16px 16px;
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    align-content: start;
+}
+
+/* Cada paso como card independiente */
+.clw-step-card {
+    background: #ffffff;
+    border: 1px solid var(--cl-border);
+    border-radius: 14px;
+    padding: 12px 14px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: all 0.2s ease;
+}
+
+.clw-step-card:hover {
+    border-color: var(--cl-accent-soft);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
+}
+
+/* Badge numérico circular */
+.clw-step-badge {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    /* background inline con el color del paso */
+}
+
+.clw-step-card-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.clw-step-title {
+    font-family: var(--font-sans, system-ui, sans-serif);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--cl-text);
+    margin: 0 0 3px;
+    line-height: 1.25;
+}
+
+.clw-step-sub {
+    font-size: 0.75rem;
+    color: var(--cl-text-muted);
+    line-height: 1.4;
+    margin: 0;
+}
+
+/* Pills del paso 7 (compactas para caber en card de 1 col) */
+.clw-step-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 6px;
+}
+
+.clw-step-pill {
+    display: inline-block;
+    background: var(--cl-accent-soft);
+    color: var(--cl-accent);
+    font-size: 0.62rem;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 999px;
+    letter-spacing: 0.01em;
     line-height: 1.5;
 }
 
-.roadmap-footer {
-    padding: var(--spacing-xl) var(--spacing-md);
-    background-color: var(--color-white);
-    border-top: 1px solid var(--color-gray-light);
-    display: flex;
-    justify-content: center;
+/* Footer sticky con CTA */
+.clw-roadmap-footer {
     position: sticky;
     bottom: 0;
-    z-index: 10;
+    z-index: 20;
+    background: #ffffff;
+    border-top: 1.5px solid var(--cl-border);
+    padding: 16px 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.clw-roadmap-footer .btn-full {
+    max-width: 600px;
+}
+
+/* ============================================================
+   Animaciones
+   ============================================================ */
+
+@keyframes clw-fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes clw-badge-pop {
+    from {
+        opacity: 0;
+        transform: scale(0.7);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes clw-spark-pop {
+    0%   { opacity: 0; transform: scale(0.5) rotate(-20deg); }
+    40%  { opacity: 1; transform: scale(1.2) rotate(10deg); }
+    70%  { opacity: 0.8; }
+    100% { opacity: 0; transform: scale(1) translateY(-12px); }
+}
+
+/* ============================================================
+   Responsive — móvil primero, ajustes tablet+
+   ============================================================ */
+
+@media (max-width: 360px) {
+    .clw-perks {
+        gap: 8px;
+    }
+
+    .clw-perk {
+        min-width: 80px;
+        padding: 12px 10px;
+    }
+
+    .clw-title {
+        font-size: 2rem;
+    }
+}
+
+@media (min-width: 600px) {
+    .clw-hero-inner {
+        padding: 0 8px;
+    }
+
+    .clw-steps-grid {
+        padding: 28px 24px 16px;
+        gap: 12px;
+    }
+
+    .clw-roadmap-header {
+        padding: 18px 28px;
+    }
+
+    .clw-roadmap-footer {
+        padding: 20px 28px;
+    }
 }

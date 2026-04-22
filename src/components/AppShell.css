@@ -1,0 +1,196 @@
+/* ─────────────────────────────────────────────────────────
+   AppShell — layout base
+   Mobile-first: sidebar oculto, main ocupa todo el viewport.
+   Desktop ≥1024px: sidebar fijo 240px + main con max-width.
+───────────────────────────────────────────────────────── */
+
+.app-shell {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar: invisible en mobile */
+.app-sidebar {
+    display: none;
+}
+
+/* Main: full-width en mobile */
+.app-main {
+    flex: 1;
+    min-width: 0;
+    background: #ffffff;
+}
+
+/* ─── Desktop ≥1024px ─── */
+@media (min-width: 1024px) {
+
+    .app-shell {
+        background: #fafaf5;
+    }
+
+    /* Sidebar permanente */
+    .app-sidebar {
+        display: flex;
+        flex-direction: column;
+        width: 240px;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+        flex-shrink: 0;
+        background: #ffffff;
+        border-right: 1px solid #e5e7eb;
+        padding: 24px 16px;
+        gap: 4px;
+        overflow-y: auto;
+    }
+
+    /* Logo */
+    .app-sidebar-brand {
+        padding: 0 8px 20px;
+        border-bottom: 1px solid #f3f4f6;
+        margin-bottom: 12px;
+    }
+
+    .app-sidebar-logo {
+        height: 28px;
+        object-fit: contain;
+        display: block;
+    }
+
+    /* Nav links */
+    .app-sidebar-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        flex: 1;
+    }
+
+    .app-nav-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        color: #6b7280;
+        font-size: 0.88rem;
+        font-weight: 500;
+        text-decoration: none;
+        transition: background 0.15s, color 0.15s;
+    }
+
+    .app-nav-link:hover {
+        background: #f9fafb;
+        color: #0A1E3F;
+    }
+
+    .app-nav-link.is-active {
+        background: #fce7f3;
+        color: #c1004a;
+        font-weight: 600;
+    }
+
+    .app-nav-link svg {
+        flex-shrink: 0;
+    }
+
+    /* User card */
+    .app-sidebar-user {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px;
+        background: #f9fafb;
+        border-radius: 12px;
+        margin-top: 12px;
+    }
+
+    .app-user-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #c1004a 0%, #EC4899 100%);
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.85rem;
+        flex-shrink: 0;
+        user-select: none;
+    }
+
+    .app-user-info {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .app-user-name {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #0A1E3F;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .app-user-points {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 0.7rem;
+        color: #c1004a;
+        font-weight: 600;
+        margin-top: 2px;
+    }
+
+    /* Sign out */
+    .app-sidebar-signout {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        background: none;
+        border: 1px solid #f3f4f6;
+        border-radius: 10px;
+        color: #6b7280;
+        font-size: 0.82rem;
+        font-weight: 500;
+        cursor: pointer;
+        margin-top: 8px;
+        transition: background 0.15s, border-color 0.15s, color 0.15s;
+        font-family: inherit;
+        width: 100%;
+        text-align: left;
+    }
+
+    .app-sidebar-signout:hover {
+        background: #fef2f2;
+        border-color: #fecaca;
+        color: #b91c1c;
+    }
+
+    /* Main como tarjeta flotante con esquinas redondeadas */
+    .app-main {
+        flex: 1;
+        min-width: 0;
+        max-width: 1100px;
+        margin: 20px auto;
+        width: calc(100% - 40px);
+        background: #ffffff;
+        border-radius: 24px;
+        box-shadow: 0 8px 32px rgba(10, 30, 63, 0.08);
+        overflow: hidden;
+    }
+
+    /* Ocultar bottom-nav en desktop */
+    .bottom-nav {
+        display: none !important;
+    }
+}
+
+/* ─── Pantallas muy grandes ≥1400px ─── */
+@media (min-width: 1400px) {
+    .app-main {
+        max-width: 1200px;
+    }
+}

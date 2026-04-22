@@ -1,40 +1,60 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Check } from 'lucide-react';
+import { Check, Star } from 'lucide-react';
 import { Button } from '../components/ui/Button';
-import './FinalSteps.css';
+import './Selectors.css';
 
-export const Success: React.FC = () => {
+export function Success() {
     const navigate = useNavigate();
 
-    React.useEffect(() => {
-        // Clear Forward Booking progress for next order
-        const keys = Object.keys(localStorage);
-        keys.forEach(key => {
-            if (key.startsWith('fb_')) {
-                localStorage.removeItem(key);
-            }
-        });
+    useEffect(() => {
+        Object.keys(localStorage)
+            .filter(k => k.startsWith('fb_'))
+            .forEach(k => localStorage.removeItem(k));
     }, []);
 
     return (
-        <div className="fb-final-container" style={{ backgroundColor: 'var(--color-white)' }}>
-            <main className="success-main">
-                <div className="success-icon-wrapper">
-                    <Check size={48} strokeWidth={3} />
-                </div>
-                <h1 className="success-title">You've completed<br />your order!</h1>
-                <p className="success-text">Your Forward Booking reservation has been confirmed.</p>
+        <div className="selector-container" style={{ background: '#ffffff' }}>
+            <header className="ds-header">
+                <div className="ds-header-spacer" aria-hidden="true" />
+                <span className="ds-header-title">Forward Booking</span>
+                <div className="ds-header-spacer" aria-hidden="true" />
+            </header>
 
+            <main className="ss-main">
+                <div className="ss-check-wrap">
+                    <Check size={52} strokeWidth={3} color="#ffffff" />
+                </div>
+
+                <h1 className="ss-title">Order confirmed</h1>
+
+                <p className="ss-subtitle">
+                    Your Forward Booking reservation is being prepared.<br />
+                    We'll keep you posted on every stage.
+                </p>
+
+                <div className="ss-points-badge">
+                    <Star size={16} strokeWidth={2} fill="#854d0e" color="#854d0e" />
+                    <span>+5,000 points earned</span>
+                </div>
+            </main>
+
+            <div className="ss-footer">
                 <Button
                     variant="primary"
                     size="full"
                     onClick={() => navigate('/orders')}
-                    className="mt-md"
                 >
                     Go to Orders
                 </Button>
-            </main>
+                <Button
+                    variant="ghost"
+                    size="full"
+                    onClick={() => navigate('/home')}
+                >
+                    Return Home
+                </Button>
+            </div>
         </div>
     );
-};
+}

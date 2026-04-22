@@ -2,12 +2,111 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+
+    <!-- Viewport: cover (permite safe-area-inset-*) + no zoom al focusar inputs -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+
+    <!-- Theme color: status bar Android + tab browser -->
+    <meta name="theme-color" content="#c1004a" />
+    <meta name="color-scheme" content="light" />
+
+    <!-- Apple / iOS Web App -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="CraftLab" />
+
+    <!-- Icons -->
+    <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
+    <link rel="apple-touch-icon" href="/icons/icon.svg" />
+    <link rel="mask-icon" href="/icons/maskable-icon.svg" color="#c1004a" />
+
+    <!-- Preconnect para Cloudinary (mejora LCP) -->
+    <link rel="preconnect" href="https://res.cloudinary.com" />
+
+    <title>CraftLab · La Palma & El Tucán</title>
   </head>
   <body>
+    <!-- Splash que se muestra mientras React arranca.
+         Se auto-oculta cuando #root tiene contenido. -->
+    <style>
+      #app-splash {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: linear-gradient(135deg, #9d0038 0%, #c1004a 45%, #EC4899 100%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: clamp(1rem, 3vh, 2rem);
+        color: #ffffff;
+        font-family: Georgia, 'Times New Roman', serif;
+        animation: appSplashFadeIn 0.25s ease;
+        transition: opacity 0.3s ease 0.1s, visibility 0s linear 0.4s;
+        padding: 2rem;
+        box-sizing: border-box;
+      }
+      #app-splash.hide {
+        opacity: 0;
+        visibility: hidden;
+      }
+      #app-splash-logo {
+        font-size: clamp(3.5rem, 14vw, 8rem);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        line-height: 1;
+        text-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+      }
+      #app-splash-logo span { color: rgba(255,255,255,0.8); }
+      #app-splash-sub {
+        font-family: system-ui, -apple-system, sans-serif;
+        font-size: clamp(0.75rem, 1.5vw, 1rem);
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        opacity: 0.85;
+        font-weight: 600;
+      }
+      #app-splash-dot {
+        width: clamp(6px, 1vw, 10px);
+        height: clamp(6px, 1vw, 10px);
+        border-radius: 50%;
+        background: rgba(255,255,255,0.9);
+        animation: appSplashPulse 1.2s ease infinite;
+      }
+      @keyframes appSplashFadeIn {
+        from { opacity: 0; } to { opacity: 1; }
+      }
+      @keyframes appSplashPulse {
+        0%, 100% { transform: scale(1); opacity: 1; }
+        50%      { transform: scale(1.6); opacity: 0.4; }
+      }
+    </style>
+    <div id="app-splash" role="status" aria-live="polite">
+      <div id="app-splash-logo">Craft<span>Lab</span></div>
+      <div id="app-splash-sub">La Palma &amp; El Tucán</div>
+      <div id="app-splash-dot"></div>
+    </div>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Oculta el splash cuando React haya montado contenido en #root
+      (function () {
+        const splash = document.getElementById('app-splash');
+        const root = document.getElementById('root');
+        if (!splash || !root) return;
+        const obs = new MutationObserver(function () {
+          if (root.children.length > 0) {
+            splash.classList.add('hide');
+            obs.disconnect();
+            setTimeout(() => splash.remove(), 500);
+          }
+        });
+        obs.observe(root, { childList: true });
+        // Fallback: 4s máximo
+        setTimeout(() => splash.classList.add('hide'), 4000);
+      })();
+    </script>
   </body>
 </html>

@@ -1,52 +1,118 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X, Beaker, Thermometer, Wind, Play } from 'lucide-react';
+import { ExitConfirmModal } from '../../components/ExitConfirmModal';
 import './CraftLabBasicEducation.css';
 
 interface StorySlide {
     id: number;
     title: string;
+    highlight?: string;  // palabra del title a destacar en fucsia
     text: string;
     icon: React.ReactNode;
-    color: string;
+    gradient: string;
+    iconColor: string;
 }
+
+// Inline SVG: pH curve from ~6.0 → ~4.0 over 110 hours
+const PH_CURVE_SVG = (
+    <svg
+        width="180"
+        height="120"
+        viewBox="0 0 180 120"
+        aria-label="pH curve descending from 6.0 to 4.0 over 110 hours"
+        role="img"
+    >
+        {/* Axes */}
+        <line x1="28" y1="10" x2="28" y2="100" stroke="#1E3A5F" strokeWidth="1.5" />
+        <line x1="28" y1="100" x2="172" y2="100" stroke="#1E3A5F" strokeWidth="1.5" />
+
+        {/* Y-axis labels (pH) */}
+        <text x="4" y="18" fontSize="9" fill="#4A4A4A">6</text>
+        <text x="4" y="58" fontSize="9" fill="#4A4A4A">5</text>
+        <text x="4" y="98" fontSize="9" fill="#4A4A4A">4</text>
+
+        {/* Y-axis gridlines */}
+        <line x1="28" y1="15" x2="172" y2="15" stroke="#ddd" strokeWidth="0.8" strokeDasharray="3,3" />
+        <line x1="28" y1="57" x2="172" y2="57" stroke="#ddd" strokeWidth="0.8" strokeDasharray="3,3" />
+
+        {/* X-axis tick labels (hours) */}
+        <text x="26"  y="112" fontSize="8" fill="#4A4A4A" textAnchor="middle">0</text>
+        <text x="54"  y="112" fontSize="8" fill="#4A4A4A" textAnchor="middle">24</text>
+        <text x="82"  y="112" fontSize="8" fill="#4A4A4A" textAnchor="middle">48</text>
+        <text x="110" y="112" fontSize="8" fill="#4A4A4A" textAnchor="middle">72</text>
+        <text x="138" y="112" fontSize="8" fill="#4A4A4A" textAnchor="middle">96</text>
+        <text x="166" y="112" fontSize="8" fill="#4A4A4A" textAnchor="middle">110</text>
+
+        {/* Axis labels */}
+        <text x="100" y="120" fontSize="8" fill="#888" textAnchor="middle">hours</text>
+        <text x="10" y="60" fontSize="8" fill="#888" textAnchor="middle" transform="rotate(-90,10,60)">pH</text>
+
+        {/* pH curve: smooth descent from (28,15) at hr0/pH6 → (166,96) at hr110/pH4 */}
+        <path
+            d="M 28,15 C 55,16 62,30 82,45 S 120,80 166,96"
+            fill="none"
+            stroke="#E85A7A"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+        />
+
+        {/* Start / end data points */}
+        <circle cx="28"  cy="15" r="3.5" fill="#E85A7A" />
+        <circle cx="166" cy="96" r="3.5" fill="#E85A7A" />
+
+        {/* Annotations */}
+        <text x="32"  y="13" fontSize="8" fill="#E85A7A" fontWeight="bold">pH 6.0</text>
+        <text x="120" y="110" fontSize="8" fill="#E85A7A" fontWeight="bold">pH 4.0</text>
+    </svg>
+);
 
 const slides: StorySlide[] = [
     {
         id: 1,
-        title: "The Magic of Fermentation",
-        text: "Fermentation isn't just a step in coffee processing; it's where the raw potential of the bean is unlocked and shaped.",
-        icon: <Beaker size={80} />,
-        color: "var(--color-pink-bg)"
+        title: "It's a Process",
+        highlight: "Process",
+        text: "Fermentation transforms raw cherries into the beans that define your coffee's character. It's where science meets craft.",
+        icon: <Beaker size={64} />,
+        gradient: 'linear-gradient(135deg, #fce7f3 0%, #f9a8d4 100%)',
+        iconColor: '#9d174d',
     },
     {
         id: 2,
         title: "Metabolic Routes",
+        highlight: "Metabolic",
         text: "Temperature and Brix (sugar content) act as the steering wheel. Warmer temps speed up the process, bringing out intense fruit notes.",
-        icon: <Thermometer size={80} />,
-        color: "#fdf0d5" // Warm ochre tint
+        icon: <Thermometer size={64} />,
+        gradient: 'linear-gradient(135deg, #fef3c7 0%, #fbbf24 100%)',
+        iconColor: '#92400e',
     },
     {
         id: 3,
         title: "Oxygen Matters",
+        highlight: "Oxygen",
         text: "An open tank (Aerobic) yields clean, smooth notes. A closed tank (Anaerobic) creates pressure and intense, boozy, tropical flavors.",
-        icon: <Wind size={80} />,
-        color: "#e0f2fe" // Light blue tint
+        icon: <Wind size={64} />,
+        gradient: 'linear-gradient(135deg, #dbeafe 0%, #60a5fa 100%)',
+        iconColor: '#1e40af',
     },
     {
         id: 4,
         title: "Seeing it in Action",
-        text: "At our farm, cherries are floated, sorted, and placed into dedicated tanks where the magic begins. (Imagine a 15s video here).",
-        icon: <Play size={80} />,
-        color: "#f3e8ff" // Pale purple
+        highlight: "Action",
+        text: "At our farm, cherries are floated, sorted, and placed into dedicated tanks where the magic begins.",
+        icon: <Play size={64} />,
+        gradient: 'linear-gradient(135deg, #ede9fe 0%, #a78bfa 100%)',
+        iconColor: '#5b21b6',
     },
     {
         id: 5,
-        title: "You are the Creator",
-        text: "Now that you understand the basics, you are ready to manipulate these variables in CraftLab.",
-        icon: <Beaker size={80} color="var(--color-pink-hot)" />,
-        color: "var(--color-gray-light)"
-    }
+        title: "Acidification",
+        highlight: "Acidification",
+        text: "As fermentation progresses, lactobacilli and yeasts produce organic acids. pH drops from ~6.0 to ~4.0 over 110 hours — this curve determines whether your coffee tastes bright, balanced or fermented.",
+        icon: PH_CURVE_SVG,
+        gradient: 'linear-gradient(135deg, #d1fae5 0%, #6ee7b7 100%)',
+        iconColor: '#065f46',
+    },
 ];
 
 // Duration for auto-advance per slide (in ms)
@@ -55,10 +121,18 @@ const SLIDE_DURATION = 8000;
 export const CraftLabBasicEducation: React.FC = () => {
     const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
     const [progress, setProgress] = useState(0); // 0 to 100 for current slide
+    const [showExitModal, setShowExitModal] = useState(false);
     const navigate = useNavigate();
 
-    // Progress bar animation loop
+    // Progress bar animation loop.
+    // Captures `currentSlideIndex` via the dependency array so it restarts
+    // cleanly on every slide change. Uses functional setState to avoid stale
+    // closures — the "advance or navigate" decision reads `slides.length`
+    // (stable constant) rather than the captured index.
     useEffect(() => {
+        // Pause auto-advance while exit modal is open
+        if (showExitModal) return;
+
         let animationFrameId: number;
         const startTime = Date.now();
 
@@ -70,13 +144,27 @@ export const CraftLabBasicEducation: React.FC = () => {
             if (percentage < 100) {
                 animationFrameId = requestAnimationFrame(animateProgress);
             } else {
-                handleNext();
+                // Use functional updater — avoids capturing stale currentSlideIndex
+                setCurrentSlideIndex((prev) => {
+                    if (prev < slides.length - 1) {
+                        return prev + 1;
+                    }
+                    // Last slide reached: navigate to quiz
+                    // Schedule outside the setState call to avoid side effects in updater
+                    return prev;
+                });
+                setProgress(0);
+                // Navigate only if we are on the last slide (read via ref-like snapshot)
+                if (currentSlideIndex >= slides.length - 1) {
+                    navigate('/craftlab/education/quiz');
+                }
             }
         };
 
         animationFrameId = requestAnimationFrame(animateProgress);
         return () => cancelAnimationFrame(animationFrameId);
-    }, [currentSlideIndex]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentSlideIndex, showExitModal]);
 
     const handleNext = () => {
         if (currentSlideIndex < slides.length - 1) {
@@ -98,7 +186,7 @@ export const CraftLabBasicEducation: React.FC = () => {
     const currentSlide = slides[currentSlideIndex];
 
     return (
-        <div className="education-stories-container" style={{ backgroundColor: currentSlide.color }}>
+        <div className="education-stories-container">
 
             {/* Progress Bars */}
             <div className="stories-progress-container">
@@ -112,7 +200,11 @@ export const CraftLabBasicEducation: React.FC = () => {
                 ))}
             </div>
 
-            <button className="story-close" onClick={() => navigate('/home')}>
+            <button
+                className="story-close"
+                onClick={() => setShowExitModal(true)}
+                aria-label="Exit education"
+            >
                 <X size={28} />
             </button>
 
@@ -123,13 +215,35 @@ export const CraftLabBasicEducation: React.FC = () => {
             </div>
 
             {/* Content */}
-            <div className="story-content">
-                <div className="story-visual">
+            <div className="be-content">
+                <div
+                    className="be-icon-circle"
+                    style={{ background: currentSlide.gradient, color: currentSlide.iconColor }}
+                >
                     {currentSlide.icon}
                 </div>
-                <h2 className="story-title">{currentSlide.title}</h2>
-                <p className="story-text">{currentSlide.text}</p>
+                <div className="be-text-wrap">
+                    <h2 className="be-title">
+                        {currentSlide.highlight ? (
+                            <>
+                                {currentSlide.title.split(currentSlide.highlight)[0]}
+                                <span className="be-title-accent">{currentSlide.highlight}</span>
+                                {currentSlide.title.split(currentSlide.highlight)[1]}
+                            </>
+                        ) : (
+                            currentSlide.title
+                        )}
+                    </h2>
+                    <p className="be-text">{currentSlide.text}</p>
+                </div>
             </div>
+
+            <ExitConfirmModal
+                isOpen={showExitModal}
+                onConfirm={() => { navigate('/home'); }}
+                onCancel={() => setShowExitModal(false)}
+                variant="craftlab"
+            />
 
         </div>
     );
