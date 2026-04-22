@@ -815,11 +815,11 @@ export const CraftLabConfigurator: React.FC = () => {
             <button
                 className="cl-sheet-fab"
                 onClick={() => setShowSheet(true)}
-                aria-label={`View your selections — ${decisionCount} of 12 completed`}
+                aria-label="View your configuration summary"
                 aria-haspopup="dialog"
             >
                 <ChevronUp size={18} />
-                <span className="cl-sheet-fab-counter">{decisionCount}/12</span>
+                <span className="cl-sheet-fab-counter">Summary</span>
             </button>
 
             {/* ──── BOTTOM SHEET BACKDROP ─────────────────────── */}
@@ -842,7 +842,7 @@ export const CraftLabConfigurator: React.FC = () => {
             >
                 <div className="cl-sheet-handle" aria-hidden="true" />
                 <div className="cl-sheet-header">
-                    <span className="cl-sheet-title">Your Configuration · {decisionCount} of 12</span>
+                    <span className="cl-sheet-title">Your Configuration</span>
                     <button
                         ref={sheetCloseRef}
                         className="cl-sheet-close"
