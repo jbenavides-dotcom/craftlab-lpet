@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Menu, User, Home as HomeIcon, ShoppingBag, Info, ArrowRight } from 'lucide-react';
+import { Menu, User, Home as HomeIcon, ShoppingBag, Info, ArrowRight, GraduationCap, FlaskConical, Lock, Check } from 'lucide-react';
 import { Modal } from '../components/ui/Modal';
 import { Button } from '../components/ui/Button';
 import './Home.css';
@@ -221,54 +221,56 @@ export const Home: React.FC = () => {
                 onClose={() => setShowCLOnboarding(false)}
                 className="cl-onboarding-modal"
             >
-                <div className="onboarding-modal-content">
-                    <h1 className="onboarding-modal-title">
-                        Welcome to Craft<span className="title-highlight">Lab</span>
+                <div className="clo-modal-content">
+                    <div className="clo-kicker">CRAFTLAB</div>
+                    <h1 className="clo-title">
+                        Welcome to Craft<span className="clo-title-accent">Lab</span>
                     </h1>
-                    <p className="onboarding-modal-intro">
-                        Discover the science behind extraordinary coffee. La Palma &amp; El Tucán has spent
-                        over a decade perfecting fermentation. Now, we put the lab in your hands.
+                    <p className="clo-intro">
+                        Choose your path. Learn the science first, or enter the lab directly.
                     </p>
 
-                    <div className="modal-choice-container">
-                        <div
-                            className="modal-choice-card education"
+                    <div className="clo-choices">
+                        <button
+                            type="button"
+                            className="clo-choice"
                             onClick={() => navigate('/craftlab/education/basic')}
-                            role="button"
-                            tabIndex={0}
                             aria-label="Go to Education Tool"
-                            onKeyDown={(e) => e.key === 'Enter' && navigate('/craftlab/education/basic')}
                         >
-                            <div className="modal-choice-icon">🎓</div>
-                            <div className="modal-choice-info">
+                            <div className="clo-choice-icon clo-choice-icon--edu">
+                                <GraduationCap size={22} strokeWidth={1.75} />
+                            </div>
+                            <div className="clo-choice-info">
                                 <h3>Education Tool</h3>
-                                <p>Learn the science and master the metabolic routes.</p>
-                                {educationCompleted && <span className="status-tag completed">Completed</span>}
+                                <p>Master the metabolic routes.</p>
                             </div>
-                        </div>
+                            {educationCompleted ? (
+                                <span className="clo-status clo-status--done"><Check size={12} strokeWidth={3} /> Done</span>
+                            ) : (
+                                <ArrowRight size={16} className="clo-choice-chev" />
+                            )}
+                        </button>
 
-                        <div
-                            className={`modal-choice-card configurator ${!educationCompleted ? 'locked' : ''}`}
-                            onClick={() => {
-                                if (educationCompleted) navigate('/craftlab/welcome');
-                            }}
-                            role="button"
-                            tabIndex={0}
+                        <button
+                            type="button"
+                            className={`clo-choice${!educationCompleted ? ' is-locked' : ''}`}
+                            onClick={() => { if (educationCompleted) navigate('/craftlab/welcome'); }}
+                            disabled={!educationCompleted}
                             aria-label={educationCompleted ? 'Go to CraftLab configurator' : 'CraftLab locked — complete education first'}
-                            aria-disabled={!educationCompleted}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter' && educationCompleted) navigate('/craftlab/welcome');
-                            }}
                         >
-                            <div className="modal-choice-icon">
-                                {educationCompleted ? '🧪' : '🔒'}
+                            <div className={`clo-choice-icon ${educationCompleted ? 'clo-choice-icon--lab' : 'clo-choice-icon--locked'}`}>
+                                {educationCompleted ? <FlaskConical size={22} strokeWidth={1.75} /> : <Lock size={20} strokeWidth={2} />}
                             </div>
-                            <div className="modal-choice-info">
+                            <div className="clo-choice-info">
                                 <h3>CraftLab</h3>
-                                <p>Design your unique fermentation process.</p>
-                                {!educationCompleted && <span className="status-tag locked">Locked</span>}
+                                <p>Design your fermentation.</p>
                             </div>
-                        </div>
+                            {educationCompleted ? (
+                                <ArrowRight size={16} className="clo-choice-chev" />
+                            ) : (
+                                <span className="clo-status clo-status--locked">Locked</span>
+                            )}
+                        </button>
                     </div>
                 </div>
             </Modal>

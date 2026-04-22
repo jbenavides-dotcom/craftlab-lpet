@@ -420,108 +420,151 @@
     }
 }
 
-/* ---- ONBOARDING MODAL ------------------------------- */
+/* ---- ONBOARDING MODAL (CraftLab) -------------------- */
 .cl-onboarding-modal {
-    max-width: 650px !important;
+    max-width: 420px !important;
     padding: 0;
 }
 
-.onboarding-modal-content {
-    padding: var(--spacing-xxl) var(--spacing-xl);
+.clo-modal-content {
+    padding: 24px 22px 22px;
     text-align: center;
 }
 
-.onboarding-modal-title {
-    font-family: var(--font-serif);
-    font-size: 2.5rem;
-    margin-bottom: var(--spacing-md);
-    color: var(--color-navy);
+.clo-kicker {
+    font-size: 0.62rem;
+    letter-spacing: 0.22em;
+    color: #c1004a;
+    font-weight: 700;
+    margin-bottom: 8px;
 }
 
-.onboarding-modal-title .title-highlight {
-    color: var(--color-pink-hot);
+.clo-title {
+    font-family: var(--font-serif, Georgia, serif);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0A1E3F;
+    margin: 0 0 6px;
+    line-height: 1.15;
 }
 
-.onboarding-modal-intro {
-    font-size: 0.95rem;
-    color: var(--color-gray-dark);
-    line-height: 1.6;
-    margin-bottom: var(--spacing-xl);
+.clo-title-accent {
+    color: #c1004a;
 }
 
-.modal-choice-container {
+.clo-intro {
+    font-size: 0.85rem;
+    color: #6b7280;
+    line-height: 1.5;
+    margin: 0 0 18px;
+}
+
+.clo-choices {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-md);
+    gap: 10px;
 }
 
-.modal-choice-card {
-    background: white;
-    border: 1px solid #eee;
-    border-radius: var(--radius-lg);
-    padding: var(--spacing-xl);
+.clo-choice {
+    background: #ffffff;
+    border: 1.5px solid #f3f4f6;
+    border-radius: 14px;
+    padding: 12px 14px;
     display: flex;
     align-items: center;
-    gap: var(--spacing-xl);
+    gap: 12px;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s ease;
     text-align: left;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    font-family: inherit;
+    width: 100%;
 }
 
-.modal-choice-card:hover:not(.locked) {
-    border-color: var(--color-brand-red);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-    transform: translateY(-4px);
+.clo-choice:hover:not(:disabled) {
+    border-color: #c1004a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(193, 0, 74, 0.1);
 }
 
-.modal-choice-card.locked {
-    opacity: 0.6;
+.clo-choice:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.clo-choice.is-locked {
+    opacity: 0.7;
     cursor: not-allowed;
-    background: #f1f3f5;
+    background: #fafafa;
 }
 
-.modal-choice-icon {
-    font-size: 1.75rem;
-    width: 48px;
-    height: 48px;
-    background: white;
-    border-radius: 50%;
+.clo-choice-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-.modal-choice-info h3 {
-    font-size: 1.1rem;
-    margin-bottom: 2px;
-    color: var(--color-navy);
+.clo-choice-icon--edu {
+    background: linear-gradient(135deg, #fce7f3 0%, #f9a8d4 100%);
+    color: #9d174d;
 }
 
-.modal-choice-info p {
-    font-size: 0.85rem;
-    color: var(--color-gray-dark);
+.clo-choice-icon--lab {
+    background: linear-gradient(135deg, #d1fae5 0%, #6ee7b7 100%);
+    color: #065f46;
+}
+
+.clo-choice-icon--locked {
+    background: #f3f4f6;
+    color: #9ca3af;
+}
+
+.clo-choice-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.clo-choice-info h3 {
+    font-size: 0.92rem;
+    font-weight: 600;
+    margin: 0 0 2px;
+    color: #0A1E3F;
+    line-height: 1.2;
+}
+
+.clo-choice-info p {
+    font-size: 0.75rem;
+    color: #6b7280;
     margin: 0;
+    line-height: 1.35;
 }
 
-.status-tag {
-    display: inline-block;
-    font-size: 0.7rem;
+.clo-choice-chev {
+    color: #9ca3af;
+    flex-shrink: 0;
+}
+
+.clo-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.62rem;
     font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 4px;
+    padding: 3px 8px;
+    border-radius: 999px;
     text-transform: uppercase;
-    margin-top: 6px;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
 }
 
-.status-tag.completed {
+.clo-status--done {
     background: #d1fae5;
     color: #065f46;
 }
 
-.status-tag.locked {
-    background: #fee2e2;
-    color: #991b1b;
+.clo-status--locked {
+    background: #f3f4f6;
+    color: #6b7280;
 }
