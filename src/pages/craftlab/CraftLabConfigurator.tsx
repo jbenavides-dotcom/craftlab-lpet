@@ -5,6 +5,7 @@ import {
     Flower2, Moon, Leaf, Package,
     Banana, Cherry, Citrus, Apple, Sparkles, Coffee,
     Crown, Sprout, Grape, Gem, Beaker, Hexagon, Waves,
+    Hourglass, Thermometer,
 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Slider } from '../../components/ui/Slider';
@@ -162,11 +163,16 @@ const SHIPMENT_QUARTERS = [
 ];
 
 const PARAM_META = [
-    { key: 'stabilization' as const, label: 'Stabilization Time',    Icon: Clock,        min: 0, max: 200, step: 12, unit: ' hrs' },
-    { key: 'cherryFerm'    as const, label: 'Cherry Fermentation',    Icon: FlaskConical, min: 0, max: 200, step: 12, unit: ' hrs' },
-    { key: 'mucilageFerm'  as const, label: 'Mucilage Fermentation',  Icon: Droplets,     min: 0, max: 200, step: 12, unit: ' hrs' },
-    { key: 'solarDry'      as const, label: 'Solar Dry',              Icon: Sun,          min: 0, max: 100, step: 1,  unit: ' days' },
-    { key: 'mechDry'       as const, label: 'Mechanical Dry',         Icon: Zap,          min: 0, max: 100, step: 6,  unit: ' hrs' },
+    { key: 'stabilization' as const, label: 'Stabilization Time',   Icon: Hourglass,     min: 0, max: 200, step: 12, unit: ' hrs',
+      iconColor: '#9d174d', gradient: 'linear-gradient(135deg, #fce7f3 0%, #f9a8d4 100%)' },
+    { key: 'cherryFerm'    as const, label: 'Cherry Fermentation',  Icon: Cherry,         min: 0, max: 200, step: 12, unit: ' hrs',
+      iconColor: '#991b1b', gradient: 'linear-gradient(135deg, #fee2e2 0%, #fca5a5 100%)' },
+    { key: 'mucilageFerm'  as const, label: 'Mucilage Fermentation', Icon: Droplets,      min: 0, max: 200, step: 12, unit: ' hrs',
+      iconColor: '#6b21a8', gradient: 'linear-gradient(135deg, #ede9fe 0%, #c4b5fd 100%)' },
+    { key: 'solarDry'      as const, label: 'Solar Dry',             Icon: Sun,           min: 0, max: 100, step: 1,  unit: ' days',
+      iconColor: '#b45309', gradient: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)' },
+    { key: 'mechDry'       as const, label: 'Mechanical Dry',        Icon: Thermometer,   min: 0, max: 100, step: 6,  unit: ' hrs',
+      iconColor: '#1D4ED8', gradient: 'linear-gradient(135deg, #dbeafe 0%, #93c5fd 100%)' },
 ];
 
 const SECTION_IMAGES: Record<string, string> = {
@@ -685,14 +691,14 @@ export const CraftLabConfigurator: React.FC = () => {
                             {/* STEP 6 — PRECISION PARAMETERS */}
                             {currentStep === 6 && (
                                 <>
-                                    <div className="section-label">STEP 07 · PRECISION PARAMETERS</div>
-                                    <h2 className="section-title">
+                                    <div className="section-label cl-label-center">STEP 07 · PRECISION PARAMETERS</div>
+                                    <h2 className="section-title cl-title-sm cl-title-center">
                                         Precision <span className="cl-accent-text">Parameters</span>
                                         <InfoPopover title="Fermentation Parameters">
                                             Cherry stabilization, cherry fermentation and mucilage fermentation shape the final cup. Longer fermentations generally add body and complexity; shorter preserve clarity.
                                         </InfoPopover>
                                     </h2>
-                                    <p className="section-desc">Fine-tune the technical parameters for your custom process.</p>
+                                    <p className="section-desc cl-desc-center">Fine-tune the technical parameters for your custom process.</p>
                                     <div className="cl-params-grid">
                                         {visibleParams.map(p => {
                                             const val = config[p.key] as number | null;
@@ -700,10 +706,10 @@ export const CraftLabConfigurator: React.FC = () => {
                                             return (
                                                 <div key={p.key} className={`cl-param-card${val !== null ? ' has-value' : ''}`}>
                                                     <div className="cl-param-card-top">
-                                                        <div className="cl-param-icon">
-                                                            <Icon size={16} />
+                                                        <div className="cl-param-icon" style={{ background: p.gradient }}>
+                                                            <Icon size={18} strokeWidth={1.75} color={p.iconColor} />
                                                         </div>
-                                                        <div className="cl-param-val">
+                                                        <div className="cl-param-val" style={val !== null ? { color: p.iconColor } : undefined}>
                                                             {val !== null ? `${val}${p.unit}` : '—'}
                                                         </div>
                                                     </div>

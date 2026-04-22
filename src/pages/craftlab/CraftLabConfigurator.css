@@ -501,14 +501,13 @@
 }
 
 .cl-param-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    background: var(--cl-blue-soft);
-    color: var(--cl-blue);
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 .cl-param-val {
@@ -516,6 +515,29 @@
     font-weight: 700;
     color: var(--cl-accent);
     font-variant-numeric: tabular-nums;
+    transition: color 0.2s ease;
+}
+
+/* ---- Modificadores para título centrado + reducido (step 7) ---- */
+.cl-title-sm {
+    font-size: 1.25rem !important;
+    margin-bottom: 0.3rem !important;
+}
+
+.cl-title-center {
+    justify-content: center;
+    text-align: center;
+}
+
+.cl-label-center {
+    text-align: center;
+}
+
+.cl-desc-center {
+    text-align: center;
+    max-width: 360px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* ---- SHIPMENT TIMEFRAME ---------------------------- */
