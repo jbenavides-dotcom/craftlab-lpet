@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Menu, User, Home as HomeIcon, ShoppingBag, Info, ArrowRight, GraduationCap, FlaskConical, Lock, Check } from 'lucide-react';
 import { Modal } from '../components/ui/Modal';
@@ -15,16 +15,18 @@ export const Home: React.FC = () => {
     const [showFBWelcome, setShowFBWelcome] = useState(false);
     const [showCLOnboarding, setShowCLOnboarding] = useState(false);
     const [isNavigatingToFB, setIsNavigatingToFB] = useState(false);
-    const [educationCompleted, setEducationCompleted] = useState(false);
+    // TEMP DEV: forzar unlock para visualizar el estado desbloqueado del modal CL
+    // Revertir al acabar: volver a useState(false) y descomentar el useEffect
+    const [educationCompleted, setEducationCompleted] = useState(true);
 
-    useEffect(() => {
-        const checkStatus = async () => {
-            const { checkCraftLabUnlocked } = await import('../lib/user-progress');
-            const completed = await checkCraftLabUnlocked();
-            setEducationCompleted(completed);
-        };
-        checkStatus();
-    }, []);
+    // useEffect(() => {
+    //     const checkStatus = async () => {
+    //         const { checkCraftLabUnlocked } = await import('../lib/user-progress');
+    //         const completed = await checkCraftLabUnlocked();
+    //         setEducationCompleted(completed);
+    //     };
+    //     checkStatus();
+    // }, []);
 
     const handleFBClick = () => {
         setShowFBWelcome(true);
@@ -241,11 +243,13 @@ export const Home: React.FC = () => {
                                 <GraduationCap size={22} strokeWidth={1.75} />
                             </div>
                             <div className="clo-choice-info">
-                                <h3>Education Tool</h3>
-                                <p>Master the metabolic routes.</p>
+                                <h3>Learn the craft</h3>
+                                <p>The science first</p>
                             </div>
                             {educationCompleted ? (
-                                <span className="clo-status clo-status--done"><Check size={12} strokeWidth={3} /> Done</span>
+                                <span className="clo-done-badge" aria-label="Completed">
+                                    <Check size={12} strokeWidth={3} />
+                                </span>
                             ) : (
                                 <ArrowRight size={16} className="clo-choice-chev" />
                             )}
@@ -262,8 +266,8 @@ export const Home: React.FC = () => {
                                 {educationCompleted ? <FlaskConical size={22} strokeWidth={1.75} /> : <Lock size={20} strokeWidth={2} />}
                             </div>
                             <div className="clo-choice-info">
-                                <h3>CraftLab</h3>
-                                <p>Design your fermentation.</p>
+                                <h3>Enter the Lab</h3>
+                                <p>Craft your coffee</p>
                             </div>
                             {educationCompleted ? (
                                 <ArrowRight size={16} className="clo-choice-chev" />
