@@ -137,49 +137,6 @@ h6 {
   background-color: var(--color-gray-light);
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   DESKTOP APP SHELL
-   La app es mobile-first. En desktop (>=768px) la constriñamos a
-   un frame tipo móvil centrado sobre un fondo neutro — evita que
-   el contenido se estire y parezca una web en vez de una app.
-   ═══════════════════════════════════════════════════════════════ */
-@media (min-width: 768px) {
-  body {
-    background: #e8e4da;
-    min-height: 100vh;
-  }
-
-  #root {
-    max-width: 480px;
-    min-height: 100vh;
-    margin: 0 auto;
-    box-shadow: 0 10px 60px rgba(10, 30, 63, 0.18);
-    background-color: var(--color-white);
-    position: relative;
-    overflow: hidden;
-  }
-
-  /* El splash sigue full-screen aunque el shell esté recortado */
-  #app-splash {
-    max-width: none;
-  }
-
-  /* Bottom nav debe quedar dentro del shell (no ancho de viewport) */
-  .bottom-nav {
-    max-width: 480px;
-    margin: 0 auto;
-  }
-}
-
-/* Pantallas muy grandes: opcional — frame un poco más grande */
-@media (min-width: 1200px) {
-  #root {
-    max-width: 520px;
-  }
-  .bottom-nav {
-    max-width: 520px;
-  }
-}
 
 /* ═══════════════════════════════════════════════════════════════
    iOS Safe Areas (notch, Dynamic Island, home indicator)
