@@ -169,21 +169,21 @@ interface ParamHint {
 }
 
 const PARAM_META = [
-    { key: 'stabilization' as const, label: 'Stabilization Time',   Icon: Hourglass,     min: 0, max: 200, step: 12, unit: ' hrs',
+    { key: 'stabilization' as const, label: 'Stabilization Time',   Icon: Hourglass,     min: 0, max: 200, step: 10, unit: ' hrs',
       iconColor: '#9d174d', gradient: 'linear-gradient(135deg, #fce7f3 0%, #f9a8d4 100%)',
       hints: [
           { min: 1,   label: 'Short',    text: 'Quick stabilization — preserves clarity and bright acidity.' },
           { min: 48,  label: 'Moderate', text: 'Balanced structure — develops sweetness without losing cup clarity.' },
           { min: 120, label: 'Extended', text: 'Deep complexity — boozy, layered notes from long cherry rest.' },
       ] as ParamHint[] },
-    { key: 'cherryFerm'    as const, label: 'Cherry Fermentation',  Icon: Cherry,         min: 0, max: 200, step: 12, unit: ' hrs',
+    { key: 'cherryFerm'    as const, label: 'Cherry Fermentation',  Icon: Cherry,         min: 0, max: 200, step: 10, unit: ' hrs',
       iconColor: '#991b1b', gradient: 'linear-gradient(135deg, #fee2e2 0%, #fca5a5 100%)',
       hints: [
           { min: 1,   label: 'Subtle',   text: 'Fruity hints, clean finish — for bright, tea-like profiles.' },
           { min: 48,  label: 'Defined',  text: 'Tropical fruit-forward with structured body.' },
           { min: 120, label: 'Intense',  text: 'Wine-like, funky, red berry intensity — Katherine\'s signature territory.' },
       ] as ParamHint[] },
-    { key: 'mucilageFerm'  as const, label: 'Mucilage Fermentation', Icon: Droplets,      min: 0, max: 200, step: 12, unit: ' hrs',
+    { key: 'mucilageFerm'  as const, label: 'Mucilage Fermentation', Icon: Droplets,      min: 0, max: 200, step: 10, unit: ' hrs',
       iconColor: '#6b21a8', gradient: 'linear-gradient(135deg, #ede9fe 0%, #c4b5fd 100%)',
       hints: [
           { min: 1,   label: 'Short',    text: 'Clean cup, natural sweetness — closer to washed character.' },
@@ -197,7 +197,7 @@ const PARAM_META = [
           { min: 15,  label: 'Standard', text: 'Ideal range at 1,800m — controlled sun drying on raised beds.' },
           { min: 40,  label: 'Slow',     text: 'Extended sun cure — deeper body, complex dried-fruit sweetness.' },
       ] as ParamHint[] },
-    { key: 'mechDry'       as const, label: 'Mechanical Dry',        Icon: Thermometer,   min: 0, max: 100, step: 6,  unit: ' hrs',
+    { key: 'mechDry'       as const, label: 'Mechanical Dry',        Icon: Thermometer,   min: 0, max: 100, step: 5,  unit: ' hrs',
       iconColor: '#1D4ED8', gradient: 'linear-gradient(135deg, #dbeafe 0%, #93c5fd 100%)',
       hints: [
           { min: 1,   label: 'Light',    text: 'Final moisture balance — protects delicate aromatics.' },
