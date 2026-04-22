@@ -93,10 +93,14 @@ export function About() {
             </header>
 
             {/* Hero */}
-            <section className="ab-hero" role="img" aria-label="Green coffee beans at the farm — La Palma y El Tucán">
+            <section className="ab-hero" role="img" aria-label="La Palma y El Tucán brand">
                 <div className="ab-hero-overlay">
-                    <p className="ab-hero-title">Born at origin.</p>
-                    <p className="ab-hero-sub">Shared with intention.</p>
+                    <img
+                        src="https://res.cloudinary.com/dtkwqoadf/image/upload/v1735702592/logo_horizontal_ss9bvn.png"
+                        alt="La Palma & El Tucán"
+                        className="ab-hero-logo"
+                    />
+                    <p className="ab-hero-sub">Born at origin · Shared with intention</p>
                 </div>
             </section>
 

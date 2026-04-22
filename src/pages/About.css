@@ -82,42 +82,36 @@
 .ab-hero {
     position: relative;
     height: 220px;
-    background-image: url('/craftlab/green-beans.jpg');
-    background-size: cover;
-    background-position: center 55%;
+    background: linear-gradient(135deg, #0A1E3F 0%, #1e3a6f 100%);
     overflow: hidden;
 }
 
 .ab-hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-        to top,
-        rgba(10, 30, 63, 0.88) 0%,
-        rgba(10, 30, 63, 0.5) 50%,
-        rgba(10, 30, 63, 0.15) 100%
-    );
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    padding: 1.75rem 1.5rem 1.5rem;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
 }
 
-.ab-hero-title {
-    font-family: var(--font-serif, Georgia, serif);
-    font-size: 2rem;
-    font-weight: 700;
-    line-height: 1.05;
-    color: #ffffff;
-    letter-spacing: -0.025em;
-    margin: 0 0 0.35rem;
+.ab-hero-logo {
+    max-width: 260px;
+    width: 72%;
+    height: auto;
+    filter: brightness(0) invert(1);
 }
 
 .ab-hero-sub {
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.7);
     margin: 0;
-    letter-spacing: 0.01em;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 500;
+    text-align: center;
 }
 
 /* ---- SECCIONES GENERALES ----------------------------- */
@@ -410,8 +404,8 @@
         height: 280px;
     }
 
-    .ab-hero-title {
-        font-size: 2.5rem;
+    .ab-hero-logo {
+        max-width: 320px;
     }
 
     .ab-cta-wrap {
