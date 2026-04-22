@@ -339,7 +339,91 @@
 }
 
 /* ---- DESKTOP ---------------------------------------- */
-@media (min-width: 640px) {
+@media (min-width: 900px) {
+    .pf-container {
+        padding: 32px 32px 32px;
+    }
+
+    /* Ocultar header sticky en desktop (AppShell ya da el contexto) */
+    .pf-header {
+        display: none;
+    }
+
+    .pf-main {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 0;
+        display: grid;
+        grid-template-columns: 340px 1fr;
+        grid-template-areas:
+            "identity stats"
+            "identity menu"
+            "identity signout";
+        gap: 24px;
+        align-items: start;
+    }
+
+    /* Identity: card grande a la izquierda (sticky-like) */
+    .pf-identity {
+        grid-area: identity;
+        padding: 40px 32px;
+        gap: 0.75rem;
+        position: sticky;
+        top: 40px;
+    }
+
+    .pf-avatar {
+        width: 140px;
+        height: 140px;
+        margin-bottom: 1rem;
+    }
+
+    .pf-avatar-initials {
+        font-size: 3.2rem;
+    }
+
+    .pf-name {
+        font-size: 1.6rem;
+    }
+
+    .pf-email {
+        font-size: 0.95rem;
+    }
+
+    /* Stats 2x2 o 4 columnas en desktop */
+    .pf-stats {
+        grid-area: stats;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        margin-top: 0;
+    }
+
+    /* Menu ancho con padding mayor */
+    .pf-menu {
+        grid-area: menu;
+        margin-top: 0;
+    }
+
+    .pf-menu-item {
+        padding: 18px 20px;
+        font-size: 0.95rem;
+    }
+
+    .pf-menu-icon-wrap {
+        margin-right: 14px;
+    }
+
+    /* Sign out card separada */
+    .pf-signout {
+        grid-area: signout;
+        margin-top: 0;
+        max-width: 280px;
+        align-self: start;
+    }
+}
+
+/* Tablet intermedio: 640-899px ajustes mínimos */
+@media (min-width: 640px) and (max-width: 899px) {
     .pf-main {
         max-width: 480px;
         margin: 0 auto;
