@@ -27,31 +27,45 @@
    Progress bars — estilo IG sobre fondo claro
    ============================================================ */
 .stories-progress-container {
-    display: flex;
-    gap: 4px;
-    padding: 20px 20px 12px;
+    display: flex !important;
+    gap: 6px;
+    padding: 24px 20px 14px;
     position: relative;
-    z-index: 20;
+    z-index: 30;
+    flex-shrink: 0;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .story-progress-segment {
-    flex: 1;
-    height: 4px;
-    background: rgba(193, 0, 74, 0.15);
+    flex: 1 1 0;
+    height: 6px;
+    min-height: 6px;
+    background: #EC4899;
+    opacity: 0.35;
     border-radius: 999px;
     overflow: hidden;
+    position: relative;
 }
 
 .story-progress-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
     height: 100%;
-    background: var(--cl-accent);
+    background: #c1004a;
     width: 0%;
     transition: width 0.05s linear;
     border-radius: 999px;
 }
 
 .story-progress-fill.completed {
-    width: 100%;
+    width: 100% !important;
+}
+
+.story-progress-segment:has(.completed),
+.story-progress-segment:has(.story-progress-fill[style*="width"]) {
+    opacity: 1;
 }
 
 /* ============================================================
@@ -185,23 +199,25 @@
         max-width: 960px;
         margin: 0 auto;
         padding: 40px 0 20px;
-        gap: 10px;
-        display: flex;
-        z-index: 20;
+        gap: 12px;
+        display: flex !important;
+        z-index: 30;
     }
 
     .story-progress-segment {
-        height: 8px;
-        background: rgba(193, 0, 74, 0.15);
+        height: 10px;
+        min-height: 10px;
+        background: #EC4899;
+        opacity: 0.35;
         border-radius: 999px;
-        box-shadow: inset 0 1px 2px rgba(193, 0, 74, 0.08);
         overflow: hidden;
+        position: relative;
     }
 
     .story-progress-fill {
         height: 100%;
         background: linear-gradient(90deg, #c1004a 0%, #EC4899 100%);
-        box-shadow: 0 0 10px rgba(193, 0, 74, 0.35);
+        box-shadow: 0 0 10px rgba(193, 0, 74, 0.5);
         border-radius: 999px;
     }
 
