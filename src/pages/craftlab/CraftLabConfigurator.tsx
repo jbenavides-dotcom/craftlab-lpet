@@ -213,6 +213,28 @@ const getActiveHint = (hints: ParamHint[] | undefined, value: number | null): Pa
     return matches.length > 0 ? matches[matches.length - 1] : null;
 };
 
+// Helper: color dinámico según el progreso del slider (0..1).
+// Azul ciencia → verde → ámbar → fucsia brand — feedback visual del "intensity level".
+const getProgressColor = (value: number | null, min: number, max: number): string => {
+    if (value === null || max <= min) return 'var(--cl-accent)';
+    const pct = Math.max(0, Math.min(1, (value - min) / (max - min)));
+    const stops: Array<[number, [number, number, number]]> = [
+        [0.00, [0x1D, 0x4E, 0xD8]], // azul ciencia
+        [0.33, [0x10, 0xB9, 0x81]], // verde
+        [0.66, [0xF5, 0x9E, 0x0B]], // ámbar
+        [1.00, [0xC1, 0x00, 0x4A]], // fucsia brand
+    ];
+    let i = 0;
+    while (i < stops.length - 2 && pct > stops[i + 1][0]) i++;
+    const [p0, c0] = stops[i];
+    const [p1, c1] = stops[i + 1];
+    const t = (pct - p0) / (p1 - p0);
+    const r = Math.round(c0[0] + (c1[0] - c0[0]) * t);
+    const g = Math.round(c0[1] + (c1[1] - c0[1]) * t);
+    const b = Math.round(c0[2] + (c1[2] - c0[2]) * t);
+    return `rgb(${r}, ${g}, ${b})`;
+};
+
 const SECTION_IMAGES: Record<string, string> = {
     'sec-macro':    'https://images.unsplash.com/photo-1498804103079-a6351b050096?q=80&w=1200&auto=format&fit=crop',
     'sec-flavor':   'https://images.unsplash.com/photo-1510972527921-ce03766a1cf1?q=80&w=1200&auto=format&fit=crop',
@@ -742,6 +764,7 @@ export const CraftLabConfigurator: React.FC = () => {
                                             const val = config[p.key] as number | null;
                                             const { Icon } = p;
                                             const hint = getActiveHint(p.hints, val);
+                                            const progressColor = getProgressColor(val, p.min, p.max);
                                             return (
                                                 <div key={p.key} className={`cl-param-card${val !== null ? ' has-value' : ''}`}>
                                                     <div className="cl-param-card-top">
@@ -749,7 +772,7 @@ export const CraftLabConfigurator: React.FC = () => {
                                                             <Icon size={18} strokeWidth={1.75} color={p.iconColor} />
                                                         </div>
                                                         <div className="cl-param-title">{p.label}</div>
-                                                        <div className="cl-param-val" style={val !== null ? { color: p.iconColor } : undefined}>
+                                                        <div className="cl-param-val" style={val !== null ? { color: progressColor } : undefined}>
                                                             {val !== null ? `${val}${p.unit}` : '—'}
                                                         </div>
                                                     </div>

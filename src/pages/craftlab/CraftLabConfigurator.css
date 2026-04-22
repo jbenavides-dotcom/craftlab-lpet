@@ -494,6 +494,9 @@
     padding: 1.25rem;
     background: #ffffff;
     transition: border-color 0.2s, box-shadow 0.2s;
+    min-height: 230px;
+    display: flex;
+    flex-direction: column;
 }
 .cl-param-card.has-value {
     border-color: var(--cl-accent);
@@ -503,7 +506,7 @@
 .cl-param-card-top {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 18px;
     margin-bottom: 0.75rem;
 }
 
@@ -520,6 +523,7 @@
 .cl-param-title {
     flex: 1;
     min-width: 0;
+    padding-left: 2px;
     font-size: 0.9rem;
     font-weight: 600;
     color: var(--cl-text);
@@ -527,7 +531,7 @@
 }
 
 .cl-param-val {
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: 700;
     color: var(--cl-accent);
     font-variant-numeric: tabular-nums;
