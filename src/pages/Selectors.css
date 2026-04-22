@@ -526,11 +526,17 @@
 }
 
 .vs-card.active {
-    border: 2px solid #000000;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: #d1fae5;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.1);
 }
 
 .vs-card.pending {
+    border: 2px solid #c1004a;
+    box-shadow: 0 0 0 4px rgba(193, 0, 74, 0.15), 0 4px 14px rgba(193, 0, 74, 0.2);
+}
+
+/* Cuando es complete Y pending (re-editando algo ya elegido), prioriza pending */
+.vs-card.active.pending {
     border: 2px solid #c1004a;
     box-shadow: 0 0 0 4px rgba(193, 0, 74, 0.15), 0 4px 14px rgba(193, 0, 74, 0.2);
 }
@@ -559,7 +565,7 @@
     right: 10px;
     width: 26px;
     height: 26px;
-    background: #000000;
+    background: #10b981;
     color: #ffffff;
     border-radius: 50%;
     display: flex;
