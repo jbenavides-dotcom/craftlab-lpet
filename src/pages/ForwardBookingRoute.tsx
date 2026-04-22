@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, Calendar, Leaf, Coffee, TestTube2, Check } from 'lucide-react';
+import { X, Calendar, Leaf, Coffee, TestTube2 } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Modal } from '../components/ui/Modal';
 import { startFB } from '../lib/fb-utils';
@@ -138,11 +138,6 @@ export const ForwardBookingRoute: React.FC = () => {
                                 aria-hidden="true"
                             >
                                 <Icon size={44} color={step.iconColor} strokeWidth={1.5} />
-                                {isComplete && (
-                                    <div className="vs-card-check" aria-hidden="true">
-                                        <Check size={14} strokeWidth={3} />
-                                    </div>
-                                )}
                             </div>
                             <div className="vs-card-content">
                                 <span className="vs-card-label">{step.label}</span>
