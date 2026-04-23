@@ -95,10 +95,15 @@ export function FlavorSelector() {
     };
 
     const handleSave = () => {
-        if (!selectedProfile) return;
-        localStorage.setItem('fb_flavor', selectedProfile);
+        // Si no escogió sub-nota pero sí un macro → guarda el macro como flavor
+        // Si tampoco hay macro → requiere al menos uno
+        const finalFlavor = selectedProfile ?? selectedMacro;
+        if (!finalFlavor) return;
+        localStorage.setItem('fb_flavor', finalFlavor);
         navigateNextFBStep('flavor', navigate);
     };
+
+    const showSkipHint = !!selectedMacro && !selectedProfile;
 
     const handleExit = () => {
         setShowExitConfirm(false);
@@ -150,7 +155,7 @@ export function FlavorSelector() {
             <main className="ds-main fs-main-compact">
                 <h1 className="ds-title fs-title-compact">Flavor profile</h1>
                 <p className="ds-subtitle fs-subtitle-compact">
-                    Choose a macro-style, then refine to specific notes.
+                    Choose a macro-style. Refine with a note <span className="fs-optional-tag">(optional)</span>.
                 </p>
 
                 {/* Macroprofile pills */}
@@ -215,11 +220,16 @@ export function FlavorSelector() {
                 <Button
                     variant="primary"
                     size="full"
-                    disabled={!selectedProfile}
+                    disabled={!selectedMacro}
                     onClick={handleSave}
                 >
                     Next
                 </Button>
+                {showSkipHint && (
+                    <p className="fs-skip-hint" role="status">
+                        No specific note selected — Katherine will pick the best expression within <strong>{selectedMacro}</strong>.
+                    </p>
+                )}
             </div>
 
             {/* Exit confirmation modal */}

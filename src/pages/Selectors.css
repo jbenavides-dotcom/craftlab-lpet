@@ -1,7 +1,10 @@
 .selector-container {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    height: 100dvh;
+    min-height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
     background-color: #f9fafb;
     position: relative;
 }
@@ -294,13 +297,16 @@
     background: #000000;
 }
 
-/* Main */
+/* Main — scrollable, para que el footer quede fijo abajo */
 .ds-main {
-    flex: 1;
+    flex: 1 1 0;
+    min-height: 0;
     padding: 28px 20px 24px;
     display: flex;
     flex-direction: column;
     gap: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .ds-title {
@@ -490,13 +496,14 @@
     line-height: 1.4;
 }
 
-/* Footer */
+/* Footer — fijo abajo vía flex layout (el container tiene height: 100dvh) */
 .ds-footer {
     padding: 16px;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
     background: #ffffff;
     border-top: 1px solid #f3f4f6;
-    position: sticky;
-    bottom: 0;
+    flex-shrink: 0;
+    z-index: 5;
 }
 
 /* ===== Variety Selector — product cards grid ===== */
@@ -645,6 +652,30 @@
     margin: 0 0 16px 0;
     font-style: italic;
     text-align: center;
+}
+
+/* Tag "(optional)" en el subtitle */
+.fs-optional-tag {
+    font-size: 0.82em;
+    font-weight: 600;
+    color: #c1004a;
+    font-style: italic;
+}
+
+/* Hint bajo el botón Next cuando el partner skippea la sub-nota */
+.fs-skip-hint {
+    margin: 10px 4px 0;
+    padding: 10px 14px;
+    background: #fff7ed;
+    border: 1px solid #fed7aa;
+    border-radius: 10px;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    color: #9a3412;
+    text-align: center;
+}
+.fs-skip-hint strong {
+    color: #c1004a;
 }
 
 .fs-empty-hint {
@@ -1000,7 +1031,8 @@
         max-width: 480px;
         margin: 40px auto;
         min-height: auto;
-        height: auto;
+        height: calc(100dvh - 80px);
+        max-height: calc(100dvh - 80px);
         border-radius: 24px;
         background: #ffffff;
         box-shadow: 0 8px 32px rgba(10, 30, 63, 0.1);

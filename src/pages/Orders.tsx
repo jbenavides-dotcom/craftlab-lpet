@@ -10,6 +10,7 @@ import {
     Info,
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { FermentationWidget } from '../components/FermentationWidget';
 import './Orders.css';
 
 const VARIETY_GRADIENTS: Record<string, string> = {
@@ -41,6 +42,8 @@ type FilterTab = 'all' | 'active' | 'completed';
 
 interface Order {
     id: string;
+    dbId: string;
+    type: 'fb' | 'cl';
     variety: string;
     harvest: string;
     process: string;
@@ -51,42 +54,7 @@ interface Order {
     gradient: string;
 }
 
-/* ─── Mock data ─────────────────────────────────────── */
-const MOCK_ORDERS: Order[] = [
-    {
-        id: 'ORD-2024-001',
-        variety: 'Geisha',
-        harvest: 'Jan – Mar 2026',
-        process: 'Natural · Anaerobic',
-        weight_kg: 70,
-        stage: 'fermentation',
-        status: 'active',
-        created: '2025-10-24',
-        gradient: 'linear-gradient(135deg, #fce7f3 0%, #f9a8d4 100%)',
-    },
-    {
-        id: 'ORD-2024-002',
-        variety: 'Sidra',
-        harvest: 'Apr – Jun 2026',
-        process: 'Bio-Innovation · Mucilage',
-        weight_kg: 35,
-        stage: 'order',
-        status: 'active',
-        created: '2025-11-02',
-        gradient: 'linear-gradient(135deg, #fee2e2 0%, #fca5a5 100%)',
-    },
-    {
-        id: 'ORD-2023-007',
-        variety: 'Pink Bourbon',
-        harvest: 'Oct – Dec 2025',
-        process: 'Washed · Standard',
-        weight_kg: 35,
-        stage: 'ready',
-        status: 'delivered',
-        created: '2025-06-12',
-        gradient: 'linear-gradient(135deg, #dbeafe 0%, #93c5fd 100%)',
-    },
-];
+/* Mock data eliminado — Orders page lee de Supabase. */
 
 /* ─── Constants ─────────────────────────────────────── */
 const STAGES: Stage[] = ['order', 'fermentation', 'drying', 'ready'];
@@ -183,6 +151,10 @@ function OrderCard({ order }: { order: Order }) {
 
                 <ProgressLine stage={order.stage} />
 
+                {order.stage === 'fermentation' && (
+                    <FermentationWidget orderType={order.type} orderId={order.dbId} />
+                )}
+
                 <p className="ord-card-meta">
                     Created {formatDate(order.created)} · {order.id}
                 </p>
@@ -228,6 +200,8 @@ export function Orders() {
 
             const fb: Order[] = (fbRes.data ?? []).map((o): Order => ({
                 id: `FB-${o.id.slice(0, 8).toUpperCase()}`,
+                dbId: o.id,
+                type: 'fb',
                 variety: o.variety || 'Coffee',
                 harvest: o.harvest_date || '—',
                 process: o.process || '—',
@@ -240,6 +214,8 @@ export function Orders() {
 
             const cl: Order[] = (clRes.data ?? []).map((o): Order => ({
                 id: `CL-${o.id.slice(0, 8).toUpperCase()}`,
+                dbId: o.id,
+                type: 'cl',
                 variety: o.variety || 'Custom',
                 harvest: o.shipment_window || '—',
                 process: o.process || '—',
