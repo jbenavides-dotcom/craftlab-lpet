@@ -42,6 +42,13 @@
     padding: 4px;
 }
 
+/* Desktop: ocultar el hamburger — ya hay sidebar permanente en AppShell */
+@media (min-width: 1024px) {
+    .header-icon-btn {
+        display: none;
+    }
+}
+
 .header-brand-container {
     display: flex;
     align-items: center;

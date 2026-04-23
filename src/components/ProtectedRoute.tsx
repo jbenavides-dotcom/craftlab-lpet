@@ -10,10 +10,17 @@ interface ProtectedRouteProps {
  * Wrapper que protege rutas: si no hay sesión activa en Supabase,
  * redirige a /login. Mientras verifica, muestra un loading mínimo.
  */
+// DEV bypass: en localhost saltarse la validación de sesión para iterar más rápido.
+// En producción (GH Pages) esto es false y sigue protegido normal.
+const DEV_BYPASS_AUTH = import.meta.env.DEV;
+
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-    const [status, setStatus] = useState<'checking' | 'authed' | 'unauthed'>('checking');
+    const [status, setStatus] = useState<'checking' | 'authed' | 'unauthed'>(
+        DEV_BYPASS_AUTH ? 'authed' : 'checking'
+    );
 
     useEffect(() => {
+        if (DEV_BYPASS_AUTH) return;
         let isMounted = true;
 
         supabase.auth.getSession().then(({ data: { session } }) => {

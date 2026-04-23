@@ -237,14 +237,15 @@ const getProgressColor = (value: number | null, min: number, max: number): strin
 };
 
 const SECTION_IMAGES: Record<string, string> = {
-    'sec-macro':    'https://images.unsplash.com/photo-1498804103079-a6351b050096?q=80&w=1200&auto=format&fit=crop',
-    'sec-flavor':   'https://images.unsplash.com/photo-1510972527921-ce03766a1cf1?q=80&w=1200&auto=format&fit=crop',
-    'sec-variety':  'https://images.unsplash.com/photo-1559525839-b184a4d698c7?q=80&w=1200&auto=format&fit=crop',
-    'sec-quantity': 'https://images.unsplash.com/photo-1611854779393-1b2da9d400fe?q=80&w=1200&auto=format&fit=crop',
-    'sec-category': 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=1200&auto=format&fit=crop',
-    'sec-method':   'https://images.unsplash.com/photo-1447933601403-0c6688de566e?q=80&w=1200&auto=format&fit=crop',
-    'sec-params':   'https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=1200&auto=format&fit=crop',
-    'sec-shipment': 'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=1200&auto=format&fit=crop',
+    // Fotos de finca aprobadas 2026-04-22 (solo café en estado de finca: cerezas/planta/verde/cosecha)
+    'sec-macro':    'https://images.unsplash.com/photo-1750967613671-297f1b63038d?q=80&w=1400&auto=format&fit=crop', // Cherries maduras en planta
+    'sec-flavor':   'https://images.unsplash.com/photo-1586095516671-d085ff58cdd4?q=80&w=1400&auto=format&fit=crop', // Close-up cerezas rojas en rama
+    'sec-variety':  'https://images.unsplash.com/photo-1737914692097-ac2393eefc03?q=80&w=1400&auto=format&fit=crop', // Plantación nublada Colombia (Cocora)
+    'sec-quantity': 'https://images.unsplash.com/photo-1703646619157-eb553d16d402?q=80&w=1400&auto=format&fit=crop', // Pila de café verde pergamino
+    'sec-category': 'https://images.unsplash.com/photo-1722962883780-8806c3ab546b?q=80&w=1400&auto=format&fit=crop', // Caficultor recolectando (Guatemala)
+    'sec-method':   'https://images.unsplash.com/photo-1586095516671-d085ff58cdd4?q=80&w=1400&auto=format&fit=crop', // Cerezas rama — TODO: reemplazar con foto real tanque fermentación
+    'sec-params':   'https://images.unsplash.com/photo-1750967613671-297f1b63038d?q=80&w=1400&auto=format&fit=crop', // Cherries detalle — TODO: reemplazar con foto sensor/pH
+    'sec-shipment': 'https://images.unsplash.com/photo-1703646619157-eb553d16d402?q=80&w=1400&auto=format&fit=crop', // Verde listo — TODO: reemplazar con patio secado o bultos jute
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────

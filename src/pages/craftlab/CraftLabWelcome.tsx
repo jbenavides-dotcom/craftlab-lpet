@@ -11,18 +11,27 @@ interface RoadmapStep {
     sub: string;
     color: string;
     pills?: string[];
+    detail: string;
 }
 
 const ROADMAP_STEPS: RoadmapStep[] = [
-    { n: 1, title: 'Macroprofile',          sub: 'Choose the flavor family of your coffee.',               color: '#c1004a' },
-    { n: 2, title: 'Flavor Profile',        sub: 'Refine to specific notes: citric, floral, winey.',       color: '#EC4899' },
-    { n: 3, title: 'Coffee Variety',        sub: 'Geisha, Sidra, Java, Caturra — each unique genetics.',   color: '#10B981' },
-    { n: 4, title: 'Quantity',              sub: '12.5 / 25 / 37.5 / 50 kg green coffee.',                 color: '#fbbf24' },
-    { n: 5, title: 'Processing Category',   sub: 'Natural · Washed · Honey · Bio-Innovation.',             color: '#1D4ED8' },
-    { n: 6, title: 'Processing Method',     sub: 'Specific fermentation protocol from Katherine.',         color: '#8B5CF6' },
+    { n: 1, title: 'Macroprofile',          sub: 'Choose the flavor family of your coffee.',               color: '#c1004a',
+        detail: 'The first creative decision. Fermented, washed or natural — each macro family sets the personality of your cup before anything else happens at the mill.' },
+    { n: 2, title: 'Flavor Profile',        sub: 'Refine to specific notes: citric, floral, winey.',       color: '#EC4899',
+        detail: 'Fine-tune the sensory direction: tropical, floral, citric, winey, chocolate. This narrows the fermentation strategy Katherine will apply downstream.' },
+    { n: 3, title: 'Coffee Variety',        sub: 'Geisha, Sidra, Java, Caturra — each unique genetics.',   color: '#10B981',
+        detail: 'Genetics shape the ceiling of what the cup can become. Geisha for jasmine/bergamot, Sidra for elegance, Java for structure, Caturra for balance.' },
+    { n: 4, title: 'Quantity',              sub: '12.5 / 25 / 37.5 / 50 kg green coffee.',                 color: '#fbbf24',
+        detail: 'Choose lot size in green coffee. Larger lots unlock volume pricing; smaller lots give you flexibility to test multiple protocols per harvest.' },
+    { n: 5, title: 'Processing Category',   sub: 'Natural · Washed · Honey · Bio-Innovation.',             color: '#1D4ED8',
+        detail: 'The high-level processing road. Natural keeps the cherry, washed strips it, honey is in between, and Bio-Innovation is our laboratory-grade fermentation.' },
+    { n: 6, title: 'Processing Method',     sub: 'Specific fermentation protocol from Katherine.',         color: '#8B5CF6',
+        detail: 'One of 5 Katherine protocols (LPX-500, BIW-200, NO-120, CSP-48, BNX-100) — each with controlled microbiology and pH curves for a target sensory outcome.' },
     { n: 7, title: 'Processing Parameters', sub: 'Fine-tune times, temperatures and drying.',              color: '#c1004a',
-        pills: ['Stabilization', 'Cherry Fermentation', 'Mucilage Fermentation', 'Solar Dry', 'Mechanical Dry'] },
-    { n: 8, title: 'Shipment Timeframe',    sub: 'Select when you want your lot delivered.',               color: '#10B981' },
+        pills: ['Stabilization', 'Cherry Fermentation', 'Mucilage Fermentation', 'Solar Dry', 'Mechanical Dry'],
+        detail: 'Precision dials: stabilization hours, fermentation time (cherry or mucilage), solar-dry days, mechanical-dry hours. Small changes here shift the cup dramatically.' },
+    { n: 8, title: 'Shipment Timeframe',    sub: 'Select when you want your lot delivered.',               color: '#10B981',
+        detail: 'Pick a quarter or choose earliest availability. We schedule milling, hulling and shipping around your window so the coffee arrives roasting-ready.' },
 ];
 
 export const CraftLabWelcome: React.FC = () => {
@@ -140,6 +149,21 @@ export const CraftLabWelcome: React.FC = () => {
                                 <div className="clw-step-card-body">
                                     <h3 className="clw-step-title">{roadmapStep.title}</h3>
                                     <p className="clw-step-sub">{roadmapStep.sub}</p>
+                                </div>
+
+                                {/* Popup con explicación — solo visible en desktop:hover */}
+                                <div
+                                    className="clw-step-popup"
+                                    role="tooltip"
+                                    aria-hidden="true"
+                                >
+                                    <div
+                                        className="clw-step-popup-accent"
+                                        style={{ background: roadmapStep.color }}
+                                        aria-hidden="true"
+                                    />
+                                    <span className="clw-step-popup-kicker">Step {roadmapStep.n}</span>
+                                    <p className="clw-step-popup-text">{roadmapStep.detail}</p>
                                 </div>
                             </div>
                         ))}

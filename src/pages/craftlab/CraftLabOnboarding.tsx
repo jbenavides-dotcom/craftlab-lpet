@@ -63,8 +63,8 @@ export const CraftLabOnboarding: React.FC = () => {
                 </video>
                 <img
                     className="cl-onb-hero-fallback"
-                    src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=2000&auto=format&fit=crop"
-                    alt="Coffee fermentation tanks at La Palma y El Tucán"
+                    src="https://images.unsplash.com/photo-1737914692097-ac2393eefc03?q=80&w=2000&auto=format&fit=crop"
+                    alt="Coffee plantation in Colombia — La Palma y El Tucán"
                 />
                 <div className="cl-onb-hero-overlay" />
                 <div className="cl-onb-hero-title">

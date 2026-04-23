@@ -103,7 +103,7 @@
     font-size: 1rem;
     color: var(--cl-accent);
     opacity: 0;
-    animation: clw-spark-pop 1.4s ease forwards;
+    animation: clw-spark-pop 2.4s ease infinite;
 }
 
 .clw-spark.s1 { top: 10px;  left: 30px;   animation-delay: 0.2s; color: var(--cl-accent); }
@@ -175,12 +175,55 @@
     flex: 1;
     max-width: 140px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    transition: transform 0.15s, box-shadow 0.15s;
+    transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1),
+                opacity 0.3s ease,
+                box-shadow 0.4s ease,
+                border-color 0.25s ease;
 }
 
 .clw-perk:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.09);
+}
+
+/* Desktop: spotlight + neighbor push en los 3 perks (Lab Access / Creator Status / Full Unlock) */
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+    .clw-perk {
+        cursor: pointer;
+    }
+
+    .clw-perk:hover {
+        transform: translateY(-10px) scale(1.09) rotate(-1deg);
+        border-color: var(--cl-accent);
+        box-shadow: 0 22px 44px rgba(193, 0, 74, 0.22),
+                    0 4px 12px rgba(0, 0, 0, 0.08);
+        z-index: 3;
+    }
+
+    .clw-perk:hover .clw-perk-icon {
+        transform: scale(1.15) rotate(6deg);
+        transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
+    }
+
+    /* Vecina derecha se corre a la derecha */
+    .clw-perk:hover + .clw-perk {
+        transform: translateX(12px) scale(0.95);
+        opacity: 0.55;
+    }
+    /* Vecina izquierda se corre a la izquierda */
+    .clw-perk:has(+ .clw-perk:hover) {
+        transform: translateX(-12px) scale(0.95);
+        opacity: 0.55;
+    }
+
+    /* Resto de perks (si hay más de 3) solo atenúan */
+    .clw-perks:has(.clw-perk:hover) .clw-perk:not(:hover) {
+        opacity: 0.55;
+    }
+}
+
+.clw-perk-icon {
+    transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.3, 1);
 }
 
 .clw-perk span {
@@ -315,13 +358,112 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
-    transition: all 0.2s ease;
+    transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1),
+                opacity 0.3s ease,
+                box-shadow 0.35s ease,
+                border-color 0.25s ease;
 }
 
 .clw-step-card:hover {
     border-color: var(--cl-accent-soft);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     transform: translateY(-2px);
+}
+
+/* Desktop-only: efecto "tilt + lift" cuando pasas sobre una card.
+   Solo en dispositivos con hover real (mouse, no touch). */
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+    .clw-step-card {
+        cursor: pointer;
+    }
+
+    .clw-step-card:hover {
+        transform: translateY(-10px) scale(1.07) rotate(-1.2deg);
+        border-color: var(--cl-accent);
+        box-shadow: 0 24px 48px rgba(193, 0, 74, 0.22),
+                    0 4px 12px rgba(0, 0, 0, 0.08);
+        z-index: 3;
+    }
+
+    .clw-step-card:hover .clw-step-badge {
+        transform: scale(1.15) rotate(4deg);
+        transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1);
+    }
+
+    /* Popup: aparece al hover */
+    .clw-step-card:hover .clw-step-popup {
+        opacity: 1;
+        visibility: visible;
+        transform: translate(-50%, 0);
+        pointer-events: auto;
+    }
+
+    /* Cuando hay cualquier card hoverada, las no-hoverada encogen y se atenúan */
+    .clw-steps-grid:has(.clw-step-card:hover) .clw-step-card:not(:hover) {
+        transform: scale(0.97);
+        opacity: 0.58;
+    }
+}
+
+/* Popup explicativo — arriba/debajo de cada step card, solo visible en desktop hover */
+.clw-step-popup {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translate(-50%, -6px);
+    width: 280px;
+    max-width: 92vw;
+    background: #0A1E3F;
+    color: #ffffff;
+    padding: 14px 16px 14px 20px;
+    border-radius: 12px;
+    box-shadow: 0 14px 34px rgba(10, 30, 63, 0.28),
+                0 2px 8px rgba(0, 0, 0, 0.08);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.22s ease,
+                transform 0.28s cubic-bezier(0.2, 0.9, 0.3, 1),
+                visibility 0.22s;
+    z-index: 40;
+}
+
+.clw-step-popup::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 12px;
+    height: 12px;
+    background: #0A1E3F;
+    border-radius: 2px;
+}
+
+.clw-step-popup-accent {
+    position: absolute;
+    top: 12px;
+    left: 8px;
+    width: 3px;
+    height: calc(100% - 24px);
+    border-radius: 999px;
+}
+
+.clw-step-popup-kicker {
+    display: block;
+    font-size: 0.62rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: #fca5a5;
+    margin-bottom: 4px;
+}
+
+.clw-step-popup-text {
+    margin: 0;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: #e2e8f0;
 }
 
 /* Badge numérico circular */
