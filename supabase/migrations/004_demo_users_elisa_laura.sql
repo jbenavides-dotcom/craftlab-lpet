@@ -4,7 +4,8 @@
 --
 -- Crea 2 usuarios nuevos con:
 --  · Email confirmado inmediato
---  · Password: CraftLab2026!
+--  · Password: reemplazar '<<SET_PASSWORD_HERE>>' antes de ejecutar.
+--    Los passwords NUNCA deben commitearse al repo.
 --  · Trigger handle_new_user auto-crea profile + user_progress
 -- ═══════════════════════════════════════════════════════════════
 
@@ -33,7 +34,7 @@ begin
             'authenticated',
             'authenticated',
             'elisa@lapalmayeltucan.com',
-            crypt('CraftLab2026!', gen_salt('bf')),
+            crypt('<<SET_PASSWORD_HERE>>', gen_salt('bf')),
             now(),
             now(), now(),
             '{"full_name":"Elisa Maria Madriñán"}'::jsonb,
@@ -89,7 +90,7 @@ begin
             'authenticated',
             'authenticated',
             'lauraescovarc@gmail.com',
-            crypt('CraftLab2026!', gen_salt('bf')),
+            crypt('<<SET_PASSWORD_HERE>>', gen_salt('bf')),
             now(),
             now(), now(),
             '{"full_name":"Laura Escovar"}'::jsonb,
