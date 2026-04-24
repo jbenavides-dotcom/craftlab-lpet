@@ -6,10 +6,11 @@ import { Button } from '../components/ui/Button';
 import { useProfile } from '../lib/useProfile';
 import './Home.css';
 
-// Photo assets — served from /public/home/
-const coffeeCherries = '/home/fb-cherries.png';
-const coffeeFermentation = '/home/cl-lab.png';
-const singleEstateImage = '/home/se-grain.png';
+// Photo assets — served desde /public/home/. BASE_URL respeta la subruta
+// de GitHub Pages (/craftlab-lpet/) en prod.
+const coffeeCherries     = `${import.meta.env.BASE_URL}home/fb-cherries.png`;
+const coffeeFermentation = `${import.meta.env.BASE_URL}home/cl-lab.png`;
+const singleEstateImage  = `${import.meta.env.BASE_URL}home/se-grain.png`;
 
 export const Home: React.FC = () => {
     const navigate = useNavigate();
