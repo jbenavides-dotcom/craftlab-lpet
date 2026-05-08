@@ -11,6 +11,7 @@ import { QuantitySelector } from './pages/QuantitySelector';
 import { ReviewConfirm } from './pages/ReviewConfirm';
 import { Success } from './pages/Success';
 import { Orders } from './pages/Orders';
+import { OrderDetail } from './pages/OrderDetail';
 import { CraftLabOnboarding } from './pages/craftlab/CraftLabOnboarding';
 import { CraftLabBasicEducation } from './pages/craftlab/CraftLabBasicEducation';
 import { CraftLabTechEducation } from './pages/craftlab/CraftLabTechEducation';
@@ -46,6 +47,7 @@ function App() {
         {/* Rutas con AppShell (sidebar desktop + bottom-nav mobile) */}
         <Route path="/home"          element={shell(<Home />)} />
         <Route path="/orders"        element={shell(<Orders />)} />
+        <Route path="/orders/:type/:id" element={shell(<OrderDetail />)} />
         <Route path="/about"         element={shell(<About />)} />
         <Route path="/profile"       element={shell(<Profile />)} />
         <Route path="/notifications" element={shell(<Notifications />)} />

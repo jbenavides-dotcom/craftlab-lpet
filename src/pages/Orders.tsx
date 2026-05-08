@@ -125,14 +125,17 @@ function ProgressLine({ stage }: { stage: Stage }) {
 
 function OrderCard({ order }: { order: Order }) {
     const badge = STATUS_CONFIG[order.status];
+    const navigate = useNavigate();
+
+    const goToDetail = () => navigate(`/orders/${order.type}/${order.dbId}`);
 
     return (
         <article
             className="ord-card"
-            onClick={() => alert('Order detail — coming in a future update.')}
+            onClick={goToDetail}
             tabIndex={0}
-            onKeyDown={(e) => e.key === 'Enter' && alert('Order detail — coming in a future update.')}
-            aria-label={`Order ${order.id}, ${order.variety}`}
+            onKeyDown={(e) => e.key === 'Enter' && goToDetail()}
+            aria-label={`Order ${order.id}, ${order.variety} — tap to view detail`}
         >
             {/* Hero gradient */}
             <div

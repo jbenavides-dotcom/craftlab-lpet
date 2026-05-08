@@ -1,0 +1,657 @@
+/* =====================================================
+   OrderDetail — página detalle de pedido
+   Tokens: mismos que Orders.css (--cl-accent, etc.)
+   Prefijo exclusivo: .od-
+   ===================================================== */
+
+/* ── Variables (heredadas de Orders.css si están en :root global,
+      redefinidas aquí por si OrderDetail se carga sola) ── */
+:root {
+    --cl-accent: #c1004a;
+    --cl-accent-soft: #fce7f3;
+    --cl-green: #10B981;
+    --cl-green-soft: #d1fae5;
+    --cl-amber: #F59E0B;
+    --cl-amber-soft: #fef3c7;
+    --cl-text: #0A1E3F;
+    --cl-text-muted: #6b7280;
+    --cl-border: #e5e7eb;
+}
+
+/* ── Container ─────────────────────────────────────── */
+.od-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    background: #ffffff;
+    padding-bottom: 48px;
+}
+
+/* ── Top bar / back ─────────────────────────────────── */
+.od-topbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 20px 0;
+    position: sticky;
+    top: 0;
+    background: #ffffff;
+    z-index: 10;
+}
+
+.od-back-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1px solid var(--cl-border);
+    background: #ffffff;
+    cursor: pointer;
+    color: var(--cl-text);
+    transition: background 0.15s, box-shadow 0.15s;
+    flex-shrink: 0;
+}
+
+.od-back-btn:hover {
+    background: #f9fafb;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.od-back-btn:focus-visible {
+    outline: 2px solid var(--cl-accent);
+    outline-offset: 2px;
+}
+
+.od-topbar-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--cl-text);
+    letter-spacing: -0.01em;
+    margin: 0;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ── Status badge ──────────────────────────────────── */
+.od-badge {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 999px;
+    flex-shrink: 0;
+}
+
+.od-badge--active {
+    background: var(--cl-accent-soft);
+    color: var(--cl-accent);
+}
+
+.od-badge--ready {
+    background: var(--cl-green-soft);
+    color: #065f46;
+}
+
+.od-badge--delivered {
+    background: #f3f4f6;
+    color: var(--cl-text-muted);
+}
+
+/* ── Hero band ─────────────────────────────────────── */
+.od-hero {
+    margin: 16px 20px 0;
+    border-radius: 20px;
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    overflow: hidden;
+    position: relative;
+}
+
+.od-hero-kicker {
+    font-size: 0.58rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(10,30,63,0.5);
+    margin: 0;
+}
+
+.od-hero-variety {
+    font-family: var(--font-serif, 'Fraunces', Georgia, serif);
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--cl-text);
+    margin: 0;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+}
+
+.od-hero-weight {
+    font-family: var(--font-serif, 'Fraunces', Georgia, serif);
+    font-size: 1rem;
+    font-weight: 300;
+    color: rgba(10,30,63,0.55);
+    margin: 0;
+}
+
+/* ── Sections ──────────────────────────────────────── */
+.od-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px 20px 0;
+}
+
+.od-section {
+    background: #ffffff;
+    border: 1px solid var(--cl-border);
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.od-section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.od-section-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.od-section-icon--rose {
+    background: var(--cl-accent-soft);
+    color: var(--cl-accent);
+}
+
+.od-section-icon--green {
+    background: var(--cl-green-soft);
+    color: #065f46;
+}
+
+.od-section-icon--amber {
+    background: var(--cl-amber-soft);
+    color: #92400e;
+}
+
+.od-section-icon--blue {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.od-section-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--cl-text);
+    margin: 0;
+}
+
+/* ── Coffee details grid ───────────────────────────── */
+.od-coffee-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    padding: 4px 0;
+}
+
+.od-coffee-item {
+    padding: 12px 18px;
+    border-bottom: 1px solid #f3f4f6;
+    border-right: 1px solid #f3f4f6;
+}
+
+.od-coffee-item:nth-child(even) {
+    border-right: none;
+}
+
+.od-coffee-item:nth-last-child(-n+2) {
+    border-bottom: none;
+}
+
+.od-coffee-label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--cl-text-muted);
+    margin: 0 0 4px;
+}
+
+.od-coffee-value {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--cl-text);
+    margin: 0;
+    line-height: 1.3;
+}
+
+/* ── Progress section ──────────────────────────────── */
+.od-progress-wrap {
+    padding: 16px 18px;
+}
+
+/* Reusa los tokens de ord-progress pero en contenedor más grande */
+.od-progress-bar {
+    display: flex;
+    align-items: flex-start;
+}
+
+.od-progress-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    flex-shrink: 0;
+}
+
+.od-progress-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--cl-border);
+    background: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.od-progress-dot--done {
+    background: var(--cl-accent);
+    border-color: var(--cl-accent);
+    color: #ffffff;
+}
+
+.od-progress-dot--active {
+    border-color: var(--cl-accent);
+    background: #ffffff;
+    box-shadow: 0 0 0 4px var(--cl-accent-soft);
+    animation: od-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes od-pulse {
+    0%, 100% { box-shadow: 0 0 0 4px var(--cl-accent-soft); }
+    50%       { box-shadow: 0 0 0 8px rgba(193, 0, 74, 0.08); }
+}
+
+.od-progress-line {
+    flex: 1;
+    height: 2px;
+    background: var(--cl-border);
+    margin-top: 9px;
+    min-width: 12px;
+    transition: background 0.2s;
+}
+
+.od-progress-line--filled {
+    background: var(--cl-accent);
+}
+
+.od-progress-label {
+    font-size: 0.56rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--cl-text-muted);
+    white-space: nowrap;
+    line-height: 1;
+    text-align: center;
+    max-width: 52px;
+}
+
+.od-progress-label--active {
+    color: var(--cl-accent);
+}
+
+/* ── Tank section ──────────────────────────────────── */
+.od-tank-wrap {
+    padding: 16px 18px;
+}
+
+.od-tank-name {
+    font-family: var(--font-serif, 'Fraunces', Georgia, serif);
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: var(--cl-text);
+    margin: 0 0 14px;
+    letter-spacing: -0.01em;
+}
+
+.od-tank-readings {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.od-tank-reading {
+    background: #f9fafb;
+    border: 1px solid #f3f4f6;
+    border-radius: 12px;
+    padding: 12px 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.od-tank-reading-value {
+    font-family: var(--font-serif, 'Fraunces', Georgia, serif);
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--cl-text);
+    line-height: 1;
+    letter-spacing: -0.02em;
+}
+
+.od-tank-reading-value--ph {
+    color: var(--cl-accent);
+}
+
+.od-tank-reading-value--temp {
+    color: #1d4ed8;
+}
+
+.od-tank-reading-value--brix {
+    color: #92400e;
+}
+
+.od-tank-reading-label {
+    font-size: 0.58rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--cl-text-muted);
+}
+
+/* Capacidad bar */
+.od-capacity-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.od-capacity-label {
+    font-size: 0.72rem;
+    color: var(--cl-text-muted);
+}
+
+.od-capacity-value {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--cl-text);
+}
+
+.od-capacity-track {
+    height: 6px;
+    background: #f3f4f6;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.od-capacity-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--cl-accent) 0%, #e8527a 100%);
+    border-radius: 999px;
+    transition: width 0.6s ease;
+}
+
+/* Tank status badge */
+.od-tank-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: #065f46;
+    background: var(--cl-green-soft);
+    padding: 4px 10px;
+    border-radius: 999px;
+}
+
+/* Tank pending */
+.od-tank-pending {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 0 4px;
+    text-align: center;
+    color: var(--cl-text-muted);
+}
+
+.od-tank-pending p {
+    font-size: 0.88rem;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.od-tank-pending-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #f9fafb;
+    border: 1px dashed var(--cl-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cl-text-muted);
+}
+
+/* ── Updates timeline ──────────────────────────────── */
+.od-timeline {
+    padding: 8px 18px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.od-timeline-item {
+    display: flex;
+    gap: 14px;
+    position: relative;
+}
+
+/* Vertical connector */
+.od-timeline-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 10px;       /* center of dot (22px wide / 2 - 1px border) */
+    top: 22px;
+    bottom: 0;
+    width: 2px;
+    background: #f3f4f6;
+}
+
+.od-timeline-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--cl-accent-soft);
+    border: 2px solid var(--cl-accent);
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--cl-accent);
+    z-index: 1;
+}
+
+.od-timeline-content {
+    flex: 1;
+    padding-bottom: 20px;
+}
+
+.od-timeline-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+}
+
+.od-timeline-stage {
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--cl-accent);
+    background: var(--cl-accent-soft);
+    padding: 2px 8px;
+    border-radius: 999px;
+}
+
+.od-timeline-date {
+    font-size: 0.7rem;
+    color: var(--cl-text-muted);
+}
+
+.od-timeline-message {
+    font-size: 0.88rem;
+    color: var(--cl-text);
+    line-height: 1.55;
+    margin: 0 0 10px;
+}
+
+.od-timeline-photo {
+    width: 100%;
+    max-width: 260px;
+    aspect-ratio: 4/3;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 1px solid var(--cl-border);
+}
+
+/* Empty updates */
+.od-updates-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 24px 18px;
+    text-align: center;
+    color: var(--cl-text-muted);
+}
+
+.od-updates-empty p {
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ── Loading state ─────────────────────────────────── */
+.od-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    min-height: 60vh;
+    color: var(--cl-text-muted);
+}
+
+.od-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid #f3f4f6;
+    border-top-color: var(--cl-accent);
+    border-radius: 50%;
+    animation: od-spin 0.8s linear infinite;
+}
+
+@keyframes od-spin {
+    to { transform: rotate(360deg); }
+}
+
+.od-loading p {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* ── Error state ───────────────────────────────────── */
+.od-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    min-height: 60vh;
+    padding: 40px 24px;
+    text-align: center;
+    color: var(--cl-text-muted);
+}
+
+.od-error p {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.5;
+    max-width: 280px;
+}
+
+.od-error-btn {
+    padding: 10px 24px;
+    border-radius: 999px;
+    border: none;
+    background: var(--cl-accent);
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity 0.15s;
+}
+
+.od-error-btn:hover { opacity: 0.88; }
+.od-error-btn:focus-visible { outline: 2px solid var(--cl-accent); outline-offset: 3px; }
+
+/* ── Responsive ────────────────────────────────────── */
+@media (min-width: 640px) {
+    .od-container {
+        max-width: 680px;
+        margin: 0 auto;
+    }
+
+    .od-topbar {
+        padding: 24px 28px 0;
+    }
+
+    .od-hero {
+        margin: 20px 28px 0;
+    }
+
+    .od-sections {
+        padding: 20px 28px 0;
+    }
+}
+
+@media (min-width: 1024px) {
+    .od-container {
+        max-width: 760px;
+    }
+}
