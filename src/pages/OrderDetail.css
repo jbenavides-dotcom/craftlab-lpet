@@ -363,16 +363,29 @@
     letter-spacing: -0.02em;
 }
 
-.od-tank-reading-value--ph {
-    color: var(--cl-accent);
-}
+.od-tank-reading-value--ph   { color: var(--cl-accent); }
+.od-tank-reading-value--temp { color: #1d4ed8; }
+.od-tank-reading-value--brix { color: #92400e; }
+.od-tank-reading-value--orp  { color: #6B5B95; }
+.od-tank-reading-value--sg   { color: #8B6F47; }
+.od-tank-reading-value--tds  { color: #2E7D8C; }
+.od-tank-reading-value--ec   { color: #1D6FA5; }
+.od-tank-reading-value--sal  { color: #5A8A8C; }
+.od-tank-reading-value--cf   { color: #B89770; }
+.od-tank-reading-value--rh   { color: #6BA89A; }
 
-.od-tank-reading-value--temp {
-    color: #1d4ed8;
+/* Grid 9 lecturas Tuya: 3 col desktop, 2 col tablet, 1 col móvil */
+.od-tank-readings--grid9 {
+    grid-template-columns: repeat(3, 1fr);
 }
-
-.od-tank-reading-value--brix {
-    color: #92400e;
+@media (max-width: 640px) {
+    .od-tank-readings--grid9 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 380px) {
+    .od-tank-readings--grid9 { grid-template-columns: 1fr; }
+}
+.od-tank-readings--grid9 .od-tank-reading-value {
+    font-size: 1.05rem;
 }
 
 .od-tank-reading-label {

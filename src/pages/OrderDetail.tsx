@@ -11,6 +11,10 @@ import {
     Check,
     Image as ImageIcon,
     Wind,
+    Zap,
+    Hash,
+    Waves,
+    Activity,
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import './OrderDetail.css';
@@ -59,6 +63,13 @@ interface SensorReadingRow {
     ph: number | null;
     temp_c: number | null;
     brix: number | null;
+    orp_mv: number | null;
+    sg: number | null;
+    tds_ppm: number | null;
+    ec_us_cm: number | null;
+    salinity_ppm: number | null;
+    cf: number | null;
+    rh_pct: number | null;
     recorded_at: string;
 }
 
@@ -214,8 +225,12 @@ function TankCard({ tank }: { tank: TankDetail }) {
         <div className="od-tank-wrap">
             <p className="od-tank-name">{tank.name}</p>
 
-            {r && (r.ph !== null || r.temp_c !== null || r.brix !== null) ? (
-                <div className="od-tank-readings">
+            {r && (
+                r.ph !== null || r.temp_c !== null || r.orp_mv !== null ||
+                r.sg !== null || r.tds_ppm !== null || r.ec_us_cm !== null ||
+                r.salinity_ppm !== null || r.cf !== null || r.rh_pct !== null
+            ) ? (
+                <div className="od-tank-readings od-tank-readings--grid9">
                     {r.ph !== null && (
                         <div className="od-tank-reading">
                             <Gauge size={14} aria-hidden="true" />
@@ -234,13 +249,67 @@ function TankCard({ tank }: { tank: TankDetail }) {
                             <span className="od-tank-reading-label">°C</span>
                         </div>
                     )}
-                    {r.brix !== null && (
+                    {r.orp_mv !== null && (
                         <div className="od-tank-reading">
-                            <Droplets size={14} aria-hidden="true" />
-                            <span className="od-tank-reading-value od-tank-reading-value--brix">
-                                {r.brix.toFixed(1)}
+                            <Zap size={14} aria-hidden="true" />
+                            <span className="od-tank-reading-value od-tank-reading-value--orp">
+                                {Math.round(r.orp_mv)}
                             </span>
-                            <span className="od-tank-reading-label">Brix</span>
+                            <span className="od-tank-reading-label">ORP mV</span>
+                        </div>
+                    )}
+                    {r.sg !== null && (
+                        <div className="od-tank-reading">
+                            <FlaskConical size={14} aria-hidden="true" />
+                            <span className="od-tank-reading-value od-tank-reading-value--sg">
+                                {r.sg.toFixed(3)}
+                            </span>
+                            <span className="od-tank-reading-label">Density SG</span>
+                        </div>
+                    )}
+                    {r.tds_ppm !== null && (
+                        <div className="od-tank-reading">
+                            <Activity size={14} aria-hidden="true" />
+                            <span className="od-tank-reading-value od-tank-reading-value--tds">
+                                {Math.round(r.tds_ppm)}
+                            </span>
+                            <span className="od-tank-reading-label">TDS ppm</span>
+                        </div>
+                    )}
+                    {r.ec_us_cm !== null && (
+                        <div className="od-tank-reading">
+                            <Zap size={14} aria-hidden="true" />
+                            <span className="od-tank-reading-value od-tank-reading-value--ec">
+                                {Math.round(r.ec_us_cm)}
+                            </span>
+                            <span className="od-tank-reading-label">EC µS/cm</span>
+                        </div>
+                    )}
+                    {r.salinity_ppm !== null && (
+                        <div className="od-tank-reading">
+                            <Waves size={14} aria-hidden="true" />
+                            <span className="od-tank-reading-value od-tank-reading-value--sal">
+                                {Math.round(r.salinity_ppm)}
+                            </span>
+                            <span className="od-tank-reading-label">Salinity ppm</span>
+                        </div>
+                    )}
+                    {r.cf !== null && (
+                        <div className="od-tank-reading">
+                            <Hash size={14} aria-hidden="true" />
+                            <span className="od-tank-reading-value od-tank-reading-value--cf">
+                                {r.cf.toFixed(2)}
+                            </span>
+                            <span className="od-tank-reading-label">CF</span>
+                        </div>
+                    )}
+                    {r.rh_pct !== null && (
+                        <div className="od-tank-reading">
+                            <Wind size={14} aria-hidden="true" />
+                            <span className="od-tank-reading-value od-tank-reading-value--rh">
+                                {r.rh_pct.toFixed(1)}
+                            </span>
+                            <span className="od-tank-reading-label">Humidity %</span>
                         </div>
                     )}
                 </div>
@@ -444,7 +513,7 @@ export function OrderDetail() {
                         // Latest sensor reading for this tank
                         const { data: readingData } = await supabase
                             .from('sensor_readings')
-                            .select('ph, temp_c, brix, recorded_at')
+                            .select('ph, temp_c, brix, orp_mv, sg, tds_ppm, ec_us_cm, salinity_ppm, cf, rh_pct, recorded_at')
                             .eq('tank_id', t.id)
                             .order('recorded_at', { ascending: false })
                             .limit(1)
