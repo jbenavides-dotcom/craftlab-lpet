@@ -109,6 +109,20 @@ interface TankDetail {
     latestReading: SensorReadingRow | null;
 }
 
+interface BatchInfo {
+    batchCode: string;
+    variedad: string | null;
+    protocoloCodigo: string | null;
+    kgNetos: number | null;
+}
+
+interface CbBatchRow {
+    batch_code: string;
+    variedad: string | null;
+    protocolo_codigo: string | null;
+    kg_cc_netos: number | null;
+}
+
 /* ─── Constants ──────────────────────────────────── */
 
 const STAGES: Stage[] = ['order', 'fermentation', 'drying', 'ready'];
@@ -217,12 +231,28 @@ function ProgressBar({ stage }: { stage: Stage }) {
     );
 }
 
-function TankCard({ tank }: { tank: TankDetail }) {
+function TankCard({ tank, batch }: { tank: TankDetail; batch: BatchInfo | null }) {
     const r = tank.latestReading;
     const capacityPct = Math.min(100, Math.round((100 / tank.capacityKg) * 100));
 
     return (
         <div className="od-tank-wrap">
+            {batch && (
+                <p className="od-tank-batch" style={{
+                    fontFamily: 'monospace',
+                    fontSize: '11px',
+                    letterSpacing: '0.08em',
+                    color: '#3d7044',
+                    background: '#e8f0e3',
+                    padding: '4px 10px',
+                    borderRadius: '3px',
+                    display: 'inline-block',
+                    marginBottom: '6px',
+                    fontWeight: 600,
+                }}>
+                    BATCH {batch.batchCode}{batch.protocoloCodigo ? ` · ${batch.protocoloCodigo}` : ''}
+                </p>
+            )}
             <p className="od-tank-name">{tank.name}</p>
 
             {r && (
@@ -410,6 +440,7 @@ export function OrderDetail() {
 
     const [order, setOrder] = useState<OrderDetail | null>(null);
     const [tank, setTank] = useState<TankDetail | null>(null);
+    const [batch, setBatch] = useState<BatchInfo | null>(null);
     const [updates, setUpdates] = useState<OrderUpdateRow[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -483,7 +514,26 @@ export function OrderDetail() {
 
                 setOrder(detail);
 
-                // 2. Load tank via order_tank_assignments (active assignment only)
+                // 2a. Load cb_batches (bache info) linked to this order
+                if (orderType === 'cl') {
+                    const { data: batchData } = await supabase
+                        .from('cb_batches')
+                        .select('batch_code, variedad, protocolo_codigo, kg_cc_netos')
+                        .eq('cl_order_id', id)
+                        .maybeSingle();
+
+                    if (mounted && batchData) {
+                        const b = batchData as CbBatchRow;
+                        setBatch({
+                            batchCode: b.batch_code,
+                            variedad: b.variedad,
+                            protocoloCodigo: b.protocolo_codigo,
+                            kgNetos: b.kg_cc_netos,
+                        });
+                    }
+                }
+
+                // 2b. Load tank via order_tank_assignments (active assignment only)
                 const { data: assignData } = await supabase
                     .from('order_tank_assignments')
                     .select('tank_id, assigned_at, released_at')
@@ -610,6 +660,22 @@ export function OrderDetail() {
                 </p>
                 <p className="od-hero-variety">{order.variety}</p>
                 <p className="od-hero-weight">{order.weightKg} kg · {order.process}</p>
+                {batch && (
+                    <p className="od-hero-batch" style={{
+                        marginTop: '10px',
+                        fontFamily: 'monospace',
+                        fontSize: '12px',
+                        letterSpacing: '0.06em',
+                        color: 'rgba(255,255,255,0.92)',
+                        background: 'rgba(0,0,0,0.32)',
+                        padding: '5px 11px',
+                        borderRadius: '3px',
+                        display: 'inline-block',
+                        fontWeight: 600,
+                    }}>
+                        BATCH {batch.batchCode}{batch.protocoloCodigo ? ` · ${batch.protocoloCodigo}` : ''}
+                    </p>
+                )}
             </div>
 
             {/* Sections */}
@@ -676,7 +742,7 @@ export function OrderDetail() {
                         </div>
                         <h2 className="od-section-title">Tank Assigned</h2>
                     </div>
-                    {tank ? <TankCard tank={tank} /> : <TankPending />}
+                    {tank ? <TankCard tank={tank} batch={batch} /> : <TankPending />}
                 </section>
 
                 {/* Section: Updates */}
