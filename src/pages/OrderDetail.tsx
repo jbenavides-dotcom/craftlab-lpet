@@ -115,6 +115,8 @@ interface BatchInfo {
     variedad: string | null;
     protocoloCodigo: string | null;
     kgNetos: number | null;
+    fermStart: string | null;
+    fermEnd: string | null;
 }
 
 interface CbBatchRow {
@@ -122,6 +124,8 @@ interface CbBatchRow {
     variedad: string | null;
     protocolo_codigo: string | null;
     kg_cc_netos: number | null;
+    ferm_cereza_inicio: string | null;
+    ferm_baba_fin: string | null;
 }
 
 /* ─── Constants ──────────────────────────────────── */
@@ -452,11 +456,17 @@ export function OrderDetail() {
         if (!tank) return;
         setExporting(true);
         try {
-            const { data, error: err } = await supabase
+            let query = supabase
                 .from('sensor_readings')
                 .select('recorded_at, ph, temp_c, brix, orp_mv, sg, tds_ppm, ec_us_cm, salinity_ppm, cf, rh_pct')
                 .eq('tank_id', tank.id)
                 .order('recorded_at', { ascending: true });
+
+            // Acotar al ciclo real del café (inicio fermentación → fin baba) si hay bache
+            if (batch?.fermStart) query = query.gte('recorded_at', batch.fermStart);
+            if (batch?.fermEnd) query = query.lte('recorded_at', batch.fermEnd);
+
+            const { data, error: err } = await query;
 
             if (err) throw err;
             const rows = (data ?? []) as SensorReadingRow[];
@@ -584,7 +594,7 @@ export function OrderDetail() {
                 if (orderType === 'cl') {
                     const { data: batchData } = await supabase
                         .from('cb_batches')
-                        .select('batch_code, variedad, protocolo_codigo, kg_cc_netos')
+                        .select('batch_code, variedad, protocolo_codigo, kg_cc_netos, ferm_cereza_inicio, ferm_baba_fin')
                         .eq('cl_order_id', id)
                         .maybeSingle();
 
@@ -595,6 +605,8 @@ export function OrderDetail() {
                             variedad: b.variedad,
                             protocoloCodigo: b.protocolo_codigo,
                             kgNetos: b.kg_cc_netos,
+                            fermStart: b.ferm_cereza_inicio,
+                            fermEnd: b.ferm_baba_fin,
                         });
                     }
                 }
