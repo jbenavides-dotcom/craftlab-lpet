@@ -15,6 +15,7 @@ import {
     Hash,
     Waves,
     Activity,
+    Download,
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import './OrderDetail.css';
@@ -444,6 +445,71 @@ export function OrderDetail() {
     const [updates, setUpdates] = useState<OrderUpdateRow[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [exporting, setExporting] = useState(false);
+
+    /* Export CSV with all sensor readings for the tank linked to this order */
+    const handleExportCsv = async () => {
+        if (!tank) return;
+        setExporting(true);
+        try {
+            const { data, error: err } = await supabase
+                .from('sensor_readings')
+                .select('recorded_at, ph, temp_c, brix, orp_mv, sg, tds_ppm, ec_us_cm, salinity_ppm, cf, rh_pct')
+                .eq('tank_id', tank.id)
+                .order('recorded_at', { ascending: true });
+
+            if (err) throw err;
+            const rows = (data ?? []) as SensorReadingRow[];
+            if (rows.length === 0) {
+                alert('No readings available for this tank yet.');
+                return;
+            }
+
+            const batchTag = batch?.batchCode ?? 'no-batch';
+            const batchName = batch
+                ? `BATCH ${batch.batchCode}${batch.protocoloCodigo ? ' · ' + batch.protocoloCodigo : ''}${batch.variedad ? ' · ' + batch.variedad : ''}`
+                : tank.name;
+
+            const header = 'batch_code,batch_name,tank_name,recorded_at_utc,ph,temp_c,brix,orp_mv,sg,tds_ppm,ec_us_cm,salinity_ppm,cf,rh_pct\n';
+            const body = rows.map(r => [
+                batchTag,
+                `"${batchName}"`,
+                `"${tank.name}"`,
+                `"${r.recorded_at}"`,
+                r.ph ?? '',
+                r.temp_c ?? '',
+                r.brix ?? '',
+                r.orp_mv ?? '',
+                r.sg ?? '',
+                r.tds_ppm ?? '',
+                r.ec_us_cm ?? '',
+                r.salinity_ppm ?? '',
+                r.cf ?? '',
+                r.rh_pct ?? '',
+            ].join(',')).join('\n');
+
+            const csv = header + body + '\n';
+            // Use UTF-8 BOM so Excel detects encoding correctly with accents
+            const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+
+            const stamp = new Date().toISOString().slice(0, 10);
+            const fileName = `batch-${batchTag}-fermentacion-${stamp}.csv`;
+
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        } catch (e) {
+            const msg = e instanceof Error ? e.message : 'Could not export readings.';
+            alert(`Export failed: ${msg}`);
+        } finally {
+            setExporting(false);
+        }
+    };
 
     // Validate route params early
     const orderType = type as OrderType | undefined;
@@ -736,11 +802,44 @@ export function OrderDetail() {
 
                 {/* Section: Tank */}
                 <section className="od-section" aria-label="Tank assignment">
-                    <div className="od-section-header">
-                        <div className="od-section-icon od-section-icon--green" aria-hidden="true">
-                            <FlaskConical size={16} strokeWidth={1.75} />
+                    <div className="od-section-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <div className="od-section-icon od-section-icon--green" aria-hidden="true">
+                                <FlaskConical size={16} strokeWidth={1.75} />
+                            </div>
+                            <h2 className="od-section-title">Tank Assigned</h2>
                         </div>
-                        <h2 className="od-section-title">Tank Assigned</h2>
+                        {tank && (
+                            <button
+                                type="button"
+                                onClick={handleExportCsv}
+                                disabled={exporting}
+                                aria-label="Export tank readings as CSV"
+                                title={batch
+                                    ? `Export readings of BATCH ${batch.batchCode}`
+                                    : 'Export tank readings'
+                                }
+                                style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: '6px',
+                                    padding: '7px 12px',
+                                    background: '#3d7044',
+                                    color: '#fff',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    fontSize: '12px',
+                                    fontWeight: 500,
+                                    letterSpacing: '0.03em',
+                                    cursor: exporting ? 'wait' : 'pointer',
+                                    opacity: exporting ? 0.6 : 1,
+                                    transition: 'opacity 0.15s',
+                                }}
+                            >
+                                <Download size={14} strokeWidth={2} />
+                                {exporting ? 'Exporting…' : 'Export CSV'}
+                            </button>
+                        )}
                     </div>
                     {tank ? <TankCard tank={tank} batch={batch} /> : <TankPending />}
                 </section>
