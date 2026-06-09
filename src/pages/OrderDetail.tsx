@@ -51,6 +51,15 @@ interface ClOrderRow {
     category: string | null;
     status: string;
     created_at: string;
+    bache_cl: string | null;
+}
+
+interface BatchPhotoRow {
+    id: string;
+    batch_code: string;
+    proceso: string | null;
+    image_url: string;
+    created_at: string;
 }
 
 interface TankRow {
@@ -447,6 +456,8 @@ export function OrderDetail() {
     const [tank, setTank] = useState<TankDetail | null>(null);
     const [batch, setBatch] = useState<BatchInfo | null>(null);
     const [updates, setUpdates] = useState<OrderUpdateRow[]>([]);
+    const [photos, setPhotos] = useState<BatchPhotoRow[]>([]);
+    const [lightbox, setLightbox] = useState<BatchPhotoRow | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [exporting, setExporting] = useState(false);
@@ -608,6 +619,17 @@ export function OrderDetail() {
                             fermStart: b.ferm_cereza_inicio,
                             fermEnd: b.ferm_baba_fin,
                         });
+                    }
+
+                    // Load process photos for the order's CraftLab bache (cl_orders.bache_cl)
+                    const bacheCl = (orderData as ClOrderRow).bache_cl;
+                    if (bacheCl) {
+                        const { data: photoData } = await supabase
+                            .from('batch_photos')
+                            .select('id, batch_code, proceso, image_url, created_at')
+                            .eq('batch_code', bacheCl)
+                            .order('created_at', { ascending: false });
+                        if (mounted && photoData) setPhotos(photoData as BatchPhotoRow[]);
                     }
                 }
 
@@ -856,6 +878,69 @@ export function OrderDetail() {
                     {tank ? <TankCard tank={tank} batch={batch} /> : <TankPending />}
                 </section>
 
+                {/* Section: Process Photos (from the order's CraftLab bache) */}
+                {photos.length > 0 && (
+                    <section className="od-section" aria-label="Process photos">
+                        <div className="od-section-header">
+                            <div className="od-section-icon od-section-icon--rose" aria-hidden="true">
+                                <ImageIcon size={16} strokeWidth={1.75} />
+                            </div>
+                            <h2 className="od-section-title">Process Photos</h2>
+                        </div>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: 12, padding: '8px 18px 18px' }}>
+                            {photos.map((p) => (
+                                <button
+                                    key={p.id}
+                                    type="button"
+                                    onClick={() => setLightbox(p)}
+                                    title={`${p.proceso ?? ''} · ${formatDateTime(p.created_at)}`}
+                                    style={{
+                                        position: 'relative',
+                                        aspectRatio: '1 / 1',
+                                        padding: 0,
+                                        border: 'none',
+                                        background: '#f3f4f6',
+                                        cursor: 'pointer',
+                                        borderRadius: 12,
+                                        overflow: 'hidden',
+                                        boxShadow: '0 1px 4px rgba(0,0,0,0.12)',
+                                    }}
+                                >
+                                    <img
+                                        src={p.image_url}
+                                        alt={p.proceso ?? 'Process photo'}
+                                        loading="lazy"
+                                        onError={(e) => {
+                                            const b = (e.currentTarget as HTMLImageElement).closest('button');
+                                            if (b) (b as HTMLElement).style.display = 'none';
+                                        }}
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                                    />
+                                    {p.proceso && (
+                                        <div style={{
+                                            position: 'absolute',
+                                            left: 0,
+                                            right: 0,
+                                            bottom: 0,
+                                            background: 'linear-gradient(to top, rgba(0,0,0,0.68), rgba(0,0,0,0))',
+                                            color: '#fff',
+                                            fontSize: 11,
+                                            fontWeight: 500,
+                                            padding: '16px 8px 7px',
+                                            textAlign: 'left',
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            whiteSpace: 'nowrap',
+                                        }}>
+                                            {p.proceso}
+                                        </div>
+                                    )}
+                                </button>
+                            ))}
+                        </div>
+                    </section>
+                )}
+
                 {/* Section: Updates */}
                 <section className="od-section" aria-label="Order updates">
                     <div className="od-section-header">
@@ -888,6 +973,28 @@ export function OrderDetail() {
                 </section>
 
             </div>
+
+            {/* Lightbox para fotos (los data: URI no se pueden abrir en pestaña nueva) */}
+            {lightbox && (
+                <div
+                    onClick={() => setLightbox(null)}
+                    role="dialog"
+                    aria-label="Photo"
+                    style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(17,24,39,0.9)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}
+                >
+                    <div onClick={(e) => e.stopPropagation()} style={{ maxWidth: 900, maxHeight: '90vh', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                        <img
+                            src={lightbox.image_url}
+                            alt={lightbox.proceso ?? 'Process photo'}
+                            style={{ maxWidth: '100%', maxHeight: '82vh', objectFit: 'contain', borderRadius: 10 }}
+                        />
+                        <div style={{ color: '#f3f4f6', fontSize: 13 }}>
+                            <strong style={{ fontFamily: 'monospace' }}>{lightbox.batch_code}</strong>
+                            {lightbox.proceso ? ` · ${lightbox.proceso}` : ''} · {formatDateTime(lightbox.created_at)}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
